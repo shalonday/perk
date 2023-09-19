@@ -1,0 +1,143 @@
+{
+  "trees": [
+    {
+      "id": "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
+      "title": "ZTM's Become a Freelance Developer",
+      "desc": "The 'Become a Freelance Developer' Career Path from Zero To Mastery. Accessible via https://zerotomastery.io/career-paths/become-a-freelancer-2r7slf",
+      "tree": { "skillIds": [0, 1, 2, 3, 4], "lpathIds": [1, 2, 3, 4] }
+    }
+  ],
+  "skills": [
+    {
+      "id": 0,
+      "title": "N0",
+      "desc": [
+        "The average high school graduate in an English speaking country"
+      ],
+      "wiki": ""
+    },
+    {
+      "id": 1,
+      "title": "N1",
+      "desc": [
+        "Skills that will allow you to apply for jobs like: Web Developer, Software Developer, Front End Developer, JavaScript Developer, and Full Stack Developer",
+        "Build 10+ real world Web Development projects you can show off on your portfolio",
+        "Learn best practices to write clean, performant, and bug free code",
+        "How to work as a freelance Web Developer",
+        "Learn React + Redux to build rich front end applications",
+        "Build a complex image recognition app using everything we learn in the course",
+        "Use NodeJS to write server-side JavaScript",
+        "Use Express, SQL and PostgreSQL to create fullstack applications that scale",
+        "Learn modern technologies that are ACTUALLY being used at tech companies in 2023",
+        "Build a professional Portfolio Website",
+        "Master modern Web Development fundamentals as well as advanced topics",
+        "Master beginner and advanced JavaScript topics",
+        "Build your own full stack websites and applications",
+        "Become a professional Web Developer and get hired",
+        "Learn to implement user authentication",
+        "Master fundamental concepts in Web Development"
+      ],
+      "wiki": ""
+    },
+    {
+      "id": 2,
+      "title": "N2",
+      "desc": [
+        "How to build a rockstar Upwork profile that stands out and ranks organically",
+        "Create winning proposals that ensure you land clients",
+        "Build a side-hustle or a full-time online income that could replace your 9-5 job",
+        "Find the right high-paying freelance jobs",
+        "The top profitable freelance skills that are currently in high-demand",
+        "How to communicate with clients effectively",
+        "How to build relationships with clients so that you can earn recurring income"
+      ],
+      "wiki": ""
+    },
+    {
+      "id": 3,
+      "title": "N3",
+      "desc": [
+        "Create a personal brand and logo that will help you stand out in your industry",
+        "Step-by-step guide to crafting an effective application package, including resume and cover letter",
+        "Learn to use tools like Canva, Figma, Super and Notion",
+        "Create a case study that exemplifies your experience and value proposition to potential employers",
+        "Learn alongside an industry pro with over a decade of experience who has taken his deep knowledge from all corners of the tech world and combined it into this course",
+        "Understand the different types of tech interviews and how best to prepare",
+        "Quickly build a professional portfolio website using no-code tools",
+        "Give yourself the best shot at landing your dream career"
+      ],
+      "wiki": ""
+    },
+    {
+      "id": 4,
+      "title": "N4",
+      "desc": [
+        "Case studies that bring you behind-the-scenes with actual clients",
+        "How to prepare professional reports and presentations",
+        "How to solve problems for businesses seeking online consultants on freelancing websites",
+        "Use your existing knowledge & expertise in any sector to consult online and provide value to companies",
+        "Build relationships with clients so that you can earn recurring income",
+        "Craft freelance consulting proposals that will land you desirable clients",
+        "Step-by-step breakdown of landing your first client to growing your freelance consulting business",
+        "Build a side-hustle or a full-time online income with a flexible schedule",
+        "Use professional tools for client and project management",
+        "Learn technicals skills from data visualization to A/B testing"
+      ],
+      "wiki": ""
+    },
+    {
+      "id": 10,
+      "title": "Nstar",
+      "desc": [
+        "Become a Freelance Developer or Designer that can get clients and impress with your work",
+        "Start your own freelance company and be your own boss",
+        "Learn all the modern skills to build beautiful Mobile and Web Applications",
+        "Create a beautiful set of projects on your portfolio website that will wow future clients",
+        "How to get more clients & be able to charge a higher rate"
+      ],
+      "wiki": ""
+    }
+  ],
+  "lpaths": [
+    {
+      "id": 1,
+      "title": "n0-n1",
+      "desc": [
+        "ZTM's The Complete Web Developer in 2023 course, available via https://zerotomastery.io/courses/coding-bootcamp/"
+      ],
+      "fromNode": 0,
+      "toNode": 1,
+      "wiki": ""
+    },
+    {
+      "id": 2,
+      "title": "n1-n2",
+      "desc": [
+        "ZTM's The Complete Guide to Freelancing in 2023 course, available via https://zerotomastery.io/courses/become-a-freelancer/"
+      ],
+      "fromNode": 1,
+      "toNode": 2,
+      "wiki": ""
+    },
+    {
+      "id": 3,
+      "title": "n2-n3",
+      "desc": [
+        "ZTM's 'The Complete Career Toolkit: Personal Branding, Resume Building + more' course, available via https://zerotomastery.io/courses/personal-branding/"
+      ],
+      "fromNode": 2,
+      "toNode": 3,
+      "wiki": ""
+    },
+    {
+      "id": 4,
+      "title": "n3-n4",
+      "desc": [
+        "ZTM's 'Consulting: The Complete Freelancer's Guide' course, available via https://zerotomastery.io/courses/learn-freelance-consulting/"
+      ],
+      "fromNode": 3,
+      "toNode": 4,
+      "wiki": ""
+    }
+  ]
+}
