@@ -2,7 +2,8 @@
 // into lists.
 // - handleOutlineItemClick, defined in Edit, allows the opening of an editing Modal that
 // is based on the clicked item.
-// - handleAdd is also defined in Edit because it's Edit that has access to the arrays.
+// - handleAdd adds a new node and path; this should add both to this Outline and to the visual
+// representation. It is also defined in Edit because it's Edit that has access to the arrays.
 
 function Outline({
   handleOutlineItemClick,
