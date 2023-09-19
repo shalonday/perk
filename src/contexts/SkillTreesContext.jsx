@@ -66,6 +66,9 @@ function SkillTreesContextProvider({ children }) {
   );
 }
 
+// An exported function. useSkillTreesContext allows other components to access the
+// context object provided to them by SkillTreesContextProvider. The context object
+// contains the variables passed into the value prop of <SkillTreesContext.Provider>.
 function useSkillTreesContext() {
   const context = useContext(SkillTreesContext);
   if (context === undefined) {
