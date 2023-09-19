@@ -9,11 +9,34 @@
 // tree.skillIds, tree.lpathIds - ids of skills and lpaths contained in this tree
 // course branches out after n3-n4 learning path. how to do this?
 
-import { createContext } from "react";
+import { createContext, useEffect, useReducer } from "react";
 
+const BASE_URL = "http://localhost:8000";
 const SkillTreesContext = createContext();
 
+const initialState = {
+  isLoading: false,
+  createdTrees: [],
+  error: "",
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+  }
+}
+
+// SkillTreesContextProvider is wrapped around components (children) in App.jsx to give those
+// components access to Skill Tree data. This allows for a central place from which to manage
+// code related to accessing the data.
 function SkillTreesContextProvider({ children }) {
+  const [{ isLoading, createdTrees, error }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
+
+  useEffect(function () {
+    async function fetchCreatedTrees() {}
+  });
   return <SkillTreesContext.Provider>{children}</SkillTreesContext.Provider>;
 }
 
