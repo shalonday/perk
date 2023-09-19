@@ -9,7 +9,7 @@
 // tree.skillIds, tree.lpathIds - ids of skills and lpaths contained in this tree
 // course branches out after n3-n4 learning path. how to do this?
 
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 const BASE_URL = "http://localhost:8000";
 const SkillTreesContext = createContext();
@@ -22,6 +22,14 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
+    case "loading":
+      return { ...state, isLoading: true };
+    case "createdTrees/loaded":
+      return { ...state, createdTrees: action.payload };
+    case "rejected":
+      return { ...state, error: action.payload };
+    default:
+      throw new Error("action type not recognized");
   }
 }
 
@@ -35,9 +43,37 @@ function SkillTreesContextProvider({ children }) {
   );
 
   useEffect(function () {
-    async function fetchCreatedTrees() {}
-  });
-  return <SkillTreesContext.Provider>{children}</SkillTreesContext.Provider>;
+    async function fetchCreatedTrees() {
+      //fetch trees created by user. in the future, need: recommendedTrees and followedTrees
+      dispatch({ type: "loading" });
+      try {
+        const res = await fetch(`${BASE_URL}/trees`);
+        const data = await res.json();
+        dispatch({ type: "createdTrees/loaded", payload: data });
+      } catch {
+        dispatch({
+          type: "rejected",
+          payload: "There was an error loading data",
+        });
+      }
+    }
+    fetchCreatedTrees();
+  }, []);
+  return (
+    <SkillTreesContext.Provider value={{ isLoading, createdTrees, error }}>
+      {children}
+    </SkillTreesContext.Provider>
+  );
 }
 
-export { SkillTreesContextProvider };
+function useSkillTreesContext() {
+  const context = useContext(SkillTreesContext);
+  if (context === undefined) {
+    throw new Error(
+      "SkillTreesContext is being used outside of SkillTreesContextProvider"
+    );
+  }
+  return context;
+}
+
+export { SkillTreesContextProvider, useSkillTreesContext };
