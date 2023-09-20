@@ -11,6 +11,7 @@
     "server": "json-server --watch data/trees.json --port 8000"
   },
   "dependencies": {
+    "@babylonjs/core": "^6.21.1",
     "json-server": "^0.17.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
