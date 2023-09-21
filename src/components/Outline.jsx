@@ -12,7 +12,7 @@ function Outline({
   handleAdd,
 }) {
   return (
-    <>
+    <div className="edit-outline">
       <div>
         <h1>Paths</h1>
         <ul>
@@ -35,7 +35,7 @@ function Outline({
         </ul>
         <button onClick={handleAdd}>Add Node</button>
       </div>
-    </>
+    </div>
   );
 }
 
