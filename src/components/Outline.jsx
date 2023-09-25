@@ -22,7 +22,7 @@ function Outline({
             </li>
           ))}
         </ul>
-        <button onClick={handleAdd}>Add Path</button>
+        <button onClick={() => handleAdd("path")}>Add Path</button>
       </div>
       <div>
         <h1>Nodes</h1>
@@ -33,7 +33,7 @@ function Outline({
             </li>
           ))}
         </ul>
-        <button onClick={handleAdd}>Add Node</button>
+        <button onClick={() => handleAdd("node")}>Add Node</button>
       </div>
     </div>
   );

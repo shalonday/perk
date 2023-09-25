@@ -30,6 +30,16 @@ const tempPathsList = [
   },
 ];
 
+//generate uuid; retrieved from https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid 4Sep2023
+function uuidv4() {
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+    (
+      c ^
+      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+    ).toString(16)
+  );
+}
+
 function Edit() {
   /*
   pathsArray is Array[{Path}]
@@ -68,6 +78,14 @@ function Edit() {
        */
   const [nodesArray, setNodesArray] = useState(tempNodesList);
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  /*
+  clickedSource is Node or Path
+  -interp. the Node or Path that was clicked to open a modal.
+  */
+  const [clickedSource, setClickedSource] = useState(null);
+
   /////////////////////////////////////////////////////////////////
   ///////////REQUIRED FOR INSERTING BABYLONJS INTO REACT///////////
   /////////////////////////////////////////////////////////////////
@@ -101,10 +119,44 @@ function Edit() {
   //////////////END OF BABYLON SECTION/////////////////////
   /////////////////////////////////////////////////////////
 
+  // Enum("path", "node") -> Effect
+  // Opens a path modal if input is "path", otherwise open a node modal. In either case we set
+  // clickedSource, which will be received by the modal as a prop, to an object containing only
+  // values for id and type, resulting in a mostly empty modal.
+  function handleAdd(type) {
+    switch (type) {
+      case "path":
+        setClickedSource({
+          id: uuidv4(),
+          title: "",
+          type: "path",
+          detailsArray: [],
+          fromNode: "",
+          toNode: "",
+        });
+        break;
+      case "node":
+        setClickedSource({
+          id: uuidv4(),
+          title: "",
+          type: "node",
+          detailsArray: [],
+        });
+        break;
+      default:
+        throw new Error("unknown type was passed to handleAdd");
+    }
+    setIsModalVisible(true);
+  }
+
   return (
     <div className="edit-container">
       {/* <Outline/> represents the textual outline representation of the skill tree */}
-      <Outline pathsArray={pathsArray} nodesArray={nodesArray} />
+      <Outline
+        pathsArray={pathsArray}
+        nodesArray={nodesArray}
+        handleAdd={handleAdd}
+      />
       {/* Image representation 
       of the skill tree based on the text outline */}
       <SceneComponent
