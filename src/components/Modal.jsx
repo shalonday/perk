@@ -29,13 +29,13 @@ export default function Modal({ source, setSourceArray }) {
     //{source.type==="node" && setSourceArray((array)=>)}
   }
 
+  // Int -> Effect
+  // delete item in bullets array that corresponds to index
   function handleDeleteItem(index) {
     setBullets((array) => array.filter((item, i) => i !== index));
   }
 
-  /*
-  Add an empty item to detailsArray to be edited by user
-  */
+  // Add an empty item to detailsArray to be edited by user
   function handleAddDetail() {
     setBullets((array) => [...array, ""]);
   }
@@ -73,7 +73,7 @@ export default function Modal({ source, setSourceArray }) {
               onChange={(e) => {
                 setBullets((array) =>
                   array.map((item, i) => (i === index ? e.target.value : item))
-                );
+                ); // array == bullets; "item" is a bullet. This allows for changing the text in the current bullet
               }}
             />
             <span onClick={() => handleDeleteItem(index)}>❌</span>

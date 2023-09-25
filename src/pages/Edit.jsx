@@ -9,6 +9,7 @@ import {
 } from "@babylonjs/core";
 import SceneComponent from "../components/SceneComponent";
 import "./Edit.css";
+import Modal from "../components/Modal";
 
 const tempNodesList = [
   { id: 0, title: "Node 1", type: "node", detailsArray: ["Prerequisite node"] },
@@ -164,6 +165,14 @@ function Edit() {
         onSceneReady={onSceneReady}
         className="edit-visualization"
       />
+      {isModalVisible && (
+        <Modal
+          source={clickedSource}
+          setSourceArray={
+            clickedSource.type === "path" ? setPathsArray : setNodesArray
+          }
+        />
+      )}
     </div>
   );
 }
