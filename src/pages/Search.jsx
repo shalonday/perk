@@ -1,3 +1,4 @@
+import styles from "./Search.module.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -13,7 +14,7 @@ function Search() {
       />
       {/* put created trees here */}
       <Link to={`/edit/${uuidv4()}`}>
-        <button>Create Tree</button>
+        <button className={styles.createButton}>Create New Tree</button>
       </Link>
     </div>
   );

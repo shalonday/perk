@@ -1,0 +1,13 @@
+.createButton {
+  font-size: 2rem;
+  color: #bef264;
+  cursor: pointer;
+  background-color: #65a30d;
+  border: none;
+  border-radius: 20px;
+
+  position: fixed;
+  padding: 20px;
+  bottom: 20px;
+  right: 20px;
+}
