@@ -10,9 +10,10 @@ function Outline({
   pathsArray,
   nodesArray,
   handleAdd,
+  className,
 }) {
   return (
-    <div className="edit-outline">
+    <div className={className}>
       <div>
         <h1>Paths</h1>
         <ul>

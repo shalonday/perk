@@ -1,3 +1,4 @@
+import styles from "./Edit.module.css";
 import { useState } from "react";
 import KonvaCanvas from "../components/KonvaCanvas";
 import Outline from "../components/Outline";
@@ -8,7 +9,6 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import SceneComponent from "../components/SceneComponent";
-import "./Edit.css";
 import Modal from "../components/Modal";
 
 const tempNodesList = [
@@ -151,19 +151,20 @@ function Edit() {
   }
 
   return (
-    <div className="edit-container">
+    <div className={styles.editContainer}>
       {/* <Outline/> represents the textual outline representation of the skill tree */}
       <Outline
         pathsArray={pathsArray}
         nodesArray={nodesArray}
         handleAdd={handleAdd}
+        className={styles.editOutline}
       />
       {/* Image representation 
       of the skill tree based on the text outline */}
       <SceneComponent
         antialias
         onSceneReady={onSceneReady}
-        className="edit-visualization"
+        className={styles.editVisualization}
       />
       {isModalVisible && (
         <Modal

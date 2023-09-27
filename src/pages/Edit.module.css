@@ -1,12 +1,12 @@
-.edit-container {
+.editContainer {
   display: flex;
   height: 100%;
 }
 
-.edit-outline {
+.editOutline {
   flex: 1;
 }
 
-.edit-visualization {
+.editVisualization {
   flex: 1;
 }
