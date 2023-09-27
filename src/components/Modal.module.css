@@ -1,0 +1,11 @@
+.modal {
+  border: black solid;
+  background-color: pink;
+  backdrop-filter: 10px;
+
+  position: fixed;
+  top: 10vh;
+  bottom: 20vh;
+  left: 30vw;
+  right: 30vw;
+}

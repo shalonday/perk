@@ -1,6 +1,7 @@
+import styles from "./Modal.module.css";
 import { useState } from "react";
 
-export default function Modal({ source, setSourceArray }) {
+export default function Modal({ source, setSourceArray, className }) {
   const [fromNode, setFromNode] = useState(source.fromNode);
   const [toNode, setToNode] = useState(source.toNode);
   const [title, setTitle] = useState(source.title);
@@ -41,7 +42,7 @@ export default function Modal({ source, setSourceArray }) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={styles.modal}>
       {source.type === "path" && (
         <p>
           This path connects{" "}
