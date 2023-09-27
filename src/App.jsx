@@ -3,6 +3,7 @@ import Search from "./pages/Search";
 import Tree from "./pages/Tree";
 import PageNotFound from "./pages/PageNotFound";
 import Edit from "./pages/Edit";
+import "./App.css";
 
 function App() {
   return (
