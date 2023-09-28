@@ -151,21 +151,23 @@ function Edit() {
   }
 
   return (
-    <div className={styles.editContainer}>
-      {/* <Outline/> represents the textual outline representation of the skill tree */}
-      <Outline
-        pathsArray={pathsArray}
-        nodesArray={nodesArray}
-        handleAdd={handleAdd}
-        className={styles.editOutline}
-      />
-      {/* Image representation 
+    <>
+      <div className={styles.editContainer}>
+        {/* <Outline/> represents the textual outline representation of the skill tree */}
+        <Outline
+          pathsArray={pathsArray}
+          nodesArray={nodesArray}
+          handleAdd={handleAdd}
+          className={styles.editOutline}
+        />
+        {/* Image representation 
       of the skill tree based on the text outline */}
-      <SceneComponent
-        antialias
-        onSceneReady={onSceneReady}
-        className={styles.editVisualization}
-      />
+        <SceneComponent
+          antialias
+          onSceneReady={onSceneReady}
+          className={styles.editVisualization}
+        />
+      </div>
       {isModalVisible && (
         <Modal
           source={clickedSource}
@@ -174,7 +176,7 @@ function Edit() {
           }
         />
       )}
-    </div>
+    </>
   );
 }
 
