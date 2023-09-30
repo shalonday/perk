@@ -94,7 +94,27 @@ function renderElement(type, { startCoordinates, endCoordinates }) {}
 
 // PathElement ListOfElements -> [[Vector3]]
 // get start coordinates of given pathElement by getting coordinate(s) of elts in its prevList
-
+// !!!
+if (import.meta.vitest) {
+  const { it, expect } = import.meta.vitest;
+  it("returns coordinates of previous node(s) as startCoordinates", () => {
+    expect(
+      getStartCoordinates(
+        {
+          id: "path4cdd-4077-4c36-92bb-5a3b09fc44d1",
+          title: "N1->N2",
+          type: "path",
+          detailsArray: ["The Odin Project"],
+          coordinates: [],
+          prevList: ["0ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
+          nextList: ["1ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
+        },
+        tempNodesList.concat(tempPathsList)
+      )
+    ).toEqual([[0, 0, 0]]);
+    // !!! add more tests once calculateEndCoordinates has been defined and tested
+  });
+}
 function getStartCoordinates(pathElement, listOfElements) {
   const prevElements = pathElement.prevList.map((prevEltId) =>
     listOfElements.find((elt) => elt.id === prevEltId)
