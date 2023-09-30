@@ -62,7 +62,23 @@ const tempTree = {
 
 // UUID UUID -> Boolean
 // return true if the UUIDs are equal, meaning that eltID is the start/root element.
-
+if (import.meta.vitest) {
+  const { it, expect } = import.meta.vitest;
+  it("returns true if the uuids are equal", () => {
+    expect(
+      isRoot(
+        "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
+        "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1"
+      )
+    ).toBe(true);
+    expect(
+      isRoot(
+        "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
+        "2ef94cdd-4077-4c36-92bb-5a3b09fc44q1"
+      )
+    ).toBe(false);
+  });
+}
 function isRoot(eltId, rootEltId) {
   return eltId === rootEltId;
 }
