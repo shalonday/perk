@@ -1,6 +1,5 @@
 import styles from "./Edit.module.css";
 import { useState } from "react";
-import KonvaCanvas from "../components/KonvaCanvas";
 import Outline from "../components/Outline";
 import {
   FreeCamera,
@@ -12,22 +11,34 @@ import SceneComponent from "../components/SceneComponent";
 import Modal from "../components/Modal";
 
 const tempNodesList = [
-  { id: 0, title: "Node 1", type: "node", detailsArray: ["Prerequisite node"] },
   {
-    id: 1,
+    id: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
+    title: "Node 1",
+    type: "node",
+    detailsArray: ["Prerequisite node"],
+    coordinates: [0, 0, 0],
+    prevList: [],
+    nextList: ["path4cdd-4077-4c36-92bb-5a3b09fc44d1"],
+  },
+  {
+    id: "1ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
     title: "Node 2",
     type: "node",
     detailsArray: ["Program a basic profile website"],
+    coordinates: [],
+    prevList: ["path4cdd-4077-4c36-92bb-5a3b09fc44d1"],
+    nextList: [],
   },
 ];
 const tempPathsList = [
   {
-    id: 0,
+    id: "path4cdd-4077-4c36-92bb-5a3b09fc44d1",
     title: "N1->N2",
     type: "path",
     detailsArray: ["The Odin Project"],
-    fromNode: "Node 1",
-    toNode: "Node 2",
+    coordinates: [],
+    prevList: ["0ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
+    nextList: ["1ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
   },
 ];
 
@@ -39,6 +50,82 @@ function uuidv4() {
       (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
     ).toString(16)
   );
+}
+
+const tempTree = {
+  id: "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
+  title: "ZTM's Become a Freelance Developer",
+  desc: "The 'Become a Freelance Developer' Career Path from Zero To Mastery. Accessible via https://zerotomastery.io/career-paths/become-a-freelancer-2r7slf",
+  rootId: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
+  elements: tempNodesList.concat(tempPathsList),
+};
+
+// UUID UUID -> Boolean
+// return true if the UUIDs are equal, meaning that eltID is the start/root element.
+
+function isRoot(eltId, rootEltId) {
+  return eltId === rootEltId;
+}
+
+// Enum("node", "path") {[[Int*3]],[Int*3]} -> Effect
+// render node or path at Vector3 position(s) represented by triplet Integer arrays.
+// path types can have multiple triplet arrays as startCoordinates, eg.,
+// renderElement("path", {[[1,1,1], [2, 2, 1], [3,3,1]],[4,4,4]}) , where [4,4,4]
+// is the sole triplet array for endCoordinates and the startCoordinates array contains three triplets
+// node types always have empty endCoordinates, and renders only at the startCoordinates
+// !!!
+function renderElement(type, { startCoordinates, endCoordinates }) {}
+
+// PathElement ListOfElements -> [[Vector3]]
+// get start coordinates of given pathElement by getting coordinate(s) of elts in its prevList
+
+function getStartCoordinates(pathElement, listOfElements) {
+  const prevElements = pathElement.prevList.map((prevEltId) =>
+    listOfElements.find((elt) => elt.id === prevEltId)
+  );
+  return prevElements.map((prevElement) => prevElement.coordinates);
+}
+
+// ??? -> [Vector3]
+// calculate suitable end coordinates for a path. The logic is as follows:
+// straight: this path's prevElement has only this path in its nextList.
+// diverging: if this path is one of multiple branches of a single prevElement
+// converging: if this path has multiple prevElements.
+// All paths whether diverging or converging end at only one endpoint
+// !!!
+function calculateEndCoordinates() {}
+
+// [UUID] ListOfElements -> [[Vector3]]
+// get endCoordinates of previous path element
+// !!!
+function getNodeCoordinates(prevList, listOfElements) {
+  return listOfElements.find((item) => item.id === prevList[0]).coordinates
+    .endCoordinates;
+}
+
+// Tree -> Effect
+// !!!
+function renderTree(tree) {
+  let startCoordinates;
+  let endCoordinates;
+  tree.elements.forEach((elt) => {
+    if (isRoot(elt.id, tree.root.id)) {
+      startCoordinates = [0, 0, 0];
+      endCoordinates = [];
+      elt.coordinates = { startCoordinates, endCoordinates };
+      renderElement("node", elt.coordinates);
+    } else {
+      if (elt.type === "node") {
+        startCoordinates = getNodeCoordinates();
+      }
+      if (elt.type === "path") {
+        startCoordinates = getStartCoordinates(elt, tree.elements);
+        endCoordinates = calculateEndCoordinates(startCoordinates);
+        elt.coordinates = { startCoordinates, endCoordinates };
+        renderElement("path", elt.coordinates);
+      }
+    }
+  });
 }
 
 function Edit() {
