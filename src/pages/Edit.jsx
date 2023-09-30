@@ -102,15 +102,6 @@ function isRoot(eltId, rootEltId) {
   return eltId === rootEltId;
 }
 
-// Enum("node", "path") {[[Int*3]],[Int*3]} -> Effect
-// render node or path at Vector3 position(s) represented by triplet Integer arrays.
-// path types can have multiple triplet arrays as startCoordinates, eg.,
-// renderElement("path", {[[1,1,1], [2, 2, 1], [3,3,1]],[4,4,4]}) , where [4,4,4]
-// is the sole triplet array for endCoordinates and the startCoordinates array contains three triplets
-// node types always have empty endCoordinates, and renders only at the startCoordinates
-// !!!
-function renderElement(type, { startCoordinates, endCoordinates }) {}
-
 // PathElement ListOfElements -> [[Vector3]]
 // get start coordinates of given pathElement by getting coordinate(s) of elts in its prevList
 // !!!
@@ -299,6 +290,15 @@ function getNodeCoordinates(prevList, listOfElements) {
   return listOfElements.find((item) => item.id === prevList[0]).coordinates
     .endCoordinates;
 }
+
+// Enum("node", "path") {[[Int*3]],[Int*3]} -> Effect
+// render node or path at Vector3 position(s) represented by triplet Integer arrays.
+// path types can have multiple triplet arrays as startCoordinates, eg.,
+// renderElement("path", {[[1,1,1], [2, 2, 1], [3,3,1]],[4,4,4]}) , where [4,4,4]
+// is the sole triplet array for endCoordinates and the startCoordinates array contains three triplets
+// node types always have empty endCoordinates, and renders only at the startCoordinates
+// !!!
+function renderElement(type, { startCoordinates, endCoordinates }) {}
 
 // Tree -> Effect
 // !!!
