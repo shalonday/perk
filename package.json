@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "server": "json-server --watch data/trees.json --port 8000"
+    "server": "json-server --watch data/trees.json --port 8000",
+    "test": "vitest"
   },
   "dependencies": {
     "@babylonjs/core": "^6.21.1",
@@ -30,6 +31,7 @@
     "konva": "^9.2.1",
     "react-konva": "^18.2.10",
     "vite": "^4.4.5",
-    "vite-plugin-eslint": "^1.8.1"
+    "vite-plugin-eslint": "^1.8.1",
+    "vitest": "^0.34.6"
   }
 }
