@@ -10,6 +10,7 @@ import {
 import SceneComponent from "../components/SceneComponent";
 import Modal from "../components/Modal";
 
+const PATH_LENGTH = 2;
 const tempNodesList = [
   {
     id: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
@@ -143,7 +144,6 @@ function getStartCoordinates(pathElement, listOfElements) {
 // PathElement -> Integer
 // returns the number of paths originating from the same node
 // this path originates from; resulting number includes this path.
-// !!!
 if (import.meta.vitest) {
   const { it, expect } = import.meta.vitest;
   it("returns number of paths originating from same node as given path", () => {
@@ -196,17 +196,100 @@ function getNumberOfSiblings(elt, listOfElements) {
     .length;
 }
 
-// ??? -> [Vector3]
+// Element Tree Vector3 Integer -> [Vector3]
 // calculate suitable end coordinates for a path. The logic is as follows:
 // straight: this path's prevElement has only this path in its nextList.
 // diverging: if this path is one of multiple branches of a single prevElement
 //    - compute coordinates by looking at the unit circle
 // converging: if this path has multiple prevElements.
 //    - go back to middle (y-axis same as origin of origin nodes)
-// All paths whether diverging or converging end at only one endpoint
-// !!!
-function calculateEndCoordinates(elt, tree, startCoordinates) {
+// All paths whether diverging or converging end at only one endpoint.
+// Order is 1 if the given path is the first branch, 2 if the second, so on and so forth.
+if (import.meta.vitest) {
+  const { it, expect } = import.meta.vitest;
+  it("returns number of paths originating from same node as given path", () => {
+    expect(
+      calculateEndCoordinates(
+        {
+          id: "path4cdd-4077-4c36-92bb-5a3b09fc44d1",
+          title: "N1->N2",
+          type: "path",
+          detailsArray: ["The Odin Project"],
+          coordinates: [],
+          prevList: ["0ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
+          nextList: ["1ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
+        },
+        tempNodesList.concat(tempPathsList),
+        [0, 0, 0],
+        1
+      )
+    ).toEqual([2, 0, 0]);
+    expect(
+      calculateEndCoordinates(
+        {
+          id: "n2-n3",
+          title: "N2->N3",
+          type: "path",
+          detailsArray: ["The Odin Project"],
+          coordinates: [],
+          prevList: ["1ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
+          nextList: [],
+        },
+        tempNodesList.concat(tempPathsList),
+        [2, 0, 0],
+        1
+      )
+    ).toEqual([
+      2 +
+        (-1 *
+          PATH_LENGTH *
+          Math.round(Math.cos((2 * Math.PI * 1) / (2 + 1)) * 100)) /
+          100,
+      (PATH_LENGTH * Math.round(Math.sin((2 * Math.PI * 1) / (2 + 1)) * 100)) /
+        100,
+      0,
+    ]);
+    expect(
+      calculateEndCoordinates(
+        {
+          id: "n2-n4",
+          title: "N2->N4",
+          type: "path",
+          detailsArray: ["The Odin Project"],
+          coordinates: [],
+          prevList: ["1ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
+          nextList: [],
+        },
+        tempNodesList.concat(tempPathsList),
+        [2, 0, 0],
+        2
+      )
+    ).toEqual([
+      2 +
+        (-1 *
+          PATH_LENGTH *
+          Math.round(Math.cos((2 * Math.PI * 2) / (2 + 1)) * 100)) /
+          100,
+      (PATH_LENGTH * Math.round(Math.sin((2 * Math.PI * 2) / (2 + 1)) * 100)) /
+        100,
+      0,
+    ]);
+  });
+}
+function calculateEndCoordinates(elt, tree, startCoordinates, order) {
   const numSibs = getNumberOfSiblings(elt, tree);
+  return [
+    startCoordinates[0] +
+      (-1 *
+        PATH_LENGTH *
+        Math.round(Math.cos((2 * Math.PI * order) / (numSibs + 1)) * 100)) /
+        100,
+    startCoordinates[1] +
+      (PATH_LENGTH *
+        Math.round(Math.sin((2 * Math.PI * order) / (numSibs + 1)) * 100)) /
+        100,
+    startCoordinates[2],
+  ];
 }
 
 // [UUID] ListOfElements -> [[Vector3]]
