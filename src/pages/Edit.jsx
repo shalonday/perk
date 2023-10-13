@@ -16,40 +16,56 @@ function uuidv4() {
 
 const tempEdgesList = [
   {
-    source: 0,
-    target: 1,
+    source: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
+    target: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
     title: "N1->N2",
     type: "path",
     detailsArray: ["The Odin Project"],
   },
   {
-    source: 1,
-    target: 2,
+    source: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
+    target: "2e094cdd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
     title: "N2->N3",
     type: "path",
     detailsArray: ["The Odin Project"],
   },
   {
-    source: 1,
-    target: 3,
+    source: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
+    target: "2ef04cdd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
     title: "N2->N4",
     type: "path",
     detailsArray: ["The Odin Project"],
   },
-  { source: 1, target: 4, value: 1 },
-  { source: 2, target: 5, value: 1 },
-  { source: 3, target: 5, value: 1 },
-  { source: 4, target: 5, value: 1 },
+  {
+    source: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
+    target: "2ef90cdd-4077-4c36-92bb-5a3b09fc44d1",
+    value: 1,
+  },
+  {
+    source: "2e094cdd-4077-4c36-92bb-5a3b09fc44d1",
+    target: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1",
+    value: 1,
+  },
+  {
+    source: "2ef04cdd-4077-4c36-92bb-5a3b09fc44d1",
+    target: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1",
+    value: 1,
+  },
+  {
+    source: "2ef90cdd-4077-4c36-92bb-5a3b09fc44d1",
+    target: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1",
+    value: 1,
+  },
 ];
 
 const SVG_WIDTH = 968;
 const SVG_HEIGHT = 600;
 const tempNodesList = [
   {
-    id: 0,
+    id: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
     fx: SVG_WIDTH / 2,
     fy: (SVG_HEIGHT - 200) / 2,
     title: "Node 1",
@@ -57,22 +73,22 @@ const tempNodesList = [
     detailsArray: ["Prerequisite node"],
   }, // fx and fy are fixed coordinates that the force sim won't touch
   {
-    id: 1,
+    id: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
     title: "Node 2",
     type: "node",
     detailsArray: ["Program a basic profile website"],
   },
-  { id: 2 },
-  { id: 3 },
-  { id: 4 },
-  { id: 5 },
+  { id: "2e094cdd-4077-4c36-92bb-5a3b09fc44d1" },
+  { id: "2ef04cdd-4077-4c36-92bb-5a3b09fc44d1" },
+  { id: "2ef90cdd-4077-4c36-92bb-5a3b09fc44d1" },
+  { id: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1" },
 ];
 
-const tree = {
+const tempTree = {
   id: "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
   title: "ZTM's Become a Freelance Developer",
   desc: "The 'Become a Freelance Developer' Career Path from Zero To Mastery. Accessible via https://zerotomastery.io/career-paths/become-a-freelancer-2r7slf",
-  rootId: 0,
+  rootId: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
   nodes: tempNodesList,
   links: tempEdgesList,
 };
