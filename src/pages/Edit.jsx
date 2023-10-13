@@ -14,6 +14,25 @@ function uuidv4() {
   );
 }
 
+/*
+  pathsArray is Array[{Path}]
+  interp. array of path objects
+
+  Path is Object{
+    id is UUID
+    title is String
+    type is one of ["node", "path"] 
+      - interp. always "path" for path objects. Allows Modal component to distinguish between paths and nodes.
+    detailsArray is Array[String]
+      - the strings that compose the description bullets. In the case of paths, these are learning activities, eg courses, workshops, books, etc.
+    source* is UUID //!!! think about how to handle this when we add the ability to delete
+      - *property name is required for D3 chart. This is the UUID of the path's source node
+    target* is String //!!! think about how to handle this when we add the ability to delete
+      - *required for D3 chart. This is the UUID of the path's target node.
+  }
+  example: { id:uuid, title: "N1->N2", type: "path", detailsArray: ["The Odin Project"], source: 0,
+    target: 1, }
+   */
 const tempEdgesList = [
   {
     source: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
@@ -63,6 +82,21 @@ const tempEdgesList = [
 
 const SVG_WIDTH = 968;
 const SVG_HEIGHT = 600;
+
+/*
+  nodesArray is Array[{Node}]
+  interp. array of node objects
+    
+  Node is Object{
+  id* is UUID. *required for D3 chart.
+  title is String
+  type is one of ["node", "path"] 
+    - interp. always "node" for node objects. Allows Modal component to distinguish between paths and nodes.
+  detailsArray is Array[String]
+    - the strings that compose the description bullets. In the case of nodes, these are SKILLS.
+      }
+      example: { id: 1, title: "Node 1", type: "node", detailsArray: ["Prerequisite node"] }
+*/
 const tempNodesList = [
   {
     id: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
@@ -94,43 +128,6 @@ const tempTree = {
 };
 
 function Edit() {
-  /*
-  pathsArray is Array[{Path}]
-  interp. array of path objects
-
-  Path is Object{
-    id is Int
-    title is String
-    type is one of ["node", "path"] 
-      - interp. always "path" for path objects. Allows Modal component to distinguish between paths and nodes.
-    detailsArray is Array[String]
-      - the strings that compose the description bullets. In the case of paths, these are learning activities, eg courses, workshops, books, etc.
-    fromNode is String //!!! think about how to handle this when we add the ability to delete
-      - title of the node earlier to this path
-    toNode is String //!!! think about how to handle this when we add the ability to delete
-      - title of the node later to this path
-  }
-  example: { id: 1, title: "N1->N2", type: "path", detailsArray: ["The Odin Project"], fromNode: 0,
-    toNode: 1, }
-   */
-  const [pathsArray, setPathsArray] = useState(tempEdgesList);
-
-  /*
-      nodesArray is Array[{Node}]
-      interp. array of node objects
-    
-      Node is Object{
-        id is Int
-        title is String
-        type is one of ["node", "path"] 
-          - interp. always "node" for node objects. Allows Modal component to distinguish between paths and nodes.
-        detailsArray is Array[String]
-          - the strings that compose the description bullets. In the case of nodes, these are SKILLS.
-      }
-      example: { id: 1, title: "Node 1", type: "node", detailsArray: ["Prerequisite node"] }
-       */
-  const [nodesArray, setNodesArray] = useState(tempNodesList);
-
   const [tree, setTree] = useState(tempTree);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
