@@ -3,6 +3,7 @@ import { useState } from "react";
 import Outline from "../components/Outline";
 import Modal from "../components/Modal";
 import D3Chart from "../components/D3Chart";
+import NewTreeModal from "../components/NewTreeModal";
 
 //generate uuid; retrieved from https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid 4Sep2023
 function uuidv4() {
@@ -132,6 +133,8 @@ function Edit() {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const [isNewTreeModalVisible, setIsNewTreeModalVisible] = useState(true);
+
   /*
   clickedElement is Node or Path
   -interp. the Node or Path that was clicked to open a modal.
@@ -182,6 +185,9 @@ function Edit() {
       of the skill tree based on the text outline */}
         <D3Chart tree={tree} />
       </div>
+      {isNewTreeModalVisible && (
+        <NewTreeModal setIsNewTreeModalVisible={setIsNewTreeModalVisible} />
+      )}
       {isModalVisible && (
         <Modal
           source={clickedElement}
