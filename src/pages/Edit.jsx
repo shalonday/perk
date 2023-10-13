@@ -133,19 +133,19 @@ function Edit() {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   /*
-  clickedSource is Node or Path
+  clickedElement is Node or Path
   -interp. the Node or Path that was clicked to open a modal.
   */
-  const [clickedSource, setClickedSource] = useState(null);
+  const [clickedElement, setClickedElement] = useState(null);
 
   // Enum("path", "node") -> Effect
   // Opens a path modal if input is "path", otherwise open a node modal. In either case we set
-  // clickedSource, which will be received by the modal as a prop, to an object containing only
+  // clickedElement, which will be received by the modal as a prop, to an object containing only
   // values for id and type, resulting in a mostly empty modal.
   function handleAdd(type) {
     switch (type) {
       case "path":
-        setClickedSource({
+        setClickedElement({
           id: uuidv4(),
           title: "",
           type: "path",
@@ -155,7 +155,7 @@ function Edit() {
         });
         break;
       case "node":
-        setClickedSource({
+        setClickedElement({
           id: uuidv4(),
           title: "",
           type: "node",
@@ -184,9 +184,9 @@ function Edit() {
       </div>
       {isModalVisible && (
         <Modal
-          source={clickedSource}
+          source={clickedElement}
           setSourceArray={
-            clickedSource.type === "path" ? setPathsArray : setNodesArray
+            clickedElement.type === "path" ? setPathsArray : setNodesArray
           }
         />
       )}
