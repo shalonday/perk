@@ -176,8 +176,8 @@ function Edit() {
       <div className={styles.editContainer}>
         {/* <Outline/> represents the textual outline representation of the skill tree */}
         <Outline
-          pathsArray={pathsArray}
-          nodesArray={nodesArray}
+          pathsArray={tree.links}
+          nodesArray={tree.nodes}
           handleAdd={handleAdd}
           className={styles.editOutline}
         />
@@ -188,14 +188,7 @@ function Edit() {
       {isNewTreeModalVisible && (
         <NewTreeModal setIsNewTreeModalVisible={setIsNewTreeModalVisible} />
       )}
-      {isModalVisible && (
-        <Modal
-          source={clickedElement}
-          setSourceArray={
-            clickedElement.type === "path" ? setPathsArray : setNodesArray
-          }
-        />
-      )}
+      {isModalVisible && <Modal source={clickedElement} setTree={setTree} />}
     </>
   );
 }
