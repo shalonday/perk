@@ -131,6 +131,8 @@ function Edit() {
        */
   const [nodesArray, setNodesArray] = useState(tempNodesList);
 
+  const [tree, setTree] = useState(tempTree);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   /*
