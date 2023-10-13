@@ -4,56 +4,6 @@ import Outline from "../components/Outline";
 import Modal from "../components/Modal";
 import D3Chart from "../components/D3Chart";
 
-const tempNodesList = [
-  {
-    id: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    title: "Node 1",
-    type: "node",
-    detailsArray: ["Prerequisite node"],
-    coordinates: [0, 0, 0],
-    prevList: [],
-    nextList: ["path4cdd-4077-4c36-92bb-5a3b09fc44d1"],
-  },
-  {
-    id: "1ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    title: "Node 2",
-    type: "node",
-    detailsArray: ["Program a basic profile website"],
-    coordinates: [],
-    prevList: ["path4cdd-4077-4c36-92bb-5a3b09fc44d1"],
-    nextList: ["n2-n3", "n2-n4"],
-  },
-];
-const tempPathsList = [
-  {
-    id: "path4cdd-4077-4c36-92bb-5a3b09fc44d1",
-    title: "N1->N2",
-    type: "path",
-    detailsArray: ["The Odin Project"],
-    coordinates: [],
-    prevList: ["0ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
-    nextList: ["1ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
-  },
-  {
-    id: "n2-n3",
-    title: "N2->N3",
-    type: "path",
-    detailsArray: ["The Odin Project"],
-    coordinates: [],
-    prevList: ["1ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
-    nextList: [],
-  },
-  {
-    id: "n2-n4",
-    title: "N2->N4",
-    type: "path",
-    detailsArray: ["The Odin Project"],
-    coordinates: [],
-    prevList: ["1ef94cdd-4077-4c36-92bb-5a3b09fc44d1"],
-    nextList: [],
-  },
-];
-
 //generate uuid; retrieved from https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid 4Sep2023
 function uuidv4() {
   return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
@@ -64,12 +14,67 @@ function uuidv4() {
   );
 }
 
-const tempTree = {
+const tempEdgesList = [
+  {
+    source: 0,
+    target: 1,
+    value: 1,
+    title: "N1->N2",
+    type: "path",
+    detailsArray: ["The Odin Project"],
+  },
+  {
+    source: 1,
+    target: 2,
+    value: 1,
+    title: "N2->N3",
+    type: "path",
+    detailsArray: ["The Odin Project"],
+  },
+  {
+    source: 1,
+    target: 3,
+    value: 1,
+    title: "N2->N4",
+    type: "path",
+    detailsArray: ["The Odin Project"],
+  },
+  { source: 1, target: 4, value: 1 },
+  { source: 2, target: 5, value: 1 },
+  { source: 3, target: 5, value: 1 },
+  { source: 4, target: 5, value: 1 },
+];
+
+const SVG_WIDTH = 968;
+const SVG_HEIGHT = 600;
+const tempNodesList = [
+  {
+    id: 0,
+    fx: SVG_WIDTH / 2,
+    fy: (SVG_HEIGHT - 200) / 2,
+    title: "Node 1",
+    type: "node",
+    detailsArray: ["Prerequisite node"],
+  }, // fx and fy are fixed coordinates that the force sim won't touch
+  {
+    id: 1,
+    title: "Node 2",
+    type: "node",
+    detailsArray: ["Program a basic profile website"],
+  },
+  { id: 2 },
+  { id: 3 },
+  { id: 4 },
+  { id: 5 },
+];
+
+const tree = {
   id: "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
   title: "ZTM's Become a Freelance Developer",
   desc: "The 'Become a Freelance Developer' Career Path from Zero To Mastery. Accessible via https://zerotomastery.io/career-paths/become-a-freelancer-2r7slf",
-  rootId: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
-  elements: tempNodesList.concat(tempPathsList),
+  rootId: 0,
+  nodes: tempNodesList,
+  links: tempEdgesList,
 };
 
 function Edit() {
@@ -92,7 +97,7 @@ function Edit() {
   example: { id: 1, title: "N1->N2", type: "path", detailsArray: ["The Odin Project"], fromNode: 0,
     toNode: 1, }
    */
-  const [pathsArray, setPathsArray] = useState(tempPathsList);
+  const [pathsArray, setPathsArray] = useState(tempEdgesList);
 
   /*
       nodesArray is Array[{Node}]
@@ -160,7 +165,7 @@ function Edit() {
         />
         {/* Image representation 
       of the skill tree based on the text outline */}
-        <D3Chart />
+        <D3Chart tree={tree} />
       </div>
       {isModalVisible && (
         <Modal
