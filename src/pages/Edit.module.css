@@ -13,3 +13,17 @@
 .editVisualization {
   flex: 1;
 }
+
+.titleDescDiv {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+}
+
+.title {
+  text-align: right;
+}
+
+.description {
+  text-align: right;
+}

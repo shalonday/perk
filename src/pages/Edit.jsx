@@ -122,7 +122,8 @@ const tempNodesList = [
 const tempTree = {
   id: "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
   title: "ZTM's Become a Freelance Developer",
-  desc: "The 'Become a Freelance Developer' Career Path from Zero To Mastery. Accessible via https://zerotomastery.io/career-paths/become-a-freelancer-2r7slf",
+  description:
+    "The 'Become a Freelance Developer' Career Path from Zero To Mastery. Accessible via https://zerotomastery.io/career-paths/become-a-freelancer-2r7slf",
   rootId: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
   nodes: tempNodesList,
   links: tempEdgesList,
@@ -184,6 +185,10 @@ function Edit() {
         {/* Image representation 
       of the skill tree based on the text outline */}
         <D3Chart tree={tree} />
+        <div className={styles.titleDescDiv}>
+          <h3 className={styles.title}>{tree.title}</h3>
+          <p className={styles.description}>{tree.description}</p>
+        </div>
       </div>
       {isNewTreeModalVisible && (
         <NewTreeModal
