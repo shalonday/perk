@@ -186,7 +186,10 @@ function Edit() {
         <D3Chart tree={tree} />
       </div>
       {isNewTreeModalVisible && (
-        <NewTreeModal setIsNewTreeModalVisible={setIsNewTreeModalVisible} />
+        <NewTreeModal
+          nodesArray={tree.nodes}
+          setIsNewTreeModalVisible={setIsNewTreeModalVisible}
+        />
       )}
       {isModalVisible && <Modal source={clickedElement} setTree={setTree} />}
     </>
