@@ -32,7 +32,7 @@ function NewTreeModal({ nodesArray, setIsNewTreeModalVisible, setTree }) {
           ></textarea>
         </div>
         <div className={styles.pickDiv}>
-          <p classname={styles.pickP}>
+          <p className={styles.pickP}>
             Pick starting node(s) for your tree:
             <select multiple>
               {nodesArray.map((node) => (
