@@ -145,7 +145,8 @@ function Edit() {
   // Enum("path", "node") -> Effect
   // Opens a path modal if input is "path", otherwise open a node modal. In either case we set
   // clickedElement, which will be received by the modal as a prop, to an object containing only
-  // values for id and type, resulting in a mostly empty modal.
+  // values for id and type, resulting in a mostly empty modal,  since this clickedElement object will
+  // be used for the modal's initial states.
   function handleAdd(type) {
     switch (type) {
       case "path":
@@ -183,11 +184,22 @@ function Edit() {
     setIsModalVisible(true);
   }
 
+  /*
+  Element(ie Node or Path) -> Effect
+  - opens a modal specific to the clicked Node or Path by assigning clickedElement that will be 
+  sent to modal, and making the modal visible
+   */
+  function handleOutlineItemClick(element) {
+    setClickedElement(element);
+    setIsModalVisible(true);
+  }
+
   return (
     <>
       <div className={styles.editContainer}>
         {/* <Outline/> represents the textual outline representation of the skill tree */}
         <Outline
+          handleOutlineItemClick={handleOutlineItemClick}
           pathsArray={tree.links}
           nodesArray={tree.nodes}
           handleAdd={handleAdd}
