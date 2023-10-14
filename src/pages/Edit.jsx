@@ -149,21 +149,32 @@ function Edit() {
   function handleAdd(type) {
     switch (type) {
       case "path":
-        setClickedElement({
+        const newPath = {
           id: uuidv4(),
           title: "",
           type: "path",
           detailsArray: [],
           source: "",
           target: "",
+        };
+        setClickedElement(newPath);
+        // adding an empty path to the array and tree as soon as Add is clicked seems simpler than
+        // adding them only once the modal is submitted. This makes it so that the modal logic works
+        // regardless if this is a new path or a preexisting path clicked for edit.
+        setTree((tree) => {
+          return { ...tree, links: [...tree.links, newPath] };
         });
         break;
       case "node":
-        setClickedElement({
+        const newNode = {
           id: uuidv4(),
           title: "",
           type: "node",
           detailsArray: [],
+        };
+        setClickedElement(newNode);
+        setTree((tree) => {
+          return { ...tree, nodes: [...tree.nodes, newNode] };
         });
         break;
       default:
@@ -197,7 +208,14 @@ function Edit() {
           setTree={setTree}
         />
       )}
-      {isModalVisible && <Modal source={clickedElement} setTree={setTree} />}
+      {isModalVisible && (
+        <Modal
+          clickedElement={clickedElement}
+          nodesArray={tree.nodes}
+          setTree={setTree}
+          setIsModalVisible={setIsModalVisible}
+        />
+      )}
     </>
   );
 }
