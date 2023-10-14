@@ -66,6 +66,12 @@ export default function Modal({
 
     setIsModalVisible(false);
   }
+
+  function handleExit(e) {
+    e.preventDefault();
+    setIsModalVisible(false);
+  }
+
   // Int -> Effect
   // delete item in bullets array that corresponds to index
   function handleDeleteItem(index) {
@@ -139,7 +145,10 @@ export default function Modal({
           </p>
         </ul>
         <div className={styles.buttonDiv}>
-          <button className={`${styles.button} ${styles.cancelButton}`}>
+          <button
+            className={`${styles.button} ${styles.cancelButton}`}
+            onClick={handleExit}
+          >
             Cancel
           </button>
           <button className={`${styles.button} ${styles.saveButton}`}>
