@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function Modal({
   clickedElement,
-  nodesArray,
+  tree,
   setTree,
   setIsModalVisible,
   className,
@@ -12,22 +12,20 @@ export default function Modal({
   const [sourceNode, setSourceNode] = useState(
     clickedElement.type === "path" && clickedElement.source
       ? clickedElement.source
-      : nodesArray[0].id
+      : tree.nodes[0].id
   );
 
   // target / targetNode is the node at the end of a path
   const [targetNode, setTargetNode] = useState(
     clickedElement.type === "path" && clickedElement.target
       ? clickedElement.target
-      : nodesArray[1].id
+      : tree.nodes[1].id
   );
   const [title, setTitle] = useState(clickedElement.title);
   const [bullets, setBullets] = useState(clickedElement.detailsArray);
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    // use setArray methods here !!!
 
     if (clickedElement.type === "path") {
       const editedPath = {
@@ -38,14 +36,20 @@ export default function Modal({
         target: targetNode,
       };
 
-      setTree((tree) => {
-        return {
-          ...tree,
-          links: tree.links.map((link) =>
-            link.id === clickedElement.id ? editedPath : link
-          ),
-        };
-      });
+      if (isPreexistingElement(clickedElement)) {
+        setTree((tree) => {
+          return {
+            ...tree,
+            links: tree.links.map((link) =>
+              link.id === clickedElement.id ? editedPath : link
+            ),
+          };
+        });
+      } else {
+        setTree((tree) => {
+          return { ...tree, links: [...tree.links, editedPath] };
+        });
+      }
     }
 
     if (clickedElement.type === "node") {
@@ -54,17 +58,32 @@ export default function Modal({
         title: title,
         detailsArray: bullets,
       };
-      setTree((tree) => {
-        return {
-          ...tree,
-          nodes: tree.nodes.map((node) =>
-            node.id === clickedElement.id ? editedNode : node
-          ),
-        };
-      });
+      if (isPreexistingElement(clickedElement)) {
+        setTree((tree) => {
+          return {
+            ...tree,
+            nodes: tree.nodes.map((node) =>
+              node.id === clickedElement.id ? editedNode : node
+            ),
+          };
+        });
+      } else {
+        setTree((tree) => {
+          return { ...tree, nodes: [...tree.nodes, editedNode] };
+        });
+      }
     }
 
     setIsModalVisible(false);
+  }
+
+  // Path/Node -> Boolean
+  // helper for handleSubmit. Return true iff clickedElement's ID already exists in either
+  // links or nodes array.
+  function isPreexistingElement(clickedElement) {
+    clickedElement.type === "path"
+      ? tree.links.map((link) => link.id).includes(clickedElement.id)
+      : tree.nodes.map((node) => node.id).includes(clickedElement.id);
   }
 
   function handleExit(e) {
@@ -94,7 +113,7 @@ export default function Modal({
               value={sourceNode}
               onChange={(e) => setSourceNode(e.target.value)}
             >
-              {nodesArray.map((node) => (
+              {tree.nodes.map((node) => (
                 <option key={node.id} value={node.id}>
                   {"Node " + node.id}
                 </option>
@@ -105,7 +124,7 @@ export default function Modal({
               value={targetNode}
               onChange={(e) => setTargetNode(e.target.value)}
             >
-              {nodesArray.map((node) => (
+              {tree.nodes.map((node) => (
                 <option key={node.id} value={node.id}>
                   {"Node " + node.id}
                 </option>

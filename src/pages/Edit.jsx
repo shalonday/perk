@@ -159,12 +159,6 @@ function Edit() {
           target: "",
         };
         setClickedElement(newPath);
-        // adding an empty path to the array and tree as soon as Add is clicked seems simpler than
-        // adding them only once the modal is submitted. This makes it so that the modal logic works
-        // regardless if this is a new path or a preexisting path clicked for edit.
-        setTree((tree) => {
-          return { ...tree, links: [...tree.links, newPath] };
-        });
         break;
       case "node":
         const newNode = {
@@ -174,9 +168,6 @@ function Edit() {
           detailsArray: [],
         };
         setClickedElement(newNode);
-        setTree((tree) => {
-          return { ...tree, nodes: [...tree.nodes, newNode] };
-        });
         break;
       default:
         throw new Error("unknown type was passed to handleAdd");
@@ -223,7 +214,7 @@ function Edit() {
       {isModalVisible && (
         <Modal
           clickedElement={clickedElement}
-          nodesArray={tree.nodes}
+          tree={tree}
           setTree={setTree}
           setIsModalVisible={setIsModalVisible}
         />
