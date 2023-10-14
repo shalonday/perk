@@ -1,9 +1,18 @@
 import { useState } from "react";
 import styles from "./NewTreeModal.module.css";
 
-function NewTreeModal({ nodesArray, setIsNewTreeModalVisible }) {
+function NewTreeModal({ nodesArray, setIsNewTreeModalVisible, setTree }) {
   const [title, setTitle] = useState("Tree Title");
   const [description, setDescription] = useState("Tree description here");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    setTree((tree) => {
+      return { ...tree, title: title, description: description };
+    });
+    setIsNewTreeModalVisible(false);
+  }
   return (
     <>
       <div className={styles.backgroundBox}></div>
@@ -25,18 +34,15 @@ function NewTreeModal({ nodesArray, setIsNewTreeModalVisible }) {
         <div className={styles.pickDiv}>
           <p classname={styles.pickP}>
             Pick starting node(s) for your tree:
-            <select>
+            <select multiple>
               {nodesArray.map((node) => (
                 <option>{node.title}</option>
               ))}
             </select>
-            ...Or{" "}
-            <button onClick={() => setIsNewTreeModalVisible(false)}>
-              create
-            </button>{" "}
-            your own
+            ...Or <button onClick={handleSubmit}>create</button> your own
           </p>
         </div>
+        <button onClick={handleSubmit}>Submit</button>
       </form>
     </>
   );

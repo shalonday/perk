@@ -189,6 +189,7 @@ function Edit() {
         <NewTreeModal
           nodesArray={tree.nodes}
           setIsNewTreeModalVisible={setIsNewTreeModalVisible}
+          setTree={setTree}
         />
       )}
       {isModalVisible && <Modal source={clickedElement} setTree={setTree} />}
