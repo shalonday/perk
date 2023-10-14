@@ -84,12 +84,26 @@ export default function Modal({
         {clickedElement.type === "path" && (
           <p>
             This path connects{" "}
-            <select>
-              <option>{source.fromNode}</option>
+            <select
+              value={sourceNode}
+              onChange={(e) => setSourceNode(e.target.value)}
+            >
+              {nodesArray.map((node) => (
+                <option key={node.id} value={node.id}>
+                  {"Node " + node.id}
+                </option>
+              ))}
             </select>{" "}
             and{" "}
-            <select>
-              <option>{source.toNode}</option>
+            <select
+              value={targetNode}
+              onChange={(e) => setTargetNode(e.target.value)}
+            >
+              {nodesArray.map((node) => (
+                <option key={node.id} value={node.id}>
+                  {"Node " + node.id}
+                </option>
+              ))}
             </select>
           </p>
         )}
