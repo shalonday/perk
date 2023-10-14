@@ -1,35 +1,71 @@
 import styles from "./Modal.module.css";
 import { useState } from "react";
 
-export default function Modal({ source, setSourceArray, className }) {
-  const [fromNode, setFromNode] = useState(source.fromNode);
-  const [toNode, setToNode] = useState(source.toNode);
-  const [title, setTitle] = useState(source.title);
-  const [bullets, setBullets] = useState(source.detailsArray);
+export default function Modal({
+  clickedElement,
+  nodesArray,
+  setTree,
+  setIsModalVisible,
+  className,
+}) {
+  // source / sourceNode is where a path exits from
+  const [sourceNode, setSourceNode] = useState(
+    clickedElement.type === "path" && clickedElement.source
+      ? clickedElement.source
+      : nodesArray[0].id
+  );
+
+  // target / targetNode is the node at the end of a path
+  const [targetNode, setTargetNode] = useState(
+    clickedElement.type === "path" && clickedElement.target
+      ? clickedElement.target
+      : nodesArray[1].id
+  );
+  const [title, setTitle] = useState(clickedElement.title);
+  const [bullets, setBullets] = useState(clickedElement.detailsArray);
 
   function handleSubmit(e) {
     e.preventDefault();
 
     // use setArray methods here !!!
 
-    source.type === "path" &&
-      setSourceArray((array) =>
-        array.map((item) =>
-          item.id === source.id
-            ? {
-                ...item,
-                title: title,
-                detailsArray: bullets,
-                fromNode: fromNode,
-                toNode: toNode,
-              }
-            : item
-        )
-      );
+    if (clickedElement.type === "path") {
+      const editedPath = {
+        ...clickedElement,
+        title: title,
+        detailsArray: bullets,
+        source: sourceNode,
+        target: targetNode,
+      };
 
-    //{source.type==="node" && setSourceArray((array)=>)}
+      setTree((tree) => {
+        return {
+          ...tree,
+          links: tree.links.map((link) =>
+            link.id === clickedElement.id ? editedPath : link
+          ),
+        };
+      });
+    }
+
+    if (clickedElement.type === "node") {
+      const editedNode = {
+        ...clickedElement,
+        title: title,
+        detailsArray: bullets,
+      };
+      setTree((tree) => {
+        return {
+          ...tree,
+          nodes: tree.nodes.map((node) =>
+            node.id === clickedElement.id ? editedNode : node
+          ),
+        };
+      });
+    }
+
+    setIsModalVisible(false);
   }
-
   // Int -> Effect
   // delete item in bullets array that corresponds to index
   function handleDeleteItem(index) {
@@ -45,7 +81,7 @@ export default function Modal({ source, setSourceArray, className }) {
     <>
       <div className={styles.backgroundBox}></div>
       <form onSubmit={handleSubmit} className={styles.modal}>
-        {source.type === "path" && (
+        {clickedElement.type === "path" && (
           <p>
             This path connects{" "}
             <select>
@@ -60,7 +96,7 @@ export default function Modal({ source, setSourceArray, className }) {
         <h3>
           <input
             type="text"
-            placeholder={"Title: " + source.title}
+            placeholder={"Title: " + clickedElement.title}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
