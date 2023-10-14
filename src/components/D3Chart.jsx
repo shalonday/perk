@@ -3,29 +3,8 @@ import { useEffect, useRef } from "react";
 
 const SVG_WIDTH = 968;
 const SVG_HEIGHT = 600;
-const tempEdgesList = [
-  { source: 0, target: 1, value: 1 },
-  { source: 1, target: 2, value: 1 },
-  { source: 1, target: 3, value: 1 },
-  { source: 1, target: 4, value: 1 },
-  { source: 2, target: 5, value: 1 },
-  { source: 3, target: 5, value: 1 },
-  { source: 4, target: 5, value: 1 },
-];
-
-const tempNodesList = [
-  { id: 0, fx: SVG_WIDTH / 2, fy: (SVG_HEIGHT - 200) / 2 }, // fx and fy are fixed coordinates that the force sim won't touch
-  { id: 1 },
-  { id: 2 },
-  { id: 3 },
-  { id: 4 },
-  { id: 5 },
-];
-
-const tree = {
-  nodes: tempNodesList,
-  links: tempEdgesList,
-};
+const ROOT_FX = SVG_WIDTH / 2; // stands for "fixed x coordinate", signifies D3 to fix this node on a point.
+const ROOT_FY = (SVG_HEIGHT - 200) / 2; // stands for "fixed y coordinate"
 
 function ForceGraph(data) {
   // Specify the dimensions of the chart.
@@ -88,15 +67,40 @@ function ForceGraph(data) {
   return svg.node();
 }
 
-export default function D3Chart() {
+// checks if all source and target nodes in tree.links exist, and if all nodes are linked.
+function isTreeRenderable(tree) {
+  return (
+    tree.nodes.every((node) => isNodeLinked(node, tree.links)) &&
+    tree.links.every((link) => isLinkUsingExistingNodes(link, tree.nodes))
+  );
+}
+
+// check if node is mentioned in any of the sources or targets
+function isNodeLinked(node, links) {
+  return links
+    .map((link) => link.source)
+    .concat(links.map((link) => link.target))
+    .includes(node.id);
+}
+
+function isLinkUsingExistingNodes(link, nodes) {
+  return (
+    nodes.map((node) => node.id).includes(link.source) &&
+    nodes.map((node) => node.id).includes(link.target)
+  );
+}
+
+export default function D3Chart({ tree }) {
   const ref = useRef();
   useEffect(() => {
-    const chart = ForceGraph(tree);
+    if (isTreeRenderable(tree)) {
+      const chart = ForceGraph(tree);
 
-    if (ref.current) {
-      ref.current.appendChild(chart);
+      if (ref.current) {
+        ref.current.appendChild(chart);
+      }
     }
-  }, []);
+  }, [tree]);
 
   return <div ref={ref} />;
 }
