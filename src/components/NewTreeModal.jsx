@@ -36,7 +36,7 @@ function NewTreeModal({ nodesArray, setIsNewTreeModalVisible, setTree }) {
             Pick starting node(s) for your tree:
             <select multiple>
               {nodesArray.map((node) => (
-                <option>{node.title}</option>
+                <option key={node.id}>{node.title}</option>
               ))}
             </select>
             ...Or <button onClick={handleSubmit}>create</button> your own
