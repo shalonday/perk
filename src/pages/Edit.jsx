@@ -154,8 +154,8 @@ function Edit() {
           title: "",
           type: "path",
           detailsArray: [],
-          fromNode: "",
-          toNode: "",
+          source: "",
+          target: "",
         });
         break;
       case "node":
