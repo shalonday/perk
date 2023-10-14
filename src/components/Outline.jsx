@@ -19,7 +19,7 @@ function Outline({
         <ul>
           {pathsArray.map((path, index) => (
             <li onClick={() => handleOutlineItemClick(path)} key={index}>
-              {path.title}
+              {`Node${path.source}->Node${path.target}`}
             </li>
           ))}
         </ul>
@@ -30,7 +30,7 @@ function Outline({
         <ul>
           {nodesArray.map((node, index) => (
             <li onClick={() => handleOutlineItemClick(node)} key={index}>
-              {node.title}
+              {"Node " + node.id}
             </li>
           ))}
         </ul>
