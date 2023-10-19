@@ -6,16 +6,7 @@ import D3Chart from "../components/D3Chart";
 import NewTreeModal from "../components/NewTreeModal";
 import { useParams } from "react-router-dom";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
-
-//generate uuid; retrieved from https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid 4Sep2023
-function uuidv4() {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-    (
-      c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-    ).toString(16)
-  );
-}
+import { uuidv4 } from "../utils";
 
 /*
   pathsArray is Array[{Path}]
@@ -38,6 +29,7 @@ function uuidv4() {
    */
 const tempEdgesList = [
   {
+    id: "f455eb57-71a1-4130-8cba-dc9ffc98bb6c",
     source: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
     target: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
@@ -46,6 +38,7 @@ const tempEdgesList = [
     detailsArray: ["The Odin Project"],
   },
   {
+    id: "56379e11-1f4c-4781-aecf-6df8956b5957",
     source: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
     target: "2e094cdd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
@@ -54,6 +47,7 @@ const tempEdgesList = [
     detailsArray: ["The Odin Project"],
   },
   {
+    id: "96a569be-a72c-49f4-be49-1201b0a7e2b7",
     source: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
     target: "2ef04cdd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
@@ -62,29 +56,30 @@ const tempEdgesList = [
     detailsArray: ["The Odin Project"],
   },
   {
+    id: "a704551c-8d74-4056-9fd8-02e498fa3ec5",
     source: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
     target: "2ef90cdd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
   },
   {
+    id: "b41802e5-b81f-4d1a-b688-a668d3b0c22c",
     source: "2e094cdd-4077-4c36-92bb-5a3b09fc44d1",
     target: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
   },
   {
+    id: "48954cd6-fab9-4396-b88f-9161823d563b",
     source: "2ef04cdd-4077-4c36-92bb-5a3b09fc44d1",
     target: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
   },
   {
+    id: "5fe5815d-1a59-431c-a31a-48000c91471b",
     source: "2ef90cdd-4077-4c36-92bb-5a3b09fc44d1",
     target: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1",
     value: 1,
   },
 ];
-
-const SVG_WIDTH = 968;
-const SVG_HEIGHT = 600;
 
 /*
   nodesArray is Array[{Node}]
@@ -103,12 +98,10 @@ const SVG_HEIGHT = 600;
 const tempNodesList = [
   {
     id: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    fx: SVG_WIDTH / 2,
-    fy: (SVG_HEIGHT - 200) / 2,
     title: "Node 1",
     type: "node",
     detailsArray: ["Prerequisite node"],
-  }, // fx and fy are fixed coordinates that the force sim won't touch
+  },
   {
     id: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
     title: "Node 2",

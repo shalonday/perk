@@ -1,10 +1,6 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
-
-const SVG_WIDTH = 968;
-const SVG_HEIGHT = 600;
-const ROOT_FX = SVG_WIDTH / 2; // stands for "fixed x coordinate", signifies D3 to fix this node on a point.
-const ROOT_FY = (SVG_HEIGHT - 200) / 2; // stands for "fixed y coordinate"
+import { SVG_HEIGHT, SVG_WIDTH } from "../utils";
 
 function ForceGraph(data, gLinkRef, gNodeRef) {
   // Specify the dimensions of the chart.
