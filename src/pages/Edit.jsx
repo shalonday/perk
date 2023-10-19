@@ -1,9 +1,11 @@
 import styles from "./Edit.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Outline from "../components/Outline";
 import Modal from "../components/Modal";
 import D3Chart from "../components/D3Chart";
 import NewTreeModal from "../components/NewTreeModal";
+import { useParams } from "react-router-dom";
+import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 
 //generate uuid; retrieved from https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid 4Sep2023
 function uuidv4() {
@@ -130,11 +132,32 @@ const tempTree = {
 };
 
 function Edit() {
-  const [tree, setTree] = useState(tempTree);
+  // tree ID grabbed from URL Param
+  const urlId = useParams();
+
+  const emptyTree = {
+    id: urlId,
+    title: "",
+    description: "",
+    rootId: "",
+    nodes: [],
+    links: [],
+  };
+
+  const { currentTree, getTree } = useSkillTreesContext();
+
+  const [tree, setTree] = useState(emptyTree);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [isNewTreeModalVisible, setIsNewTreeModalVisible] = useState(true);
+
+  // On first render, get the tree indicated by URL, then set the displayed tree to that.
+  useEffect(function () {
+    getTree(urlId);
+    if (Object.keys(currentTree).length > 0) setTree(currentTree);
+    else setTree(emptyTree);
+  }, []);
 
   /*
   clickedElement is Node or Path
