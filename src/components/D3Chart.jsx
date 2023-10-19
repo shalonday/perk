@@ -75,10 +75,6 @@ export default function D3Chart({ tree, className }) {
   useEffect(() => {
     if (isTreeRenderable(tree)) {
       ForceGraph(tree, gLinkRef, gNodeRef);
-
-      // if (svgRef.current) {
-      //   svgRef.current.appendChild(chart);
-      // }
     }
   }, [tree]);
 
@@ -90,7 +86,25 @@ export default function D3Chart({ tree, className }) {
       >
         <g ref={gLinkRef}>
           {tree.links.map((link) => (
-            <line stroke="#4338ca" stroke-width={1.5}></line>
+            <>
+              <marker
+                id="arrow"
+                viewBox="0 0 10 10"
+                refX="15"
+                refY="5"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+                fill="#4338ca"
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+              <line
+                stroke="#4338ca"
+                stroke-width={1.5}
+                marker-end="url(#arrow)"
+              ></line>
+            </>
           ))}
         </g>
         <g ref={gNodeRef}>
