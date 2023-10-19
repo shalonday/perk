@@ -198,7 +198,7 @@ function Edit() {
         />
         {/* Image representation 
       of the skill tree based on the text outline */}
-        <D3Chart tree={tree} />
+        <D3Chart tree={tree} className={styles.editVisualization} />
         <div className={styles.titleDescDiv}>
           <h3 className={styles.title}>{tree.title}</h3>
           <p className={styles.description}>{tree.description}</p>
