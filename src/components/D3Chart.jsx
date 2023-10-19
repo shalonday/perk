@@ -85,32 +85,33 @@ export default function D3Chart({ tree, className }) {
       >
         <g ref={gLinkRef}>
           {tree.links.map((link) => (
-            <>
-              <marker
-                key={"m" + link.id}
-                id="arrow"
-                viewBox="0 0 10 10"
-                refX="15"
-                refY="5"
-                markerWidth="6"
-                markerHeight="6"
-                orient="auto-start-reverse"
-                fill="#4338ca"
-              >
-                <path d="M 0 0 L 10 5 L 0 10 z" />
-              </marker>
-              <line
-                key={link.id}
-                stroke="#4338ca"
-                strokeWidth={1.5}
-                markerEnd="url(#arrow)"
-              ></line>
-            </>
+            <marker
+              key={"m" + link.id}
+              id="arrow"
+              viewBox="0 0 10 10"
+              refX="15"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+              fill="#4338ca"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" />
+            </marker>
+          ))}
+
+          {tree.links.map((link) => (
+            <line
+              key={link.id}
+              stroke="#4338ca"
+              strokeWidth={1.5}
+              markerEnd="url(#arrow)"
+            ></line>
           ))}
         </g>
         <g ref={gNodeRef}>
           {tree.nodes.map((node) => (
-            <circle key={node.id} fill="#ec4899" stroke-width={1.5}></circle> //
+            <circle key={node.id} fill="#ec4899" strokeWidth={1.5}></circle> //
           ))}
         </g>
       </svg>{" "}
