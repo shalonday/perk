@@ -79,7 +79,6 @@ function SkillTreesContextProvider({ children }) {
       dispatch({ type: "loading" });
       const res = await fetch(`${BASE_URL}/trees/${id}`);
       const data = await res.json();
-      console.log(data);
       dispatch({ type: "tree/loaded", payload: data });
     } catch {
       dispatch({

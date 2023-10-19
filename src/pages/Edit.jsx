@@ -156,7 +156,6 @@ function Edit() {
   useEffect(function () {
     getTree(urlId);
     if (Object.keys(currentTree).length > 0) setTree(currentTree);
-    else setTree(emptyTree);
   }, []);
 
   /*
