@@ -25,17 +25,23 @@ function reducer(state, action) {
     case "loading":
       return { ...state, isLoading: true };
     case "createdTrees/loaded":
-      return { ...state, createdTrees: action.payload };
+      return { ...state, createdTrees: action.payload, isLoading: false };
+    case "tree/loaded":
+      return {
+        ...state,
+        createdTrees: [...state.createdTrees, action.payload],
+        isLoading: false,
+      };
     case "rejected":
-      return { ...state, error: action.payload };
+      return { ...state, error: action.payload, isLoading: false };
     default:
       throw new Error("action type not recognized");
   }
 }
 
-// SkillTreesContextProvider is wrapped around components (children) in App.jsx to give those
-// components access to Skill Tree data. This allows for a central place from which to manage
-// code related to accessing the data.
+// SkillTreesContextProvider is wrapped around components (passed here as children prop) in App.jsx
+// to give those components access to Skill Tree data. This allows for a central place from which
+// to manage code related to accessing the data.
 function SkillTreesContextProvider({ children }) {
   const [{ isLoading, createdTrees, error }, dispatch] = useReducer(
     reducer,
@@ -59,8 +65,31 @@ function SkillTreesContextProvider({ children }) {
     }
     fetchCreatedTrees();
   }, []);
+
+  async function createTree(newTree) {
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/trees`, {
+        method: "POST",
+        body: JSON.stringify(newTree),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      dispatch({ type: "tree/created", payload: data });
+      console.log(data);
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: "There was an error uploading data",
+      });
+    }
+  }
   return (
-    <SkillTreesContext.Provider value={{ isLoading, createdTrees, error }}>
+    <SkillTreesContext.Provider
+      value={{ isLoading, createdTrees, error, createTree }}
+    >
       {children}
     </SkillTreesContext.Provider>
   );

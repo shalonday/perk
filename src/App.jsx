@@ -4,17 +4,20 @@ import Tree from "./pages/Tree";
 import PageNotFound from "./pages/PageNotFound";
 import Edit from "./pages/Edit";
 import "./App.css";
+import { SkillTreesContextProvider } from "./contexts/SkillTreesContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<Search />} />
-        <Route path="tree" element={<Tree />} />
-        <Route path="edit/:id" element={<Edit />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <SkillTreesContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<Search />} />
+          <Route path="tree" element={<Tree />} />
+          <Route path="edit/:id" element={<Edit />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </SkillTreesContextProvider>
   );
 }
 
