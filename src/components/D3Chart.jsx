@@ -42,11 +42,14 @@ function ForceGraph(data, gLinkRef, gNodeRef) {
   }
 }
 
-// checks if all source and target nodes in tree.links exist, and if all nodes are linked.
+// Checks if either the tree consists of only one node and no paths, or if
+// all source and target nodes in tree.links exist, and if all nodes are linked.
+// These are the conditions to say that a tree is renderable.
 function isTreeRenderable(tree) {
   return (
-    tree.nodes.every((node) => isNodeLinked(node, tree.links)) &&
-    tree.links.every((link) => isLinkUsingExistingNodes(link, tree.nodes))
+    (tree.nodes.length === 1 && tree.links.length === 0) ||
+    (tree.nodes.every((node) => isNodeLinked(node, tree.links)) &&
+      tree.links.every((link) => isLinkUsingExistingNodes(link, tree.nodes)))
   );
 }
 
