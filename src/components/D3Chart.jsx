@@ -6,7 +6,7 @@ const SVG_HEIGHT = 600;
 const ROOT_FX = SVG_WIDTH / 2; // stands for "fixed x coordinate", signifies D3 to fix this node on a point.
 const ROOT_FY = (SVG_HEIGHT - 200) / 2; // stands for "fixed y coordinate"
 
-function ForceGraph(data) {
+function ForceGraph(data, gLinkRef, gNodeRef) {
   // Specify the dimensions of the chart.
   const width = SVG_WIDTH;
   const height = SVG_HEIGHT;
@@ -15,14 +15,6 @@ function ForceGraph(data) {
   // so that re-evaluating this cell produces the same result.
   const links = data.links.map((d) => ({ ...d }));
   const nodes = data.nodes.map((d) => ({ ...d }));
-
-  // Create the SVG container.
-  const svg = d3
-    .create("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("viewBox", [0, 0, width, height])
-    .attr("style", "max-width: 100%; height: auto;");
 
   // Create a simulation with several forces.
   d3.forceSimulation(nodes)
@@ -34,23 +26,12 @@ function ForceGraph(data) {
     .force("center", d3.forceCenter(width / 2, height / 2))
     .on("tick", ticked);
 
-  const link = svg
-    .append("g")
-    .attr("stroke", "#000")
-    .attr("stroke-width", 1.5)
-    .selectAll("line")
-    .data(links)
-    .enter()
-    .append("line");
+  const link = d3.select(gLinkRef.current).selectAll("line").data(links);
 
-  const node = svg
-    .append("g")
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 1.5)
+  const node = d3
+    .select(gNodeRef.current)
     .selectAll("circle")
     .data(nodes)
-    .enter()
-    .append("circle")
     .attr("id", (d) => d.id)
     .attr("r", 4.5);
 
@@ -63,8 +44,6 @@ function ForceGraph(data) {
 
     node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
   }
-
-  return svg.node();
 }
 
 // checks if all source and target nodes in tree.links exist, and if all nodes are linked.
@@ -90,17 +69,36 @@ function isLinkUsingExistingNodes(link, nodes) {
   );
 }
 
-export default function D3Chart({ tree }) {
-  const ref = useRef();
+export default function D3Chart({ tree, className }) {
+  const gLinkRef = useRef();
+  const gNodeRef = useRef();
   useEffect(() => {
     if (isTreeRenderable(tree)) {
-      const chart = ForceGraph(tree);
+      ForceGraph(tree, gLinkRef, gNodeRef);
 
-      if (ref.current) {
-        ref.current.appendChild(chart);
-      }
+      // if (svgRef.current) {
+      //   svgRef.current.appendChild(chart);
+      // }
     }
   }, [tree]);
 
-  return <div ref={ref} />;
+  return (
+    <div className={className}>
+      <svg
+        viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
+        style={{ maxWidth: "100%", height: "auto" }}
+      >
+        <g ref={gLinkRef}>
+          {tree.links.map((link) => (
+            <line stroke="#4338ca" stroke-width={1.5}></line>
+          ))}
+        </g>
+        <g ref={gNodeRef}>
+          {tree.nodes.map((node) => (
+            <circle fill="#ec4899" stroke-width={1.5}></circle> //
+          ))}
+        </g>
+      </svg>{" "}
+    </div>
+  );
 }
