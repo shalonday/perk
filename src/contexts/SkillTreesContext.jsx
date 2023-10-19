@@ -17,6 +17,7 @@ const SkillTreesContext = createContext();
 const initialState = {
   isLoading: false,
   createdTrees: [],
+  currentTree: {},
   error: "",
 };
 
@@ -27,6 +28,12 @@ function reducer(state, action) {
     case "createdTrees/loaded":
       return { ...state, createdTrees: action.payload, isLoading: false };
     case "tree/loaded":
+      return {
+        ...state,
+        currentTree: action.payload,
+        isLoading: false,
+      };
+    case "tree/created":
       return {
         ...state,
         createdTrees: [...state.createdTrees, action.payload],
@@ -43,10 +50,8 @@ function reducer(state, action) {
 // to give those components access to Skill Tree data. This allows for a central place from which
 // to manage code related to accessing the data.
 function SkillTreesContextProvider({ children }) {
-  const [{ isLoading, createdTrees, error }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ isLoading, createdTrees, currentTree, error }, dispatch] =
+    useReducer(reducer, initialState);
 
   useEffect(function () {
     async function fetchCreatedTrees() {
@@ -65,6 +70,24 @@ function SkillTreesContextProvider({ children }) {
     }
     fetchCreatedTrees();
   }, []);
+
+  // Get single tree by id. This will be used in the Edit page or Tree page to display a
+  // tree that exists in the database.
+  async function getTree(id) {
+    if (id === currentTree.id) return; // no need to fetch if the currentTree is the same one being searched
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/trees/${id}`);
+      const data = await res.json();
+      console.log(data);
+      dispatch({ type: "tree/loaded", payload: data });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: `There was an error getting city data for ID:${id}`,
+      });
+    }
+  }
 
   async function createTree(newTree) {
     try {
@@ -88,7 +111,14 @@ function SkillTreesContextProvider({ children }) {
   }
   return (
     <SkillTreesContext.Provider
-      value={{ isLoading, createdTrees, error, createTree }}
+      value={{
+        isLoading,
+        createdTrees,
+        error,
+        createTree,
+        getTree,
+        currentTree,
+      }}
     >
       {children}
     </SkillTreesContext.Provider>
