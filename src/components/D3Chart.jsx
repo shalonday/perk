@@ -84,6 +84,7 @@ export default function D3Chart({ tree, className }) {
           {tree.links.map((link) => (
             <>
               <marker
+                key={"m" + link.id}
                 id="arrow"
                 viewBox="0 0 10 10"
                 refX="15"
@@ -96,16 +97,17 @@ export default function D3Chart({ tree, className }) {
                 <path d="M 0 0 L 10 5 L 0 10 z" />
               </marker>
               <line
+                key={link.id}
                 stroke="#4338ca"
-                stroke-width={1.5}
-                marker-end="url(#arrow)"
+                strokeWidth={1.5}
+                markerEnd="url(#arrow)"
               ></line>
             </>
           ))}
         </g>
         <g ref={gNodeRef}>
           {tree.nodes.map((node) => (
-            <circle fill="#ec4899" stroke-width={1.5}></circle> //
+            <circle key={node.id} fill="#ec4899" stroke-width={1.5}></circle> //
           ))}
         </g>
       </svg>{" "}
