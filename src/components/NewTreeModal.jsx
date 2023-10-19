@@ -1,9 +1,18 @@
 import { useState } from "react";
 import styles from "./NewTreeModal.module.css";
+import { SVG_HEIGHT, SVG_WIDTH, uuidv4 } from "../utils";
 
-function NewTreeModal({ nodesArray, setIsNewTreeModalVisible, setTree }) {
+function NewTreeModal({
+  nodesArray,
+  setIsNewTreeModalVisible,
+  setTree,
+  setClickedElement,
+  setIsModalVisible,
+}) {
   const [title, setTitle] = useState("Tree Title");
   const [description, setDescription] = useState("Tree description here");
+  const FIXED_X_COORDINATE = SVG_WIDTH / 2;
+  const FIXED_Y_COORDINATE = (SVG_HEIGHT - 200) / 2;
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -13,6 +22,23 @@ function NewTreeModal({ nodesArray, setIsNewTreeModalVisible, setTree }) {
     });
     setIsNewTreeModalVisible(false);
   }
+
+  // Open an Add Node modal, in addition to the normal submission logic
+  function handleCreateRoot(e) {
+    handleSubmit(e);
+
+    const newNode = {
+      id: uuidv4(),
+      title: "",
+      type: "node",
+      detailsArray: [],
+      fx: FIXED_X_COORDINATE,
+      fy: FIXED_Y_COORDINATE,
+    };
+    setClickedElement(newNode);
+    setIsModalVisible(true);
+  }
+
   return (
     <>
       <div className={styles.backgroundBox}></div>
@@ -39,7 +65,7 @@ function NewTreeModal({ nodesArray, setIsNewTreeModalVisible, setTree }) {
                 <option key={node.id}>{node.title}</option>
               ))}
             </select>
-            ...Or <button onClick={handleSubmit}>create</button> your own
+            ...Or <button onClick={handleCreateRoot}>create</button> your own
           </p>
         </div>
         <button onClick={handleSubmit}>Submit</button>

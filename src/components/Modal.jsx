@@ -12,14 +12,14 @@ export default function Modal({
   const [sourceNode, setSourceNode] = useState(
     clickedElement.type === "path" && clickedElement.source
       ? clickedElement.source
-      : tree.nodes[0].id
+      : tree.nodes[0]?.id
   );
 
   // target / targetNode is the node at the end of a path
   const [targetNode, setTargetNode] = useState(
     clickedElement.type === "path" && clickedElement.target
       ? clickedElement.target
-      : tree.nodes[1].id
+      : tree.nodes[1]?.id
   );
   const [title, setTitle] = useState(clickedElement.title);
   const [bullets, setBullets] = useState(clickedElement.detailsArray);

@@ -224,6 +224,8 @@ function Edit() {
           nodesArray={tree.nodes}
           setIsNewTreeModalVisible={setIsNewTreeModalVisible}
           setTree={setTree}
+          setClickedElement={setClickedElement}
+          setIsModalVisible={setIsModalVisible}
         />
       )}
       {isModalVisible && (
