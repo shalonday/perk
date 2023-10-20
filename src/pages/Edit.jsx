@@ -1,5 +1,5 @@
 import styles from "./Edit.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Outline from "../components/Outline";
 import Modal from "../components/Modal";
 import D3Chart from "../components/D3Chart";
@@ -126,7 +126,7 @@ const tempTree = {
 
 function Edit() {
   // tree ID grabbed from URL Param
-  const urlId = useParams();
+  const { id: urlId } = useParams();
 
   const emptyTree = {
     id: urlId,
@@ -137,25 +137,45 @@ function Edit() {
     links: [],
   };
 
-  const { currentTree, getTree } = useSkillTreesContext();
+  const { currentTree, getTree, createTree } = useSkillTreesContext();
 
   const [tree, setTree] = useState(emptyTree);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
-
   const [isNewTreeModalVisible, setIsNewTreeModalVisible] = useState(true);
 
-  // On first render, get the tree indicated by URL, then set the displayed tree to that.
-  useEffect(function () {
+  // clickedElement is Node or Path
+  // -interp. the Node or Path that was clicked to open a modal.
+  const [clickedElement, setClickedElement] = useState(null);
+
+  // Boolean
+  // interp. indicates whether the tree being edited is new (ie not yet in the database) or not.
+  const isNewTree = useRef(false);
+
+  // Upon opening an edit screen, grab the tree with id === urlId from the database, and place
+  // that into currentTree variable
+  useEffect(function grabTree() {
     getTree(urlId);
-    if (Object.keys(currentTree).length > 0) setTree(currentTree);
   }, []);
 
-  /*
-  clickedElement is Node or Path
-  -interp. the Node or Path that was clicked to open a modal.
-  */
-  const [clickedElement, setClickedElement] = useState(null);
+  // Set the edit screen display depending on whether a tree with id == urlId exists in the database.
+  // Also set isNewTree flag accordingly.
+  // This useEffect has to be separate from grabTree() because this requires currentTree as a
+  // dependency, and that causes an endless loop of fetching if getTree tries to grab a
+  // non-existent/new tree.
+  useEffect(
+    function initializeEditScreen() {
+      if (Object.keys(currentTree).length > 0) {
+        console.log("length:" + Object.keys(currentTree).length);
+        setTree(currentTree);
+        isNewTree.current = false;
+        setIsNewTreeModalVisible(false);
+      } else {
+        isNewTree.current = true;
+      }
+      console.log(currentTree);
+    },
+    [currentTree]
+  );
 
   // Enum("path", "node") -> Effect
   // Opens a path modal if input is "path", otherwise open a node modal. In either case we set
@@ -200,6 +220,19 @@ function Edit() {
     setIsModalVisible(true);
   }
 
+  // Save created tree to database, saving the tree details with its array of node IDs and link IDs
+  // under the "trees" array, and all new nodes and links, or edited nodes and links into "nodes" and
+  // "links" array.
+  function handleSubmit() {
+    //not a form button so no need for e.preventDefault
+    console.log(tree);
+    if (isNewTree.current === true) {
+      createTree(tree);
+    } else {
+      // make an updateTree function !!! to call here
+    }
+  }
+
   return (
     <>
       <div className={styles.editContainer}>
@@ -218,6 +251,7 @@ function Edit() {
           <h3 className={styles.title}>{tree.title}</h3>
           <p className={styles.description}>{tree.description}</p>
         </div>
+        <button onClick={handleSubmit}>Submit</button>
       </div>
       {isNewTreeModalVisible && (
         <NewTreeModal
