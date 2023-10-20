@@ -137,7 +137,8 @@ function Edit() {
     links: [],
   };
 
-  const { currentTree, getTree, createTree } = useSkillTreesContext();
+  const { currentTree, getTree, createTree, updateTree } =
+    useSkillTreesContext();
 
   const [tree, setTree] = useState(emptyTree);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -229,7 +230,7 @@ function Edit() {
     if (isNewTree.current === true) {
       createTree(tree);
     } else {
-      // make an updateTree function !!! to call here
+      updateTree(tree);
     }
   }
 
@@ -247,7 +248,10 @@ function Edit() {
         {/* Image representation 
       of the skill tree based on the text outline */}
         <D3Chart tree={tree} className={styles.editVisualization} />
-        <div className={styles.titleDescDiv}>
+        <div
+          className={styles.titleDescDiv}
+          onClick={() => setIsNewTreeModalVisible(true)}
+        >
           <h3 className={styles.title}>{tree.title}</h3>
           <p className={styles.description}>{tree.description}</p>
         </div>
@@ -255,7 +259,7 @@ function Edit() {
       </div>
       {isNewTreeModalVisible && (
         <NewTreeModal
-          nodesArray={tree.nodes}
+          tree={tree}
           setIsNewTreeModalVisible={setIsNewTreeModalVisible}
           setTree={setTree}
           setClickedElement={setClickedElement}

@@ -3,14 +3,14 @@ import styles from "./NewTreeModal.module.css";
 import { SVG_HEIGHT, SVG_WIDTH, uuidv4 } from "../utils";
 
 function NewTreeModal({
-  nodesArray,
+  tree,
   setIsNewTreeModalVisible,
   setTree,
   setClickedElement,
   setIsModalVisible,
 }) {
-  const [title, setTitle] = useState("Tree Title");
-  const [description, setDescription] = useState("Tree description here");
+  const [title, setTitle] = useState(tree.title);
+  const [description, setDescription] = useState(tree.description);
   const FIXED_X_COORDINATE = SVG_WIDTH / 2;
   const FIXED_Y_COORDINATE = (SVG_HEIGHT - 200) / 2;
 
@@ -35,6 +35,9 @@ function NewTreeModal({
       fx: FIXED_X_COORDINATE,
       fy: FIXED_Y_COORDINATE,
     };
+    setTree((tree) => {
+      return { ...tree, rootId: newNode.id };
+    });
     setClickedElement(newNode);
     setIsModalVisible(true);
   }
@@ -61,11 +64,15 @@ function NewTreeModal({
           <p className={styles.pickP}>
             Pick starting node(s) for your tree:
             <select multiple>
-              {nodesArray.map((node) => (
+              {tree.nodes.map((node) => (
                 <option key={node.id}>{node.title}</option>
               ))}
             </select>
-            ...Or <button onClick={handleCreateRoot}>create</button> your own
+            ...Or{" "}
+            <button onClick={handleCreateRoot} disabled={tree.nodes.length > 0}>
+              create
+            </button>{" "}
+            your own
           </p>
         </div>
         <button onClick={handleSubmit}>Submit</button>
