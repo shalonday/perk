@@ -39,6 +39,14 @@ function reducer(state, action) {
         createdTrees: [...state.createdTrees, action.payload],
         isLoading: false,
       };
+    case "tree/updated":
+      return {
+        ...state,
+        createdTrees: state.createdTrees.map((tree) =>
+          tree.id === action.payload.id ? action.payload : tree
+        ),
+        isLoading: false,
+      };
     case "rejected":
       return { ...state, error: action.payload, isLoading: false };
     default:
@@ -100,7 +108,6 @@ function SkillTreesContextProvider({ children }) {
       });
       const data = await res.json();
       dispatch({ type: "tree/created", payload: data });
-      console.log(data);
     } catch {
       dispatch({
         type: "rejected",
@@ -108,6 +115,28 @@ function SkillTreesContextProvider({ children }) {
       });
     }
   }
+
+  async function updateTree(newTree) {
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/trees/${newTree.id}`, {
+        method: "PUT",
+        body: JSON.stringify(newTree),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log(data);
+      dispatch({ type: "tree/updated", payload: data });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: "There was an error uploading data",
+      });
+    }
+  }
+
   return (
     <SkillTreesContext.Provider
       value={{
@@ -115,6 +144,7 @@ function SkillTreesContextProvider({ children }) {
         createdTrees,
         error,
         createTree,
+        updateTree,
         getTree,
         currentTree,
       }}
