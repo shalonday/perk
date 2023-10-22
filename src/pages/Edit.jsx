@@ -137,8 +137,16 @@ function Edit() {
     links: [],
   };
 
-  const { currentTree, getTree, createTree, updateTree } =
-    useSkillTreesContext();
+  const {
+    currentTree,
+    getTree,
+    createTree,
+    updateTree,
+    getNode,
+    currentNode,
+    createNode,
+    updateNode,
+  } = useSkillTreesContext();
 
   const [tree, setTree] = useState(emptyTree);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -173,7 +181,6 @@ function Edit() {
       } else {
         isNewTree.current = true;
       }
-      console.log(currentTree);
     },
     [currentTree]
   );
@@ -226,12 +233,48 @@ function Edit() {
   // "links" array.
   function handleSubmit() {
     //not a form button so no need for e.preventDefault
-    console.log(tree);
+
+    // !!!create/update node objects and link objects into their own arrays in the database
+    const nodesArray = tree.nodes;
+    const linksArray = tree.links;
+    // !!!create/update nodes in the database
+    console.log(nodesArray);
+
+    nodesArray.forEach((node) => {
+      if (Object.keys(node).includes("fx")) {
+        // these properties shouldn't be passed to the database.
+        delete node.fx;
+        delete node.fy;
+      }
+      console.log(node);
+      submitNode(node);
+    });
+    // !!!create/update links in the database
+
+    // !!!convert tree.nodes and tree.links into uuid arrays
+
     if (isNewTree.current === true) {
       createTree(tree);
     } else {
       updateTree(tree);
     }
+  }
+
+  function submitNode(node) {
+    if (isNodeNew(node.id)) {
+      // current node is not yet in database. this is a create
+      createNode(node);
+    } else {
+      // current node is already in database. this is an update.
+      updateNode(node);
+    }
+  }
+
+  // Node -> Boolean
+  // Returns true if a node with same id doesn't exist in database yet.
+  async function isNodeNew(nodeId) {
+    await getNode(nodeId);
+    return Object.keys(currentNode).length === 0;
   }
 
   return (

@@ -18,6 +18,7 @@ const initialState = {
   isLoading: false,
   createdTrees: [],
   currentTree: {},
+  currentNode: {},
   error: "",
 };
 
@@ -47,6 +48,24 @@ function reducer(state, action) {
         ),
         isLoading: false,
       };
+    case "node/loaded":
+      return {
+        ...state,
+        currentNode: action.payload,
+        isLoading: false,
+      };
+    // I don't think there's any other state I'd need to update because this doesn't
+    // need to reflect any change in the UI. Same with node/updated
+    case "node/created":
+      return {
+        ...state,
+        isLoading: false,
+      };
+    case "node/updated":
+      return {
+        ...state,
+        isLoading: false,
+      };
     case "rejected":
       return { ...state, error: action.payload, isLoading: false };
     default:
@@ -58,8 +77,10 @@ function reducer(state, action) {
 // to give those components access to Skill Tree data. This allows for a central place from which
 // to manage code related to accessing the data.
 function SkillTreesContextProvider({ children }) {
-  const [{ isLoading, createdTrees, currentTree, error }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { isLoading, createdTrees, currentTree, currentNode, error },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(function () {
     async function fetchCreatedTrees() {
@@ -137,6 +158,64 @@ function SkillTreesContextProvider({ children }) {
     }
   }
 
+  // Get single node by id
+  async function getNode(id) {
+    if (id === currentNode.id) return; // no need to fetch if the currentNode is the same one being searched
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/nodes/${id}`);
+      const data = await res.json();
+      dispatch({ type: "node/loaded", payload: data });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: `There was an error getting city data for ID:${id}`,
+      });
+    }
+  }
+
+  async function createNode(newNode) {
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/nodes`, {
+        method: "POST",
+        body: JSON.stringify(newNode),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log("new node created: " + data);
+      dispatch({ type: "node/created" }); // no need for payload because there's no UI change the data needs to be used for.
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: "There was an error uploading data",
+      });
+    }
+  }
+
+  async function updateNode(newNode) {
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/nodes/${newNode.id}`, {
+        method: "PUT",
+        body: JSON.stringify(newNode),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log("node updated: " + data);
+      dispatch({ type: "tree/updated" });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: "There was an error uploading data",
+      });
+    }
+  }
+
   return (
     <SkillTreesContext.Provider
       value={{
@@ -147,6 +226,10 @@ function SkillTreesContextProvider({ children }) {
         updateTree,
         getTree,
         currentTree,
+        getNode,
+        createNode,
+        updateNode,
+        currentNode,
       }}
     >
       {children}
