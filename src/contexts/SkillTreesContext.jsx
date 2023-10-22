@@ -19,6 +19,7 @@ const initialState = {
   createdTrees: [],
   currentTree: {},
   currentNode: {},
+  currentLink: {},
   error: "",
 };
 
@@ -66,6 +67,22 @@ function reducer(state, action) {
         ...state,
         isLoading: false,
       };
+    case "link/loaded":
+      return {
+        ...state,
+        currentLink: action.payload,
+        isLoading: false,
+      };
+    case "link/created":
+      return {
+        ...state,
+        isLoading: false,
+      };
+    case "link/updated":
+      return {
+        ...state,
+        isLoading: false,
+      };
     case "rejected":
       return { ...state, error: action.payload, isLoading: false };
     default:
@@ -78,7 +95,7 @@ function reducer(state, action) {
 // to manage code related to accessing the data.
 function SkillTreesContextProvider({ children }) {
   const [
-    { isLoading, createdTrees, currentTree, currentNode, error },
+    { isLoading, createdTrees, currentTree, currentNode, currentLink, error },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -112,7 +129,7 @@ function SkillTreesContextProvider({ children }) {
     } catch {
       dispatch({
         type: "rejected",
-        payload: `There was an error getting city data for ID:${id}`,
+        payload: `There was an error getting tree data for ID:${id}`,
       });
     }
   }
@@ -169,7 +186,7 @@ function SkillTreesContextProvider({ children }) {
     } catch {
       dispatch({
         type: "rejected",
-        payload: `There was an error getting city data for ID:${id}`,
+        payload: `There was an error getting node data for ID:${id}`,
       });
     }
   }
@@ -207,7 +224,65 @@ function SkillTreesContextProvider({ children }) {
       });
       const data = await res.json();
       console.log("node updated: " + data);
-      dispatch({ type: "tree/updated" });
+      dispatch({ type: "node/updated" });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: "There was an error uploading data",
+      });
+    }
+  }
+
+  // Get single link by id
+  async function getLink(id) {
+    if (id === currentLink.id) return; // no need to fetch if the currentNode is the same one being searched
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/links/${id}`);
+      const data = await res.json();
+      dispatch({ type: "link/loaded", payload: data });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: `There was an error getting link data for ID:${id}`,
+      });
+    }
+  }
+
+  async function createLink(newLink) {
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/links`, {
+        method: "POST",
+        body: JSON.stringify(newLink),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log("new link created: " + data);
+      dispatch({ type: "link/created" }); // no need for payload because there's no UI change the data needs to be used for.
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: "There was an error uploading data",
+      });
+    }
+  }
+
+  async function updateLink(newLink) {
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/links/${newLink.id}`, {
+        method: "PUT",
+        body: JSON.stringify(newLink),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log("link updated: " + data);
+      dispatch({ type: "link/updated" });
     } catch {
       dispatch({
         type: "rejected",
@@ -230,6 +305,10 @@ function SkillTreesContextProvider({ children }) {
         createNode,
         updateNode,
         currentNode,
+        getLink,
+        createLink,
+        updateLink,
+        currentLink,
       }}
     >
       {children}

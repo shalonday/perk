@@ -146,6 +146,10 @@ function Edit() {
     currentNode,
     createNode,
     updateNode,
+    getLink,
+    currentLink,
+    createLink,
+    updateLink,
   } = useSkillTreesContext();
 
   const [tree, setTree] = useState(emptyTree);
@@ -232,24 +236,14 @@ function Edit() {
   // under the "trees" array, and all new nodes and links, or edited nodes and links into "nodes" and
   // "links" array.
   function handleSubmit() {
-    //not a form button so no need for e.preventDefault
+    // not a form button so no need for e.preventDefault
 
-    // !!!create/update node objects and link objects into their own arrays in the database
+    // create/update node objects and link objects into their own arrays in the database
     const nodesArray = tree.nodes;
     const linksArray = tree.links;
-    // !!!create/update nodes in the database
-    console.log(nodesArray);
 
-    nodesArray.forEach((node) => {
-      if (Object.keys(node).includes("fx")) {
-        // these properties shouldn't be passed to the database.
-        delete node.fx;
-        delete node.fy;
-      }
-      console.log(node);
-      submitNode(node);
-    });
-    // !!!create/update links in the database
+    submitNodes(nodesArray);
+    submitLinks(linksArray);
 
     // !!!convert tree.nodes and tree.links into uuid arrays
 
@@ -258,6 +252,17 @@ function Edit() {
     } else {
       updateTree(tree);
     }
+  }
+
+  function submitNodes(nodesArray) {
+    nodesArray.forEach((node) => {
+      if (Object.keys(node).includes("fx")) {
+        // these properties shouldn't be passed to the database.
+        delete node.fx;
+        delete node.fy;
+      }
+      submitNode(node);
+    });
   }
 
   function submitNode(node) {
@@ -270,11 +275,34 @@ function Edit() {
     }
   }
 
+  function submitLinks(linksArray) {
+    linksArray.forEach((link) => {
+      submitLink(link);
+    });
+  }
+
+  function submitLink(link) {
+    if (isLinkNew(link.id)) {
+      // current node is not yet in database. this is a create
+      createLink(link);
+    } else {
+      // current node is already in database. this is an update.
+      updateLink(link);
+    }
+  }
+
   // Node -> Boolean
   // Returns true if a node with same id doesn't exist in database yet.
   async function isNodeNew(nodeId) {
     await getNode(nodeId);
     return Object.keys(currentNode).length === 0;
+  }
+
+  // Link -> Boolean
+  // Returns true if a link with same id doesn't exist in database yet.
+  async function isLinkNew(linkId) {
+    await getLink(linkId);
+    return Object.keys(currentLink).length === 0;
   }
 
   return (
