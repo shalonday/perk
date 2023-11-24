@@ -68,7 +68,7 @@ function isLinkUsingExistingNodes(link, nodes) {
   );
 }
 
-export default function D3Chart({ tree, className }) {
+export default function D3Chart({ tree, className = "" }) {
   const gLinkRef = useRef();
   const gNodeRef = useRef();
   useEffect(() => {
