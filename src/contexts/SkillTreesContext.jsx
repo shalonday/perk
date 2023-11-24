@@ -16,7 +16,7 @@ const SkillTreesContext = createContext();
 
 const initialState = {
   isLoading: false,
-  createdTrees: [],
+  universalTree: {},
   currentTree: {},
   error: "",
 };
@@ -25,8 +25,8 @@ function reducer(state, action) {
   switch (action.type) {
     case "loading":
       return { ...state, isLoading: true };
-    case "createdTrees/loaded":
-      return { ...state, createdTrees: action.payload, isLoading: false };
+    case "universalTree/loaded":
+      return { ...state, universalTree: action.payload, isLoading: false };
     case "tree/loaded":
       return {
         ...state,
@@ -36,13 +36,13 @@ function reducer(state, action) {
     case "tree/merged":
       return {
         ...state,
-        createdTrees: [...state.createdTrees, action.payload],
+        universalTree: [...state.universalTree, action.payload],
         isLoading: false,
       };
     case "tree/updated":
       return {
         ...state,
-        createdTrees: state.createdTrees.map((tree) =>
+        universalTree: state.universalTree.map((tree) =>
           tree.id === action.payload.id ? action.payload : tree
         ),
         isLoading: false,
@@ -58,17 +58,17 @@ function reducer(state, action) {
 // to give those components access to Skill Tree data. This allows for a central place from which
 // to manage code related to accessing the data.
 function SkillTreesContextProvider({ children }) {
-  const [{ isLoading, createdTrees, currentTree, error }, dispatch] =
+  const [{ isLoading, universalTree, currentTree, error }, dispatch] =
     useReducer(reducer, initialState);
 
   useEffect(function () {
-    async function fetchCreatedTrees() {
+    async function fetchuniversalTree() {
       //fetch trees created by user. in the future, need: recommendedTrees and followedTrees
       dispatch({ type: "loading" });
       try {
-        const res = await fetch(`${BASE_URL}/trees`);
+        const res = await fetch(`${BASE_URL}/tree`);
         const data = await res.json();
-        dispatch({ type: "createdTrees/loaded", payload: data });
+        dispatch({ type: "universalTree/loaded", payload: data });
       } catch {
         dispatch({
           type: "rejected",
@@ -76,7 +76,7 @@ function SkillTreesContextProvider({ children }) {
         });
       }
     }
-    fetchCreatedTrees();
+    fetchuniversalTree();
   }, []);
 
   // Get single tree by id. This will be used in the Edit page or Tree page to display a
@@ -142,7 +142,7 @@ function SkillTreesContextProvider({ children }) {
     <SkillTreesContext.Provider
       value={{
         isLoading,
-        createdTrees,
+        universalTree,
         error,
         mergeTree,
         updateTree,
