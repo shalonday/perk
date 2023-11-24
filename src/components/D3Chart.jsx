@@ -2,10 +2,11 @@ import * as d3 from "d3";
 import { useEffect, useRef } from "react";
 import { SVG_HEIGHT, SVG_WIDTH } from "../utils";
 
+const width = SVG_WIDTH;
+const height = SVG_HEIGHT;
+
 function ForceGraph(data, gLinkRef, gNodeRef) {
   // Specify the dimensions of the chart.
-  const width = SVG_WIDTH;
-  const height = SVG_HEIGHT;
 
   // The force simulation mutates links and nodes, so create a copy
   // so that re-evaluating this cell produces the same result.
@@ -68,7 +69,7 @@ function isLinkUsingExistingNodes(link, nodes) {
   );
 }
 
-export default function D3Chart({ tree, className = "" }) {
+export default function D3Chart({ tree, className = "", onNodeClick = "" }) {
   const gLinkRef = useRef();
   const gNodeRef = useRef();
   useEffect(() => {
@@ -80,8 +81,8 @@ export default function D3Chart({ tree, className = "" }) {
   return (
     <div className={className}>
       <svg
-        viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
-        style={{ maxWidth: "100%", height: "auto" }}
+        viewBox={`0 0 ${width} ${height}`}
+        style={{ width: "100%", height: "100%" }}
       >
         <g ref={gLinkRef}>
           {tree.links.map((link) => (
@@ -111,7 +112,12 @@ export default function D3Chart({ tree, className = "" }) {
         </g>
         <g ref={gNodeRef}>
           {tree.nodes.map((node) => (
-            <circle key={node.id} fill="#ec4899" strokeWidth={1.5}></circle> //
+            <circle
+              key={node.id}
+              fill="#ec4899"
+              strokeWidth={1.5}
+              onClick={onNodeClick}
+            ></circle> //
           ))}
         </g>
       </svg>{" "}

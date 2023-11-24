@@ -1,13 +1,26 @@
-.createButton {
-  font-size: 2rem;
-  color: #bef264;
-  cursor: pointer;
-  background-color: #65a30d;
-  border: none;
-  border-radius: 20px;
+.svgContainer {
+  height: 50vh;
+}
 
-  position: fixed;
+.createButton {
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  border-radius: 0px;
+}
+.nodeDescription {
+  font-size: 20px;
+  text-align: justify;
   padding: 20px;
-  bottom: 20px;
-  right: 20px;
+  position: fixed;
+  bottom: 0px;
+  height: min(50%, auto);
+}
+
+.nodeDescription > div {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
 }

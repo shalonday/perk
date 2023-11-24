@@ -1,32 +1,48 @@
 import styles from "./Search.module.css";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import D3Chart from "../components/D3Chart";
+import { useSkillTreesContext } from "../contexts/SkillTreesContext";
+import { useState } from "react";
 
 function Search() {
-  const [query, setQuery] = useState("");
+  const { universalTree, isLoading } = useSkillTreesContext();
+  const [isNodeDescriptionVisible, setIsNodeDescriptionVisible] =
+    useState(false);
+  const [clickedNode, setClickedNode] = useState(null);
+
+  function handleNodeClick(e) {
+    setIsNodeDescriptionVisible((val) => !val);
+    setClickedNode(e.target);
+    console.log(e.target.__data__);
+  }
 
   return (
     <div>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      {/* put created trees here */}
-      <Link to={`/edit/${uuidv4()}`}>
-        <button className={styles.createButton}>Create New Tree</button>
-      </Link>
-    </div>
-  );
-}
+      {isLoading ? (
+        <h1>Loading</h1>
+      ) : (
+        <D3Chart
+          tree={universalTree}
+          onNodeClick={handleNodeClick}
+          className={styles.svgContainer}
+        />
+      )}
 
-//generate uuid; retrieved from https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid 4Sep2023
-function uuidv4() {
-  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-    (
-      c ^
-      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-    ).toString(16)
+      <div
+        className={styles.nodeDescription}
+        style={{ display: isNodeDescriptionVisible ? "block" : "none" }}
+      >
+        <div>
+          <h3>{clickedNode?.__data__.title}</h3>
+          <h3>
+            <Link to={`/edit/${clickedNode?.id}`}>
+              <button className={styles.createButton}>+</button>
+            </Link>
+          </h3>
+        </div>
+        <p>{clickedNode?.__data__.description}</p>
+      </div>
+    </div>
   );
 }
 
