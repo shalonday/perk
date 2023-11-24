@@ -15,7 +15,7 @@ const BASE_URL = "http://localhost:3000";
 const SkillTreesContext = createContext();
 
 const initialState = {
-  isLoading: false,
+  isLoading: true,
   universalTree: {},
   currentTree: {},
   error: "",
