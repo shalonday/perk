@@ -4,6 +4,7 @@ import { SVG_HEIGHT, SVG_WIDTH } from "../utils";
 
 const width = SVG_WIDTH;
 const height = SVG_HEIGHT;
+const RADIUS = 10;
 
 function ForceGraph(data, gLinkRef, gNodeRef) {
   // Specify the dimensions of the chart.
@@ -30,7 +31,7 @@ function ForceGraph(data, gLinkRef, gNodeRef) {
     .selectAll("circle")
     .data(nodes)
     .attr("id", (d) => d.id)
-    .attr("r", 4.5);
+    .attr("r", RADIUS);
 
   function ticked() {
     link
