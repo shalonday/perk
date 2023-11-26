@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import styles from "./D3Chart.module.css";
 import { useEffect, useRef } from "react";
 import { SVG_HEIGHT, SVG_WIDTH } from "../utils";
 
@@ -70,7 +71,14 @@ function isLinkUsingExistingNodes(link, nodes) {
   );
 }
 
-export default function D3Chart({ tree, className = "", onNodeClick = "" }) {
+export default function D3Chart({
+  tree,
+  className = "",
+  onNodeClick = "",
+  onNodeTouchStart = "",
+  onNodeTouchEnd = "",
+  selectedNodeIds = [],
+}) {
   const gLinkRef = useRef();
   const gNodeRef = useRef();
   useEffect(() => {
@@ -78,7 +86,6 @@ export default function D3Chart({ tree, className = "", onNodeClick = "" }) {
       ForceGraph(tree, gLinkRef, gNodeRef);
     }
   }, [tree]);
-
   return (
     <div className={className}>
       <svg
@@ -118,6 +125,13 @@ export default function D3Chart({ tree, className = "", onNodeClick = "" }) {
               fill="#ec4899"
               strokeWidth={1.5}
               onClick={onNodeClick}
+              onTouchStart={onNodeTouchStart}
+              onTouchEnd={onNodeTouchEnd}
+              className={
+                selectedNodeIds.includes(node.id)
+                  ? styles.selected
+                  : `${selectedNodeIds.includes(node.id)}`
+              }
             ></circle> //
           ))}
         </g>

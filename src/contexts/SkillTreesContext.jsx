@@ -9,7 +9,13 @@
 // tree.skillIds, tree.lpathIds - ids of skills and lpaths contained in this tree
 // course branches out after n3-n4 learning path. how to do this?
 
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 
 const BASE_URL = "http://localhost:3000";
 const SkillTreesContext = createContext();
@@ -60,6 +66,9 @@ function reducer(state, action) {
 function SkillTreesContextProvider({ children }) {
   const [{ isLoading, universalTree, currentTree, error }, dispatch] =
     useReducer(reducer, initialState);
+
+  // Initial elements that will appear in Edit. These are set at Search.jsx, then accessed at Edit.jsx
+  const [elementsToEdit, setElementsToEdit] = useState([]);
 
   useEffect(function () {
     async function fetchuniversalTree() {
@@ -148,6 +157,8 @@ function SkillTreesContextProvider({ children }) {
         updateTree,
         getTree,
         currentTree,
+        elementsToEdit,
+        setElementsToEdit,
       }}
     >
       {children}
