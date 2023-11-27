@@ -1,10 +1,6 @@
 import styles from "./Edit.module.css";
 import { useEffect, useRef, useState } from "react";
-import Outline from "../components/Outline";
-import Modal from "../components/Modal";
 import D3Chart from "../components/D3Chart";
-import NewTreeModal from "../components/NewTreeModal";
-import { useParams } from "react-router-dom";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import { uuidv4 } from "../utils";
 
@@ -27,59 +23,6 @@ import { uuidv4 } from "../utils";
   example: { id:uuid, title: "N1->N2", type: "path", detailsArray: ["The Odin Project"], source: 0,
     target: 1, }
    */
-const tempEdgesList = [
-  {
-    id: "f455eb57-71a1-4130-8cba-dc9ffc98bb6c",
-    source: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    target: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    value: 1,
-    title: "N1->N2",
-    type: "path",
-    detailsArray: ["The Odin Project"],
-  },
-  {
-    id: "56379e11-1f4c-4781-aecf-6df8956b5957",
-    source: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    target: "2e094cdd-4077-4c36-92bb-5a3b09fc44d1",
-    value: 1,
-    title: "N2->N3",
-    type: "path",
-    detailsArray: ["The Odin Project"],
-  },
-  {
-    id: "96a569be-a72c-49f4-be49-1201b0a7e2b7",
-    source: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    target: "2ef04cdd-4077-4c36-92bb-5a3b09fc44d1",
-    value: 1,
-    title: "N2->N4",
-    type: "path",
-    detailsArray: ["The Odin Project"],
-  },
-  {
-    id: "a704551c-8d74-4056-9fd8-02e498fa3ec5",
-    source: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    target: "2ef90cdd-4077-4c36-92bb-5a3b09fc44d1",
-    value: 1,
-  },
-  {
-    id: "b41802e5-b81f-4d1a-b688-a668d3b0c22c",
-    source: "2e094cdd-4077-4c36-92bb-5a3b09fc44d1",
-    target: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1",
-    value: 1,
-  },
-  {
-    id: "48954cd6-fab9-4396-b88f-9161823d563b",
-    source: "2ef04cdd-4077-4c36-92bb-5a3b09fc44d1",
-    target: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1",
-    value: 1,
-  },
-  {
-    id: "5fe5815d-1a59-431c-a31a-48000c91471b",
-    source: "2ef90cdd-4077-4c36-92bb-5a3b09fc44d1",
-    target: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1",
-    value: 1,
-  },
-];
 
 /*
   nodesArray is Array[{Node}]
@@ -95,34 +38,6 @@ const tempEdgesList = [
       }
       example: { id: 1, title: "Node 1", type: "node", detailsArray: ["Prerequisite node"] }
 */
-const tempNodesList = [
-  {
-    id: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    title: "Node 1",
-    type: "node",
-    detailsArray: ["Prerequisite node"],
-  },
-  {
-    id: "20f94cdd-4077-4c36-92bb-5a3b09fc44d1",
-    title: "Node 2",
-    type: "node",
-    detailsArray: ["Program a basic profile website"],
-  },
-  { id: "2e094cdd-4077-4c36-92bb-5a3b09fc44d1" },
-  { id: "2ef04cdd-4077-4c36-92bb-5a3b09fc44d1" },
-  { id: "2ef90cdd-4077-4c36-92bb-5a3b09fc44d1" },
-  { id: "2ef940dd-4077-4c36-92bb-5a3b09fc44d1" },
-];
-
-const tempTree = {
-  id: "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
-  title: "ZTM's Become a Freelance Developer",
-  description:
-    "The 'Become a Freelance Developer' Career Path from Zero To Mastery. Accessible via https://zerotomastery.io/career-paths/become-a-freelancer-2r7slf",
-  rootId: "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
-  nodes: tempNodesList,
-  links: tempEdgesList,
-};
 
 // Goals: CUD nodes and relationships. C - any. UD- only those owned by account; maybe do this from profile page and not in MVP?
 // open a tree with the selected node(s) present.
@@ -138,7 +53,97 @@ const tempTree = {
 function Edit() {
   const { elementsToEdit, mergeTree, updateTree, error } =
     useSkillTreesContext();
-  return <D3Chart tree={elementsToEdit} className={styles.svgContainer} />;
+
+  const [currentTree, setCurrentTree] = useState(elementsToEdit);
+  const [selectedNodes, setSelectedNodes] = useState([]);
+  const [currentNode, setCurrentNode] = useState(null);
+  let timer;
+  const touchduration = 500;
+
+  function handleNodeClick(e) {
+    console.log(e.target.__data__);
+    if (e.target.__data__.type === "module") {
+      toggleSelectModuleNode(e.target);
+    } else if (e.target.__data__.type === "skill") {
+      handleSkillNodeClick(e);
+    }
+  }
+
+  // necessary for handling long touches on touchscreen
+  function handleNodeTouchStart(e) {
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      //https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
+      timer = setTimeout(() => {
+        if (e.target.__data__.type === "skill") toggleSelectSkillNode(e.target);
+        else if (e.target.__data__.type === "module")
+          toggleSelectModuleNode(e.target);
+      }, touchduration);
+    }
+  }
+
+  function handleNodeTouchEnd() {
+    //stops short touches from firing the event
+    if (timer) clearTimeout(timer); // https://stackoverflow.com/questions/6139225/how-to-detect-a-long-touch-pressure-with-javascript-for-android-and-iphone
+  }
+
+  function handleSkillNodeClick(e) {
+    if (e.ctrlKey) {
+      // allow for multiple selection
+      toggleSelectSkillNode(e.target);
+    } else {
+      selectOneSkillNodeAtATime(e.target);
+    }
+  }
+
+  function selectOneSkillNodeAtATime(targetSkillNode) {
+    if (selectedNodes.length === 0) {
+      toggleSelectSkillNode(targetSkillNode);
+    } else if (selectedNodes.length === 1) {
+      if (targetSkillNode === selectedNodes[0])
+        toggleSelectSkillNode(targetSkillNode);
+      else setSelectedNodes([targetSkillNode]);
+    } else if (selectedNodes.length > 1) {
+      setSelectedNodes([targetSkillNode]);
+    }
+  }
+
+  // SkillNode -> Effect
+  // unselects modules and toggles selection of skill nodes
+  function toggleSelectSkillNode(targetSkillNode) {
+    console.log(selectedNodes);
+    if (selectedNodes[0]?.__data__.type === "module") {
+      setSelectedNodes([targetSkillNode]);
+    } else if (!selectedNodes.includes(targetSkillNode)) {
+      // cases: selectedNodes is empty, or contains other skills,
+      setCurrentNode(targetSkillNode);
+      setSelectedNodes((arr) => [...arr, targetSkillNode]);
+      //setIsNodeDescriptionVisible(true);
+    } else {
+      // selectedNodes includes target and this unselects it
+      setSelectedNodes((arr) =>
+        arr.filter((el) => el.__data__.id !== targetSkillNode.__data__.id)
+      );
+      //setIsNodeDescriptionVisible(false);
+    }
+  }
+
+  //ModuleNode -> Effect
+  //select only one module at a time, cancelling selected skill nodes
+  function toggleSelectModuleNode(target) {
+    if (selectedNodes.includes(target)) setSelectedNodes([]); //toggle
+    else setSelectedNodes([target]);
+  }
+
+  return (
+    <D3Chart
+      tree={currentTree}
+      onNodeClick={handleNodeClick}
+      onNodeTouchStart={handleNodeTouchStart}
+      onNodeTouchEnd={handleNodeTouchEnd}
+      className={styles.svgContainer}
+      selectedNodeIds={selectedNodes.map((node) => node.id)}
+    />
+  );
 }
 
 export default Edit;

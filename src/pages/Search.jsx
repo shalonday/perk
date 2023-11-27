@@ -66,8 +66,21 @@ function Search() {
     if (timer) clearTimeout(timer); // https://stackoverflow.com/questions/6139225/how-to-detect-a-long-touch-pressure-with-javascript-for-android-and-iphone
   }
 
+  // SVGArray -> RecordArray
+  // Extract from the D3 SVGs the database records that were used to make them.
+  function getDataObjectsFromD3Node(nodes) {
+    return nodes.map((node) => {
+      const { vx, vy, x, y, index, ...rest } = node.__data__;
+      console.log(rest);
+      return rest;
+    });
+  }
+
   function handlePlusClick() {
-    setElementsToEdit({ nodes: selectedNodes, links: [] });
+    setElementsToEdit({
+      nodes: getDataObjectsFromD3Node(selectedNodes), //this simplifies the rendering at Edit.jsx
+      links: [],
+    });
   }
 
   return (
