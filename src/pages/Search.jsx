@@ -15,16 +15,9 @@ function Search() {
   const touchduration = 500;
 
   function handleNodeClick(e) {
-    console.log("mouseclick");
-    // normal click or normal touch
-
-    if (e.target !== currentNode) setIsNodeDescriptionVisible(true);
-    else setIsNodeDescriptionVisible((val) => !val); // if the last node clicked (currentNode) is clicked again, alternate between opening and closing
-
     // ctrl + click
     if (e.ctrlKey) {
       // allow for multiple selection
-      console.log("ctrl click");
       toggleSelect(e.target);
     }
     // select only one node at a time if normal clicking / normal touching
@@ -39,19 +32,16 @@ function Search() {
     } else if (selectedNodes.length > 1) {
       setSelectedNodes([e.target]);
     }
-
-    setCurrentNode(e.target);
   }
 
   function handleNodeTouchStart(e) {
-    // !!! still need to test on actual phone. do on longtouch
+    // !!! still need to test on actual phone.
+    //do on longtouch
     if (window.matchMedia("(pointer: coarse)").matches) {
       //https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
       // touchscreen
-      console.log("touch");
       timer = setTimeout(() => {
         toggleSelect(e.target);
-        console.log("longtouch");
       }, touchduration);
     }
   }
@@ -59,17 +49,19 @@ function Search() {
   // SVGElement -> Effect
   // Adds or removes target from selectedNodes
   function toggleSelect(target) {
-    console.log("toggleSelect");
-    if (!selectedNodes.includes(target))
+    if (!selectedNodes.includes(target)) {
+      setCurrentNode(target);
       setSelectedNodes((arr) => [...arr, target]);
-    else
+      setIsNodeDescriptionVisible(true);
+    } else {
       setSelectedNodes((arr) =>
         arr.filter((el) => el.__data__.id !== target.__data__.id)
       );
+      setIsNodeDescriptionVisible(false);
+    }
   }
 
   function handleNodeTouchEnd() {
-    console.log("touchend");
     //stops short touches from firing the event
     if (timer) clearTimeout(timer); // https://stackoverflow.com/questions/6139225/how-to-detect-a-long-touch-pressure-with-javascript-for-android-and-iphone
   }
