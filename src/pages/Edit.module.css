@@ -1,29 +1,4 @@
-.editContainer {
-  display: flex;
-  height: 100%;
-}
-
-/* These are only positional CSS for these components; it seems sensible to place them in the same
-   file as the container in which they are positioned. See their respective CSS Modules for
-   the CSS specific to their appearance. */
-.editOutline {
-  flex: 1;
-}
-
-.editVisualization {
-  flex: 1;
-}
-
-.titleDescDiv {
-  position: absolute;
-  top: 50px;
-  right: 50px;
-}
-
-.title {
-  text-align: right;
-}
-
-.description {
-  text-align: right;
+.svgContainer {
+  height: 50vh;
+  width: 100vw;
 }

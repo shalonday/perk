@@ -75,7 +75,7 @@ function Search() {
   }
 
   function handlePlusClick() {
-    setElementsToEdit(selectedNodes);
+    setElementsToEdit({ nodes: selectedNodes, links: [] });
   }
 
   return (

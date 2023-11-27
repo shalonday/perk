@@ -1,5 +1,6 @@
 .svgContainer {
   height: 50vh;
+  width: 100vw;
 }
 
 .createButton {

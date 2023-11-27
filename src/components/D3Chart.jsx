@@ -3,8 +3,6 @@ import styles from "./D3Chart.module.css";
 import { useEffect, useRef } from "react";
 import { SVG_HEIGHT, SVG_WIDTH } from "../utils";
 
-const width = SVG_WIDTH;
-const height = SVG_HEIGHT;
 const RADIUS = 10;
 
 function ForceGraph(data, gLinkRef, gNodeRef) {
@@ -21,8 +19,9 @@ function ForceGraph(data, gLinkRef, gNodeRef) {
       "link",
       d3.forceLink(links).id((d) => d.id)
     )
-    .force("charge", d3.forceManyBody().strength(-400))
-    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("x", d3.forceX(SVG_WIDTH / 2))
+    .force("y", d3.forceY(SVG_HEIGHT / 2))
     .on("tick", ticked);
 
   const link = d3.select(gLinkRef.current).selectAll("line").data(links);
@@ -45,51 +44,23 @@ function ForceGraph(data, gLinkRef, gNodeRef) {
   }
 }
 
-// Checks if either the tree consists of only one node and no paths, or if
-// all source and target nodes in tree.links exist, and if all nodes are linked.
-// These are the conditions to say that a tree is renderable.
-function isTreeRenderable(tree) {
-  return (
-    (tree.nodes.length === 1 && tree.links.length === 0) ||
-    (tree.nodes.every((node) => isNodeLinked(node, tree.links)) &&
-      tree.links.every((link) => isLinkUsingExistingNodes(link, tree.nodes)))
-  );
-}
-
-// check if node is mentioned in any of the sources or targets
-function isNodeLinked(node, links) {
-  return links
-    .map((link) => link.source)
-    .concat(links.map((link) => link.target))
-    .includes(node.id);
-}
-
-function isLinkUsingExistingNodes(link, nodes) {
-  return (
-    nodes.map((node) => node.id).includes(link.source) &&
-    nodes.map((node) => node.id).includes(link.target)
-  );
-}
-
 export default function D3Chart({
   tree,
   className = "",
-  onNodeClick = "",
-  onNodeTouchStart = "",
-  onNodeTouchEnd = "",
+  onNodeClick = () => {},
+  onNodeTouchStart = () => {},
+  onNodeTouchEnd = () => {},
   selectedNodeIds = [],
 }) {
   const gLinkRef = useRef();
   const gNodeRef = useRef();
   useEffect(() => {
-    if (isTreeRenderable(tree)) {
-      ForceGraph(tree, gLinkRef, gNodeRef);
-    }
+    ForceGraph(tree, gLinkRef, gNodeRef);
   }, [tree]);
   return (
     <div className={className}>
       <svg
-        viewBox={`0 0 ${width} ${height}`}
+        viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
         style={{ width: "100%", height: "100%" }}
       >
         <g ref={gLinkRef}>

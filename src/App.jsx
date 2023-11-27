@@ -13,7 +13,7 @@ function App() {
         <Routes>
           <Route index element={<Search />} />
           <Route path="tree" element={<Tree />} />
-          <Route path="edit/:id" element={<Edit />} />
+          <Route path="edit/" element={<Edit />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
