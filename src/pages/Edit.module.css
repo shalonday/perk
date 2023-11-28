@@ -1,4 +1,32 @@
 .svgContainer {
-  height: 50vh;
+  height: 66vh;
   width: 100vw;
+}
+
+.buttonDiv {
+  display: flex;
+  flex-direction: column;
+}
+
+.plusButton {
+  display: block;
+  border: none;
+  background-color: transparent;
+  color: black;
+  font-size: 3rem;
+}
+
+.nodeDescription {
+  font-size: 20px;
+  text-align: justify;
+  padding: 20px;
+  position: fixed;
+  bottom: 0px;
+  height: min(50%, auto);
+}
+
+.nodeDescription > div {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
 }

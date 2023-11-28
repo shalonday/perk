@@ -2,7 +2,6 @@ import styles from "./Edit.module.css";
 import { useEffect, useRef, useState } from "react";
 import D3Chart from "../components/D3Chart";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
-import { uuidv4 } from "../utils";
 
 /*
   pathsArray is Array[{Path}]
@@ -57,11 +56,14 @@ function Edit() {
   const [currentTree, setCurrentTree] = useState(elementsToEdit);
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [currentNode, setCurrentNode] = useState(null);
+  const [isPlusButtonVisible, setIsPlusButtonVisible] = useState(false);
+  const [isNodeDescriptionVisible, setIsNodeDescriptionVisible] =
+    useState(false);
   let timer;
   const touchduration = 500;
 
   function handleNodeClick(e) {
-    console.log(e.target.__data__);
+    setCurrentNode(e.target);
     if (e.target.__data__.type === "module") {
       toggleSelectModuleNode(e.target);
     } else if (e.target.__data__.type === "skill") {
@@ -74,6 +76,7 @@ function Edit() {
     if (window.matchMedia("(pointer: coarse)").matches) {
       //https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
       timer = setTimeout(() => {
+        setCurrentNode(e.target);
         if (e.target.__data__.type === "skill") toggleSelectSkillNode(e.target);
         else if (e.target.__data__.type === "module")
           toggleSelectModuleNode(e.target);
@@ -101,8 +104,12 @@ function Edit() {
     } else if (selectedNodes.length === 1) {
       if (targetSkillNode === selectedNodes[0])
         toggleSelectSkillNode(targetSkillNode);
-      else setSelectedNodes([targetSkillNode]);
+      else {
+        setSelectedNodes([]);
+        toggleSelectSkillNode(targetSkillNode); // necessary bec this sets node description visibility (vs just doing setSelectedNodes([target]))
+      }
     } else if (selectedNodes.length > 1) {
+      console.log("enter");
       setSelectedNodes([targetSkillNode]);
     }
   }
@@ -110,20 +117,19 @@ function Edit() {
   // SkillNode -> Effect
   // unselects modules and toggles selection of skill nodes
   function toggleSelectSkillNode(targetSkillNode) {
-    console.log(selectedNodes);
     if (selectedNodes[0]?.__data__.type === "module") {
+      setIsNodeDescriptionVisible(true);
       setSelectedNodes([targetSkillNode]);
     } else if (!selectedNodes.includes(targetSkillNode)) {
       // cases: selectedNodes is empty, or contains other skills,
-      setCurrentNode(targetSkillNode);
+      setIsNodeDescriptionVisible(true);
       setSelectedNodes((arr) => [...arr, targetSkillNode]);
-      //setIsNodeDescriptionVisible(true);
     } else {
       // selectedNodes includes target and this unselects it
       setSelectedNodes((arr) =>
         arr.filter((el) => el.__data__.id !== targetSkillNode.__data__.id)
       );
-      //setIsNodeDescriptionVisible(false);
+      setIsNodeDescriptionVisible(false);
     }
   }
 
@@ -134,15 +140,42 @@ function Edit() {
     else setSelectedNodes([target]);
   }
 
+  useEffect(
+    function togglePlusButtonVisibility() {
+      if (selectedNodes.length === 0) {
+        setIsPlusButtonVisible(false);
+      } else {
+        setIsPlusButtonVisible(true);
+      }
+    },
+    [selectedNodes]
+  );
+
   return (
-    <D3Chart
-      tree={currentTree}
-      onNodeClick={handleNodeClick}
-      onNodeTouchStart={handleNodeTouchStart}
-      onNodeTouchEnd={handleNodeTouchEnd}
-      className={styles.svgContainer}
-      selectedNodeIds={selectedNodes.map((node) => node.id)}
-    />
+    <>
+      <D3Chart
+        tree={currentTree}
+        onNodeClick={handleNodeClick}
+        onNodeTouchStart={handleNodeTouchStart}
+        onNodeTouchEnd={handleNodeTouchEnd}
+        className={styles.svgContainer}
+        selectedNodeIds={selectedNodes.map((node) => node.id)}
+      />
+      <div className={styles.buttonDiv}>
+        {isPlusButtonVisible ? (
+          <button className={styles.plusButton}>+</button>
+        ) : null}
+      </div>
+      <div
+        className={styles.nodeDescription}
+        style={{ display: isNodeDescriptionVisible ? "block" : "none" }}
+      >
+        <div>
+          <h3>{currentNode?.__data__.title}</h3>
+        </div>
+        <p>{currentNode?.__data__.description}</p>
+      </div>
+    </>
   );
 }
 
