@@ -1,11 +1,16 @@
 import * as d3 from "d3";
 import styles from "./D3Chart.module.css";
 import { useEffect, useRef } from "react";
-import { SVG_HEIGHT, SVG_WIDTH } from "../utils";
 
-const RADIUS = 10;
+const RADIUS = 7;
 
-function ForceGraph(data, gLinkRef, gNodeRef) {
+function ForceGraph(
+  data,
+  gLinkRef,
+  gNodeRef,
+  viewBoxWidth = 400,
+  viewBoxHeight = 400
+) {
   // Specify the dimensions of the chart.
 
   // The force simulation mutates links and nodes, so create a copy
@@ -20,8 +25,8 @@ function ForceGraph(data, gLinkRef, gNodeRef) {
       d3.forceLink(links).id((d) => d.id)
     )
     .force("charge", d3.forceManyBody().strength(-100))
-    .force("x", d3.forceX(SVG_WIDTH / 2))
-    .force("y", d3.forceY(SVG_HEIGHT / 2))
+    .force("x", d3.forceX(viewBoxWidth / 2))
+    .force("y", d3.forceY(viewBoxHeight / 2))
     .on("tick", ticked);
 
   const link = d3.select(gLinkRef.current).selectAll("line").data(links);
@@ -54,13 +59,19 @@ export default function D3Chart({
 }) {
   const gLinkRef = useRef();
   const gNodeRef = useRef();
+  const svgContainerRef = useRef();
+  const viewBoxWidth = svgContainerRef.current?.clientWidth;
+  const viewBoxHeight = svgContainerRef.current?.clientHeight;
+
   useEffect(() => {
-    ForceGraph(tree, gLinkRef, gNodeRef);
-  }, [tree]);
+    ForceGraph(tree, gLinkRef, gNodeRef, viewBoxWidth, viewBoxHeight);
+  }, [tree, viewBoxWidth, viewBoxHeight]);
   return (
-    <div className={className}>
+    <div className={className} ref={svgContainerRef}>
       <svg
-        viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
+        viewBox={`0 0 ${svgContainerRef.current ? viewBoxWidth : "400"} ${
+          svgContainerRef.current ? viewBoxHeight : "400"
+        }`}
         style={{ width: "100%", height: "100%" }}
       >
         <g ref={gLinkRef}>
