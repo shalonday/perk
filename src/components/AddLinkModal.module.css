@@ -1,0 +1,35 @@
+.form {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  background-color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.form * {
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  padding: 0;
+  list-style: none;
+  text-align: justify;
+}
+
+.form fieldset {
+  margin: auto;
+  border-bottom: 1px solid;
+}
+
+.form fieldset > textarea,
+.form fieldset > div {
+  resize: both;
+}
+
+.submitButtonDiv {
+  margin-top: 20px;
+  width: calc(100% - 40px);
+  font-size: 20px;
+}

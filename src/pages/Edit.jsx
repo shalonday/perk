@@ -2,6 +2,7 @@ import styles from "./Edit.module.css";
 import { useEffect, useRef, useState } from "react";
 import D3Chart from "../components/D3Chart";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
+import ModuleModal from "../components/ModuleModal";
 
 /*
   pathsArray is Array[{Path}]
@@ -59,6 +60,7 @@ function Edit() {
   const [isPlusButtonVisible, setIsPlusButtonVisible] = useState(false);
   const [isNodeDescriptionVisible, setIsNodeDescriptionVisible] =
     useState(false);
+  const [isModuleModalVisible, setIsModuleModalVisible] = useState(false);
   let timer;
   const touchduration = 500;
 
@@ -163,7 +165,12 @@ function Edit() {
       />
       <div className={styles.buttonDiv}>
         {isPlusButtonVisible ? (
-          <button className={styles.plusButton}>+</button>
+          <button
+            className={styles.plusButton}
+            onClick={setIsModuleModalVisible}
+          >
+            +
+          </button>
         ) : null}
       </div>
       <div
@@ -175,6 +182,12 @@ function Edit() {
         </div>
         <p>{currentNode?.__data__.description}</p>
       </div>
+
+      {isModuleModalVisible && (
+        <ModuleModal
+          prerequisiteNodes={selectedNodes.map((node) => node.__data__)}
+        />
+      )}
     </>
   );
 }
