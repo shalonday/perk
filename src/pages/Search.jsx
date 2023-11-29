@@ -5,7 +5,7 @@ import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import { useState } from "react";
 
 function Search() {
-  const { universalTree, isLoading, setElementsToEdit } =
+  const { universalTree, isLoading, setElementsToEdit, error } =
     useSkillTreesContext();
   const [isNodeDescriptionVisible, setIsNodeDescriptionVisible] =
     useState(false);
@@ -85,9 +85,9 @@ function Search() {
 
   return (
     <div>
-      {isLoading ? (
-        <h1>Loading</h1>
-      ) : (
+      {isLoading && <h1>Loading</h1>}
+      {error && <h1>{error}</h1>}
+      {!isLoading && !error && (
         <D3Chart
           tree={universalTree}
           onNodeClick={handleNodeClick}
