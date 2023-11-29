@@ -1,6 +1,9 @@
+import "@mdxeditor/editor/style.css";
 import { useRef, useState } from "react";
 import styles from "./ModuleModal.module.css";
 import AddLinkModal from "./AddLinkModal";
+import { MDXEditor, headingsPlugin } from "@mdxeditor/editor";
+import AddTargetNodeSection from "./AddTargetNodeSection";
 
 function ModuleModal({ prerequisiteNodes }) {
   const [targetNodes, setTargetNodes] = useState([]);
@@ -28,7 +31,7 @@ function ModuleModal({ prerequisiteNodes }) {
   }
 
   // Add an empty item to detailsArray to be edited by user
-  function handleAddDetail(e) {
+  function handleAddItem(e) {
     e.preventDefault();
     setTargetNodes((array) => [...array, ""]);
   }
@@ -80,37 +83,14 @@ function ModuleModal({ prerequisiteNodes }) {
           </ul>
         </fieldset>
         <fieldset>
-          <h3>By the end of this module, the learner should be able to:</h3>
-          <ul>
-            {targetNodes.map((bullet, index) => (
-              <li key={index} className={styles.targetNodeInputGroup}>
-                <span onClick={() => handleDeleteItem(index)}>&#10005;</span>
-                <textarea
-                  className={styles.targetNodeTextarea}
-                  rows={1}
-                  value={bullet}
-                  onChange={(e) => {
-                    setTargetNodes((array) =>
-                      array.map((item, i) =>
-                        i === index ? e.target.value : item
-                      )
-                    ); // array == targetNodes; "item" is a bullet. This allows for changing the text in the current bullet
-                  }}
-                >
-                  [Phrase starting with a verb representing the skill that will
-                  be learned]
-                </textarea>
-              </li>
-            ))}
-            <button
-              onClick={handleAddDetail}
-              key="last"
-              className={styles.addTargetButton}
-            >
-              +
-            </button>
-          </ul>
+          <AddTargetNodeSection
+            targetNodes={targetNodes}
+            setTargetNodes={setTargetNodes}
+            handleDeleteItem={handleDeleteItem}
+            handleAddItem={handleAddItem}
+          />
         </fieldset>
+        <MDXEditor markdown="# Hello world" plugins={[headingsPlugin()]} />
         <fieldset>
           <h3>Learn</h3>
           <textarea

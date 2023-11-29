@@ -1,0 +1,27 @@
+.targetNodeInputGroup {
+  display: flex;
+}
+
+.targetNodeInputGroup span {
+  width: auto;
+}
+
+.targetNodeTextarea {
+  flex: 1;
+}
+
+.addTargetButton {
+  padding: 2px 5px 0px 5px;
+
+  width: auto;
+  border: 1px solid;
+  border-radius: 300px;
+}
+
+.submitButtonDiv {
+  width: calc(100% - 40px);
+  border-bottom: 1px solid;
+  font-size: 20px;
+  position: fixed;
+  bottom: 20px;
+}
