@@ -1,13 +1,134 @@
 {
   "trees": [
     {
-      "id": "2ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
       "title": "ZTM's Become a Freelance Developer",
-      "desc": "The 'Become a Freelance Developer' Career Path from Zero To Mastery. Accessible via https://zerotomastery.io/career-paths/become-a-freelancer-2r7slf",
-      "tree": { "skillIds": [0, 1, 2, 3, 4], "lpathIds": [1, 2, 3, 4] }
+      "description": "The 'Become a Freelance Developer' Career Path from Zero To Mastery. Accessible via https://zerotomastery.io/career-paths/become-a-freelancer-2r7slf",
+      "rootId": "0ef94cdd-4077-4c36-92bb-5a3b09fc44d1",
+      "nodes": [],
+      "links": []
+    },
+    {
+      "id": "e555a2b7-5edc-4a1c-9575-a39a3962b4b9",
+      "title": "A tree",
+      "description": "This is my first tree changed",
+      "rootId": "",
+      "nodes": [
+        {
+          "id": "54b8dc97-4aaa-4e58-ba4a-50616ebd1294",
+          "title": "A node",
+          "type": "node",
+          "detailsArray": ["A node item", "Another node item"],
+          "fx": 484,
+          "fy": 200
+        },
+        {
+          "id": "4fe3ce32-26d8-42c1-82ea-b788d56dd04d",
+          "title": "Another node",
+          "type": "node",
+          "detailsArray": ["item 1"]
+        }
+      ],
+      "links": [
+        {
+          "id": "b81c3c57-94cc-470b-a752-10357e9a895f",
+          "title": "A path",
+          "type": "path",
+          "detailsArray": ["path item"],
+          "source": "54b8dc97-4aaa-4e58-ba4a-50616ebd1294",
+          "target": "4fe3ce32-26d8-42c1-82ea-b788d56dd04d"
+        }
+      ]
+    },
+    {
+      "id": "73c5ee8e-3e92-406f-8b09-f33a3d2eec0f",
+      "title": "",
+      "description": "",
+      "rootId": "baa895eb-fe35-4f25-ac1d-6d3861e26359",
+      "nodes": [
+        {
+          "id": "baa895eb-fe35-4f25-ac1d-6d3861e26359",
+          "title": "",
+          "type": "node",
+          "detailsArray": []
+        },
+        {
+          "id": "02d3259d-d752-4aca-b7d9-edb8abfe801a",
+          "title": "",
+          "type": "node",
+          "detailsArray": []
+        }
+      ],
+      "links": [
+        {
+          "id": "a63758ad-f97c-4312-b435-1ce0648429a9",
+          "title": "",
+          "type": "path",
+          "detailsArray": [],
+          "source": "baa895eb-fe35-4f25-ac1d-6d3861e26359",
+          "target": "02d3259d-d752-4aca-b7d9-edb8abfe801a"
+        }
+      ]
+    },
+    {
+      "id": "b2cfaab7-99c7-4607-a022-47c6c5a20115",
+      "title": "",
+      "description": "",
+      "rootId": "3f905816-a38e-4d87-a0e2-65e4500153d3",
+      "nodes": [
+        {
+          "id": "3f905816-a38e-4d87-a0e2-65e4500153d3",
+          "title": "",
+          "type": "node",
+          "detailsArray": []
+        },
+        {
+          "id": "07793f6f-38a0-4f05-9131-3f798ac9d3c6",
+          "title": "",
+          "type": "node",
+          "detailsArray": []
+        },
+        {
+          "id": "9fd31da8-4041-4a81-bc9c-342354274ffa",
+          "title": "",
+          "type": "node",
+          "detailsArray": []
+        },
+        {
+          "id": "c9afa166-6697-406b-9214-4d725debf7f1",
+          "title": "",
+          "type": "node",
+          "detailsArray": []
+        }
+      ],
+      "links": [
+        {
+          "id": "f6bf5204-d09a-4c1e-94d5-5e8e4aa3d3c2",
+          "title": "",
+          "type": "path",
+          "detailsArray": [],
+          "source": "3f905816-a38e-4d87-a0e2-65e4500153d3",
+          "target": "07793f6f-38a0-4f05-9131-3f798ac9d3c6"
+        },
+        {
+          "id": "71cde3ae-ff29-4517-ad3c-55139efa7a63",
+          "title": "",
+          "type": "path",
+          "detailsArray": [],
+          "source": "07793f6f-38a0-4f05-9131-3f798ac9d3c6",
+          "target": "9fd31da8-4041-4a81-bc9c-342354274ffa"
+        },
+        {
+          "id": "2a2775a1-3633-4e8f-83ec-414e404c684d",
+          "title": "",
+          "type": "path",
+          "detailsArray": [],
+          "source": "07793f6f-38a0-4f05-9131-3f798ac9d3c6",
+          "target": "c9afa166-6697-406b-9214-4d725debf7f1"
+        }
+      ]
     }
   ],
-  "skills": [
+  "nodes": [
     {
       "id": 0,
       "title": "N0",
@@ -96,9 +217,205 @@
         "How to get more clients & be able to charge a higher rate"
       ],
       "wiki": ""
+    },
+    {
+      "id": "008c9652-0f3f-4001-8ebf-41a69a1aad75",
+      "title": "",
+      "type": "node",
+      "detailsArray": [],
+      "fx": 484,
+      "fy": 200
+    },
+    {
+      "id": "5b68274c-37e1-46b8-888c-c4f5e41ab970",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "c44c0b4d-8886-4e61-8ebe-0370e52f05c0",
+      "title": "",
+      "type": "node",
+      "detailsArray": [],
+      "fx": 484,
+      "fy": 200
+    },
+    {
+      "id": "89da7cb8-aaf2-4c7d-a48d-ce00b9718750",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "e818e4b9-6b1c-48d8-8434-c74da92f7e5d",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "baa895eb-fe35-4f25-ac1d-6d3861e26359",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "02d3259d-d752-4aca-b7d9-edb8abfe801a",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "722d6896-aa2c-45e9-a8f9-1bd209aadffb",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "eedd0ac7-0d43-4427-a73c-d9104f27d056",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "15628c31-3162-4422-9f6d-60bee1e21e21",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "a7c25deb-1aea-44df-a6df-c82395c1eefd",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "76e86b88-73ab-42a3-b6d2-9667b085d76b",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "dbc5c029-1b50-459a-8eb8-32c4b4b1790c",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "c6efc913-195c-4e68-b0ba-2e26a20ade92",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "9e899835-163a-49ff-a774-d880e4e93c11",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "db936efb-1880-49f2-93a3-5380b55fc117",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "7ac7ea37-0e1d-4553-b178-72709b3813bd",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "afbc588d-dc14-4931-97e8-2ed0db6a097a",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "df4d425e-8729-4a8f-9bcf-ddbb4a74d23b",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "6b0b5f5d-d9a4-4467-82d2-62fbc5addd33",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "3dce4b4c-f8cf-464c-956f-f8aa85a377d5",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "8001de0f-5b74-4855-95d5-11df605413a2",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "5c8ad707-0add-498a-a6ef-1bca8e9e73b7",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "3f905816-a38e-4d87-a0e2-65e4500153d3",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "9fd31da8-4041-4a81-bc9c-342354274ffa",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "c9afa166-6697-406b-9214-4d725debf7f1",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "07793f6f-38a0-4f05-9131-3f798ac9d3c6",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "3e022612-d4bc-42d9-a496-1310c567a19c",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "e29894f0-b531-4739-8b7c-30af53ec880f",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "efead5e2-57e3-41ba-a1c7-4d475363d8bb",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "d492bb52-7ded-465e-9394-e3d0cf6b1628",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
+    },
+    {
+      "id": "bc7120e5-6c2a-4279-969e-08a40bc38854",
+      "title": "",
+      "type": "node",
+      "detailsArray": []
     }
   ],
-  "lpaths": [
+  "links": [
     {
       "id": 1,
       "title": "n0-n1",
@@ -138,6 +455,86 @@
       "fromNode": 3,
       "toNode": 4,
       "wiki": ""
+    },
+    {
+      "id": "a63758ad-f97c-4312-b435-1ce0648429a9",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "baa895eb-fe35-4f25-ac1d-6d3861e26359",
+      "target": "02d3259d-d752-4aca-b7d9-edb8abfe801a"
+    },
+    {
+      "id": "0fa6eff8-f90f-478e-a8a1-14e1858e902a",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "c6efc913-195c-4e68-b0ba-2e26a20ade92",
+      "target": "db936efb-1880-49f2-93a3-5380b55fc117"
+    },
+    {
+      "id": "4ff6dd66-fe1f-4d6f-ba7a-5e617d4ac946",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "db936efb-1880-49f2-93a3-5380b55fc117",
+      "target": "7ac7ea37-0e1d-4553-b178-72709b3813bd"
+    },
+    {
+      "id": "c90c8a0c-0c4c-40c6-88c9-fade91cbccd7",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "db936efb-1880-49f2-93a3-5380b55fc117",
+      "target": "afbc588d-dc14-4931-97e8-2ed0db6a097a"
+    },
+    {
+      "id": "8a217a9b-378f-4e4e-938d-94adc001bfa2",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "7ac7ea37-0e1d-4553-b178-72709b3813bd",
+      "target": "9e899835-163a-49ff-a774-d880e4e93c11"
+    },
+    {
+      "id": "a0b1035c-4486-4f35-b49d-38b319369b56",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "afbc588d-dc14-4931-97e8-2ed0db6a097a",
+      "target": "9e899835-163a-49ff-a774-d880e4e93c11"
+    },
+    {
+      "id": "440759fe-414a-4022-bfee-297ae791b038",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "df4d425e-8729-4a8f-9bcf-ddbb4a74d23b",
+      "target": "6b0b5f5d-d9a4-4467-82d2-62fbc5addd33"
+    },
+    {
+      "id": "f6bf5204-d09a-4c1e-94d5-5e8e4aa3d3c2",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "3f905816-a38e-4d87-a0e2-65e4500153d3",
+      "target": "07793f6f-38a0-4f05-9131-3f798ac9d3c6"
+    },
+    {
+      "id": "71cde3ae-ff29-4517-ad3c-55139efa7a63",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "07793f6f-38a0-4f05-9131-3f798ac9d3c6",
+      "target": "9fd31da8-4041-4a81-bc9c-342354274ffa"
+    },
+    {
+      "id": "2a2775a1-3633-4e8f-83ec-414e404c684d",
+      "title": "",
+      "type": "path",
+      "detailsArray": [],
+      "source": "07793f6f-38a0-4f05-9131-3f798ac9d3c6",
+      "target": "c9afa166-6697-406b-9214-4d725debf7f1"
     }
   ]
 }

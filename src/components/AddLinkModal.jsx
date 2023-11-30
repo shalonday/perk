@@ -28,20 +28,44 @@ function AddLinkModal({
   return (
     <form className={styles.form}>
       <fieldset>
-        <textarea
-          rows={1}
-          placeholder="URL"
+        <select>
+          <option>Select resource type</option>
+          <option>Online Article (Wikipedia, Medium, blogs, etc.)</option>
+          <option>Online Course (Coursera, edx, Udemy, etc.)</option>
+          <option>Video or Video Playlist (Youtube, Vimeo, etc.)</option>
+          <option>Book (online bookstores, online archives, etc.)</option>
+          <option>Q&A or Forum (Stack Overflow, Reddit, etc.)</option>
+          <option>Audio (Apple Podcasts, Spotify Podcasts, etc.)</option>
+          <option>
+            Image or Image Album (Museum or gallery websites, etc.)
+          </option>
+          <option>Other document</option>
+        </select>
+        <label htmlFor="price">Price (USD):</label>
+        <input
+          id="price"
+          placeholder="Enter resource price in USD (Enter 0 if free)"
+        />
+        <label htmlFor="ISBN">ISBN: </label>
+        <input id="ISBN" placeholder="(optional) Enter Book ISBN here" />
+        <label htmlFor="other">Other resource type:</label>
+        <input id="other" placeholder="Enter resource type" />
+        <label htmlFor="url">URL</label>
+        <input
+          id="url"
+          placeholder="Enter URL starting with http:// or https://"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
+        <label htmlFor="text">Text</label>
         <textarea
-          placeholder="Link text"
+          placeholder="Enter the text that will be linked to the URL"
           value={linkText}
           onChange={(e) => setLinkText(e.target.value)}
         />
 
         <div className={styles.submitButtonDiv}>
-          <button onClick={handleSubmit}>Submit &rarr;</button>
+          <button onClick={handleSubmit}>+ Add Link</button>
         </div>
       </fieldset>
     </form>
