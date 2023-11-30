@@ -30,3 +30,8 @@
   display: flex;
   justify-content: space-between;
 }
+
+.nodeDescription p,
+.nodeDescription h3 {
+  margin: 0;
+}
