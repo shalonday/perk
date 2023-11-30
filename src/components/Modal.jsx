@@ -8,14 +8,14 @@ export default function Modal({
   setIsModalVisible,
   className,
 }) {
-  // source / sourceNode is where a path exits from
+  // set default source node to 0th node in tree.nodes
   const [sourceNode, setSourceNode] = useState(
     clickedElement.type === "path" && clickedElement.source
       ? clickedElement.source
       : tree.nodes[0]?.id
   );
 
-  // target / targetNode is the node at the end of a path
+  // set default target node to 1th node in tree.nodes
   const [targetNode, setTargetNode] = useState(
     clickedElement.type === "path" && clickedElement.target
       ? clickedElement.target
