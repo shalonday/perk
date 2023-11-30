@@ -1,9 +1,9 @@
 import "@mdxeditor/editor/style.css";
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import styles from "./ModuleModal.module.css";
 import AddLinkModal from "./AddLinkModal";
-import { MDXEditor, headingsPlugin } from "@mdxeditor/editor";
 import AddTargetNodeSection from "./AddTargetNodeSection";
+import TextEditor from "./TextEditor";
 
 function ModuleModal({ prerequisiteNodes }) {
   const [targetNodes, setTargetNodes] = useState([]);
@@ -57,7 +57,7 @@ function ModuleModal({ prerequisiteNodes }) {
   }
 
   return (
-    <>
+    <Suspense fallback={<p>Loading</p>}>
       {isAddLinkModalVisible && (
         <AddLinkModal
           setText={modalTextSetter.current}
@@ -69,12 +69,12 @@ function ModuleModal({ prerequisiteNodes }) {
       <form
         className={isAddLinkModalVisible ? styles.formUndisplayed : styles.form}
       >
-        <fieldset>
+        <fieldset className={styles.title}>
           <h3>
             <input placeholder="[optional title]" />
           </h3>
         </fieldset>
-        <fieldset>
+        <fieldset className={styles.prereqs}>
           <h3>Prerequisites</h3>
           <ul className={styles.prerequisitesList}>
             {prerequisiteNodes.map((node, i) => (
@@ -82,7 +82,7 @@ function ModuleModal({ prerequisiteNodes }) {
             ))}
           </ul>
         </fieldset>
-        <fieldset>
+        <fieldset className={styles.targets}>
           <AddTargetNodeSection
             targetNodes={targetNodes}
             setTargetNodes={setTargetNodes}
@@ -90,32 +90,22 @@ function ModuleModal({ prerequisiteNodes }) {
             handleAddItem={handleAddItem}
           />
         </fieldset>
-        <MDXEditor markdown="# Hello world" plugins={[headingsPlugin()]} />
-        <fieldset>
+        <fieldset className={styles.learn}>
           <h3>Learn</h3>
-          <textarea
-            rows={3}
-            value={visibleLearnBodyText}
-            onChange={(e) => setVisibleLearnBodyText(e.target.value)}
-            placeholder="Discuss in this section the material that will be consumed by the learner, ie., lecture videos, articles, books/book chapters, etc."
-          />
+          <TextEditor />
 
           <span onClick={handleAddLinkLearn}>[Add a hyperlink]</span>
         </fieldset>
-        <fieldset>
+        <fieldset className={styles.practice}>
           <h3>Practice</h3>
-          <textarea
-            rows={3}
-            placeholder="Practice exercises that let the learner make use of what they just
-            learned to build mastery"
-          />
+          <TextEditor />
           <span onClick={handleAddLinkPractice}>[Add a hyperlink]</span>
         </fieldset>
         <div className={styles.submitButtonDiv}>
           <button onClick={handleSubmit}>Submit &rarr;</button>
         </div>
       </form>
-    </>
+    </Suspense>
   );
 }
 

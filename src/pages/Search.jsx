@@ -84,7 +84,7 @@ function Search() {
   }
 
   return (
-    <div>
+    <div className={styles.searchPage}>
       {isLoading && <h1>Loading</h1>}
       {error && <h1>{error}</h1>}
       {!isLoading && !error && (

@@ -10,7 +10,7 @@
   flex: 1;
 }
 
-.addTargetButton {
+.targetList .addTargetButton {
   padding: 2px 5px 0px 5px;
 
   width: auto;

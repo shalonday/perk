@@ -4,23 +4,35 @@
   left: 0;
   padding: 20px;
   background-color: white;
-  height: 100vh;
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
 }
 
 .formUndisplayed * {
   display: none;
 }
 
-.form * {
+.form .title *,
+.form .prereqs *,
+.form .targets *,
+.form .title,
+.form .prereqs,
+.form .targets,
+.submitButtonDiv * {
   border: none;
   background-color: transparent;
-  width: 100%;
+
+  margin: 0;
   padding: 0;
   list-style: none;
   text-align: justify;
 }
 
-.form fieldset {
+.form .title,
+.form .prereqs,
+.form .targets {
   margin: 20px 0;
 }
 
@@ -28,34 +40,26 @@
   margin-top: 0px;
 }
 
-.form textarea {
-  resize: auto;
+.learn,
+.practice {
+  margin: 20px 0;
+  padding: 0;
+  border: none;
 }
 
-.form .targetNodeInputGroup {
-  display: flex;
-}
-
-.form .targetNodeInputGroup span {
-  width: auto;
-}
-
-.targetNodeTextarea {
-  flex: 1;
-}
-
-.addTargetButton {
-  padding: 2px 5px 0px 5px;
-
-  width: auto;
-  border: 1px solid;
-  border-radius: 300px;
+.learn .learn h3,
+.practice h3 {
+  margin: 0;
 }
 
 .submitButtonDiv {
-  width: calc(100% - 40px);
+  flex: 1;
+  position: sticky;
+  bottom: 20px;
+  width: calc(100vw - 40px);
   border-bottom: 1px solid;
   font-size: 20px;
-  position: fixed;
-  bottom: 20px;
+}
+.submitButtonDiv button {
+  margin-top: auto;
 }
