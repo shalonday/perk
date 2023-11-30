@@ -14,6 +14,7 @@ import {
   directivesPlugin,
   headingsPlugin,
   imagePlugin,
+  linkDialogPlugin,
   linkPlugin,
   quotePlugin,
   tablePlugin,
@@ -21,8 +22,10 @@ import {
   toolbarPlugin,
 } from "@mdxeditor/editor";
 import { listsPlugin } from "@mdxeditor/editor/plugins/lists";
+import { useEffect, useRef } from "react";
 
-function TextEditor() {
+function TextEditor({ textToAppend, onChange }) {
+  const ref = useRef();
   const markdown = `
   * Item 1
   * Item 2
@@ -32,11 +35,25 @@ function TextEditor() {
   1. Item 1
   2. Item 2
 `;
+
+  // Dynamically set text on editor by passing textToAppend to this component
+  // See https://mdxeditor.dev/editor/docs/getting-started or my commit message
+  // to see why both this and onChange are necessary for my case.
+  useEffect(
+    function setText() {
+      const currentText = ref.current?.getMarkdown();
+      ref.current?.setMarkdown(currentText + `${textToAppend}`);
+    },
+    [textToAppend]
+  );
   return (
     <MDXEditor
+      ref={ref}
+      onChange={onChange} // Detect changes upon typing
       markdown={markdown}
       plugins={[
         linkPlugin(),
+        linkDialogPlugin(),
         headingsPlugin(),
         quotePlugin(),
         thematicBreakPlugin(),
