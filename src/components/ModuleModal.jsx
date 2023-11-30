@@ -4,17 +4,13 @@ import styles from "./ModuleModal.module.css";
 import AddLinkModal from "./AddLinkModal";
 import AddTargetNodeSection from "./AddTargetNodeSection";
 import TextEditor from "./TextEditor";
+import MainTextSection from "./MainTextSection";
 
 function ModuleModal({ prerequisiteNodes }) {
   const [title, setTitle] = useState("");
   const [targetNodes, setTargetNodes] = useState([]);
   const [learnText, setLearnText] = useState("");
   const [practiceText, setPracticeText] = useState("");
-  const [learnLinkText, setLearnLinkText] = useState("");
-  const [practiceLinkText, setPracticeLinkText] = useState("");
-  const linkTextSetter = useRef();
-
-  const [isAddLinkModalVisible, setIsAddLinkModalVisible] = useState(false);
 
   // Array of links added onto Learn and Practice sections.
   const [resourcesArray, setResourcesArray] = useState([]);
@@ -31,37 +27,18 @@ function ModuleModal({ prerequisiteNodes }) {
     setTargetNodes((array) => [...array, ""]);
   }
 
-  function handleAddLinkLearn() {
-    console.log("add link learn");
-    linkTextSetter.current = setLearnLinkText;
-    setIsAddLinkModalVisible(true);
-  }
-
-  function handleAddLinkPractice() {
-    // get ref to focused textarea
-    // concatenate link url or some other text or span to textarea via ref
-    linkTextSetter.current = setPracticeLinkText;
-    setIsAddLinkModalVisible(true);
-  }
-
   function handleSubmit(e) {
     e.preventDefault();
-    // set the currentTree value by adding the new components to it
+
+    // create a module object and target nodes objects
+    // create the link objects
+    // set the currentTree value by adding the new nodes and links to it
     // close the modal
   }
 
   return (
     <Suspense fallback={<p>Loading</p>}>
-      {isAddLinkModalVisible && (
-        <AddLinkModal
-          linkTextSetter={linkTextSetter.current}
-          setIsAddLinkModalVisible={setIsAddLinkModalVisible}
-          setResourcesArray={setResourcesArray}
-        />
-      )}
-      <form
-        className={isAddLinkModalVisible ? styles.formUndisplayed : styles.form}
-      >
+      <form className={styles.form}>
         <fieldset className={styles.title}>
           <h3>
             <input
@@ -87,25 +64,15 @@ function ModuleModal({ prerequisiteNodes }) {
             handleAddItem={handleAddItem}
           />
         </fieldset>
-        <fieldset className={styles.learn}>
-          <h3>Learn</h3>
-          <TextEditor
-            textToAppend={learnLinkText}
-            onChange={(markdown) => setLearnText(markdown)}
-          />
-          <span onClick={handleAddLinkLearn}>[Add a hyperlink]</span>
-        </fieldset>
-        <fieldset className={styles.practice}>
-          <h3>Practice</h3>
-          <TextEditor
-            textToAppend={practiceLinkText}
-            onChange={(markdown) => setPracticeText(markdown)}
-          />
-          <span onClick={handleAddLinkPractice}>[Add a hyperlink]</span>
-        </fieldset>
+        <MainTextSection
+          setLearnText={setLearnText}
+          setPracticeText={setPracticeText}
+          setResourcesArray={setResourcesArray}
+        />
         <div className={styles.submitButtonDiv}>
           <button onClick={handleSubmit}>Submit &rarr;</button>
         </div>
+        <div></div>
       </form>
     </Suspense>
   );

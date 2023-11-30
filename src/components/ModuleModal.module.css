@@ -40,25 +40,14 @@
   margin-top: 0px;
 }
 
-.learn,
-.practice {
-  margin: 20px 0;
-  padding: 0;
-  border: none;
-}
-
-.learn .learn h3,
-.practice h3 {
-  margin: 0;
-}
-
 .submitButtonDiv {
   flex: 1;
-  position: sticky;
+  position: fixed;
   bottom: 20px;
   width: calc(100vw - 40px);
   border-bottom: 1px solid;
   font-size: 20px;
+  background-color: white;
 }
 .submitButtonDiv button {
   margin-top: auto;

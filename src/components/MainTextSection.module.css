@@ -1,0 +1,11 @@
+.learn,
+.practice {
+  margin: 20px 0;
+  padding: 0;
+  border: none;
+}
+
+.learn h3,
+.practice h3 {
+  margin: 0;
+}
