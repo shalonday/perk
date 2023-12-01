@@ -105,12 +105,12 @@ function SkillTreesContextProvider({ children }) {
     }
   }
 
-  async function mergeTree(nodesArray, linksArray) {
+  async function mergeTree(tree) {
     try {
       dispatch({ type: "loading" });
       const res = await fetch(`${BASE_URL}/tree`, {
         method: "POST",
-        body: JSON.stringify({ nodes: nodesArray, links: linksArray }),
+        body: JSON.stringify(tree),
         headers: {
           "Content-Type": "application/json",
         },
