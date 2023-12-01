@@ -186,6 +186,8 @@ function Edit() {
       {isModuleModalVisible && (
         <ModuleModal
           prerequisiteNodes={selectedNodes.map((node) => node.__data__)}
+          setCurrentTree={setCurrentTree}
+          setIsModuleModalVisible={setIsModuleModalVisible}
         />
       )}
     </>
