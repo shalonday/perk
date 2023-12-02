@@ -1,13 +1,9 @@
 // about the json objects:
-// trees: skill trees containing skills and lpaths connected to each other
-// skills: represented by circular "nodes" in a skill tree illustration, these represent skills prerequisite to or obtained by traversing a learning path
-// lpaths: short for learning paths - represented by lines in a skill tree illustration, these represent activities to be done to obtain the skill referenced in its toNode property.
-// for trees, uuid seems like a feasible id type since trees are unlike nodes and paths na may
-//     pagkakasunud-sunod. for skills and paths, maybe a hexadecimal datatype would make sense?
-//     or guid din kasi kung titingnan yung wiki universe, di naman magiging consistent yung ordering
-//     unless one person creates the WHOLE universe.
-// tree.skillIds, tree.lpathIds - ids of skills and lpaths contained in this tree
-// course branches out after n3-n4 learning path. how to do this?
+// universalTree: {nodes:[Objects], links:[Objects]}
+// nodes: either a skill type node: {id: String, type:"skill", title:String, description (optional):String}
+//        or a module type node: {id:String, type:"module", title:String, learnText:String, practiceText:String, resourcesArray:[Resource objects]}
+// links: {source: uuid, target: uuid, id:uuid}
+//        - source and target properties are requirements for D3Chart
 
 import {
   createContext,
@@ -40,9 +36,57 @@ function reducer(state, action) {
         isLoading: false,
       };
     case "tree/merged":
+      const appendedTree = action.payload;
+
+      console.log("appendedTree");
+      console.log(appendedTree);
+
+      //Update node in universalTree if it's part of the appendedTree,
+      //i.e., we're updating the node whether it was changed or not.
+      const updatedUnivTreeNodes = state.universalTree.nodes.map((univNode) =>
+        appendedTree.nodes
+          .map((appendedTreeNode) => appendedTreeNode.id)
+          .includes(univNode.id)
+          ? appendedTree.nodes.filter(
+              (appendedTreeNode) => appendedTreeNode.id === univNode.id
+            )[0]
+          : univNode
+      );
+
+      console.log("updatedUnivTreeNodes");
+      console.log(updatedUnivTreeNodes);
+
+      const updatedUnivTree = {
+        nodes: updatedUnivTreeNodes,
+        links: state.universalTree.links,
+      };
+
+      console.log("updatedUnivTree");
+      console.log(updatedUnivTree);
+
+      // Array of nodes whose id's are not yet in universalTree
+      const newNodes = appendedTree.nodes.filter(
+        (appNode) =>
+          !state.universalTree.nodes
+            .map((univNode) => univNode.id)
+            .includes(appNode.id)
+      );
+
+      console.log(updatedUnivTree.links);
+      const mergedUnivTreeLinks = updatedUnivTree.links.concat(
+        appendedTree.links
+      );
+
+      console.log("updatedUnivTree.nodes");
+      console.log(updatedUnivTree.nodes);
+      const mergedUnivTreeNodes = updatedUnivTree.nodes.concat(newNodes);
+      const mergedUnivTree = {
+        nodes: mergedUnivTreeNodes,
+        links: mergedUnivTreeLinks,
+      };
       return {
         ...state,
-        universalTree: [...state.universalTree, action.payload],
+        universalTree: mergedUnivTree,
         isLoading: false,
       };
     case "tree/updated":
@@ -71,7 +115,7 @@ function SkillTreesContextProvider({ children }) {
   const [elementsToEdit, setElementsToEdit] = useState([]);
 
   useEffect(function () {
-    async function fetchuniversalTree() {
+    async function fetchUniversalTree() {
       //fetch trees created by user. in the future, need: recommendedTrees and followedTrees
       dispatch({ type: "loading" });
       try {
@@ -85,7 +129,7 @@ function SkillTreesContextProvider({ children }) {
         });
       }
     }
-    fetchuniversalTree();
+    fetchUniversalTree();
   }, []);
 
   // Get single tree by id. This will be used in the Edit page or Tree page to display a
@@ -116,8 +160,9 @@ function SkillTreesContextProvider({ children }) {
         },
       });
       const data = await res.json();
-      console.log("Universal tree merged with data: " + data);
-      dispatch({ type: "tree/merged", payload: data });
+      console.log("Universal tree merged with data: ");
+      console.log(data);
+      dispatch({ type: "tree/merged", payload: tree });
     } catch {
       dispatch({
         type: "rejected",

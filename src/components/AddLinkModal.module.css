@@ -1,10 +1,4 @@
 .form {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 20px;
-  background-color: white;
-  height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -12,24 +6,31 @@
 .form * {
   border: none;
   background-color: transparent;
-  width: 100%;
+
   padding: 0;
   list-style: none;
   text-align: justify;
 }
 
+.form button,
+.form select {
+  width: 100%;
+}
 .form fieldset {
   margin: auto;
   border-bottom: 1px solid;
 }
 
-.form fieldset > textarea,
-.form fieldset > div {
-  resize: both;
+.sectionDiv {
+  display: flex;
+}
+
+.sectionDiv input,
+.sectionDiv textarea {
+  flex: 1;
 }
 
 .submitButtonDiv {
-  margin-top: 20px;
-  width: calc(100% - 40px);
+  width: 100%;
   font-size: 20px;
 }

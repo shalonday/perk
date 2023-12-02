@@ -45,13 +45,11 @@ function ModuleModal({
       resourcesArray: resourcesArray,
     };
 
-    // create the link objects
     const newIsPrerequisiteToLinks = prerequisiteNodes.map((prereqNode) => {
       const newLink = {
         id: uuidv4(),
         source: prereqNode.id,
         target: id,
-        // idk if need pa ng id's ng links???
       };
       return newLink;
     });

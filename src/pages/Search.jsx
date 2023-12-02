@@ -14,6 +14,8 @@ function Search() {
   let timer;
   const touchduration = 500;
 
+  console.log(universalTree);
+
   function handleNodeClick(e) {
     // ctrl + click
     if (e.ctrlKey) {
@@ -71,7 +73,6 @@ function Search() {
   function getDataObjectsFromD3Node(nodes) {
     return nodes.map((node) => {
       const { vx, vy, x, y, index, ...rest } = node.__data__;
-      console.log(rest);
       return rest;
     });
   }

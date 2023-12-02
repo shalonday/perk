@@ -62,7 +62,7 @@ function AddLinkModal({
   }
 
   return (
-    <form className={styles.form}>
+    <div className={styles.form}>
       <fieldset>
         <select
           value={resourceType}
@@ -92,15 +92,17 @@ function AddLinkModal({
           </option>
           <option value="other">Other document</option>
         </select>
-        <label htmlFor="price">Price (USD):</label>
-        <input
-          id="price"
-          placeholder="Enter resource price in USD (Enter 0 if free)"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
+        <div className={styles.sectionDiv}>
+          <label htmlFor="price">Price (USD):</label>
+          <input
+            id="price"
+            placeholder="Enter resource price in USD (Enter 0 if free)"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+        </div>
         {resourceType === "book" && (
-          <>
+          <div className={styles.sectionDiv}>
             <label htmlFor="ISBN">ISBN: </label>
             <input
               id="ISBN"
@@ -108,10 +110,10 @@ function AddLinkModal({
               value={isbn}
               onChange={(e) => setISBN(e.target.value)}
             />
-          </>
+          </div>
         )}
         {resourceType === "other" && (
-          <>
+          <div className={styles.sectionDiv}>
             <label htmlFor="other">Other resource type:</label>
             <input
               id="other"
@@ -119,27 +121,31 @@ function AddLinkModal({
               value={otherType}
               onChange={(e) => setOtherType(e.target.value)}
             />
-          </>
+          </div>
         )}
-        <label htmlFor="url">URL</label>
-        <input
-          id="url"
-          placeholder="Enter URL starting with http:// or https://"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-        <label htmlFor="text">Text</label>
-        <textarea
-          placeholder="Enter the text that will be linked to the URL"
-          value={linkText}
-          onChange={(e) => setLinkText(e.target.value)}
-        />
+        <div className={styles.sectionDiv}>
+          <label htmlFor="url">URL</label>
+          <input
+            id="url"
+            placeholder="Enter URL starting with http:// or https://"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+        </div>
+        <div className={styles.sectionDiv}>
+          <label htmlFor="text">Text</label>
+          <textarea
+            placeholder="Enter the text that will be linked to the URL"
+            value={linkText}
+            onChange={(e) => setLinkText(e.target.value)}
+          />
+        </div>
 
         <div className={styles.submitButtonDiv}>
           <button onClick={handleSubmit}>+ Add Link</button>
         </div>
       </fieldset>
-    </form>
+    </div>
   );
 }
 
