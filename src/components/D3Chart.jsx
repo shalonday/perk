@@ -3,6 +3,9 @@ import styles from "./D3Chart.module.css";
 import { useEffect, useRef } from "react";
 
 const RADIUS = 7;
+const SKILL_FILL = "hsl(60 100% 50%)";
+const MODULE_FILL = "hsl(60 10% 80%)";
+const LINK_COLOR = "hsl(60 10% 80%)";
 
 function ForceGraph(
   data,
@@ -36,7 +39,14 @@ function ForceGraph(
     .selectAll("circle")
     .data(nodes)
     .attr("id", (d) => d.id)
-    .attr("r", RADIUS);
+    .attr("fill", (d) => {
+      if (d.type === "module") return MODULE_FILL;
+      else return SKILL_FILL;
+    })
+    .attr("r", (d) => {
+      if (d.type === "module") return RADIUS / 2;
+      else return RADIUS;
+    });
 
   function ticked() {
     link
@@ -85,7 +95,7 @@ export default function D3Chart({
               markerWidth="6"
               markerHeight="6"
               orient="auto-start-reverse"
-              fill="#4338ca"
+              fill={LINK_COLOR}
             >
               <path d="M 0 0 L 10 5 L 0 10 z" />
             </marker>
@@ -94,7 +104,7 @@ export default function D3Chart({
           {tree.links.map((link) => (
             <line
               key={link.id}
-              stroke="#4338ca"
+              stroke={LINK_COLOR}
               strokeWidth={1.5}
               markerEnd="url(#arrow)"
             ></line>
@@ -104,7 +114,6 @@ export default function D3Chart({
           {tree.nodes.map((node) => (
             <circle
               key={node.id}
-              fill="#ec4899"
               strokeWidth={1.5}
               onClick={onNodeClick}
               onTouchStart={onNodeTouchStart}
@@ -114,7 +123,7 @@ export default function D3Chart({
                   ? styles.selected
                   : `${selectedNodeIds.includes(node.id)}`
               }
-            ></circle> //
+            ></circle>
           ))}
         </g>
       </svg>{" "}
