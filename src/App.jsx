@@ -9,7 +9,7 @@ import { SkillTreesContextProvider } from "./contexts/SkillTreesContext";
 function App() {
   return (
     <SkillTreesContextProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/perk">
         <Routes>
           <Route index element={<Search />} />
           <Route path="tree" element={<Tree />} />

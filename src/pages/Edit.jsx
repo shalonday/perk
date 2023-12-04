@@ -108,41 +108,48 @@ function Edit() {
 
   return (
     <>
-      {isLoading && <h1>Loading</h1>}
-      {error && <h1>{error}</h1>}
-      {!isLoading && !error && (
-        <D3Chart
-          tree={currentTree}
-          onNodeClick={handleNodeClick}
-          onNodeTouchStart={handleNodeTouchStart}
-          onNodeTouchEnd={handleNodeTouchEnd}
-          className={styles.svgContainer}
-          selectedNodeIds={selectedNodes.map((node) => node.id)}
-        />
-      )}
-      <div className={styles.buttonDiv}>
-        {selectedNodes.length > 0 ? (
-          <button
-            className={styles.plusButton}
-            onClick={setIsModuleModalVisible}
-          >
-            +
-          </button>
-        ) : null}
-      </div>
       <div
-        className={styles.nodeDescription}
-        style={{ display: isNodeDescriptionVisible ? "block" : "none" }}
+        className={styles.mainDiv}
+        style={
+          isModuleModalVisible ? { display: "none" } : { display: "block" }
+        }
       >
-        <div>
-          <h3>{currentNode?.__data__.title}</h3>
+        <div
+          className={styles.nodeDescription}
+          style={{ display: isNodeDescriptionVisible ? "block" : "none" }}
+        >
+          <div>
+            <h3>{currentNode?.__data__.title}</h3>
+          </div>
+          <p>{currentNode?.__data__.description}</p>
         </div>
-        <p>{currentNode?.__data__.description}</p>
-      </div>
-      <div>
-        <button onClick={handleSubmit}>Submit &rarr;</button>
-      </div>
+        {isLoading && <h1>Loading</h1>}
+        {error && <h1>{error}</h1>}
+        {!isLoading && !error && (
+          <D3Chart
+            tree={currentTree}
+            onNodeClick={handleNodeClick}
+            onNodeTouchStart={handleNodeTouchStart}
+            onNodeTouchEnd={handleNodeTouchEnd}
+            className={styles.svgContainer}
+            selectedNodeIds={selectedNodes.map((node) => node.id)}
+          />
+        )}
+        <div className={styles.buttonDiv}>
+          {selectedNodes.length > 0 ? (
+            <button
+              className={styles.plusButton}
+              onClick={setIsModuleModalVisible}
+            >
+              +
+            </button>
+          ) : null}
+        </div>
 
+        <div>
+          <button onClick={handleSubmit}>Submit &rarr;</button>
+        </div>
+      </div>
       {isModuleModalVisible && (
         <ModuleModal
           prerequisiteNodes={selectedNodes.map((node) => node.__data__)}

@@ -3,6 +3,9 @@
   width: 100vw;
 }
 
+.mainDiv {
+}
+
 .buttonDiv {
   display: flex;
   flex-direction: column;
@@ -21,7 +24,7 @@
   text-align: justify;
   padding: 20px;
   position: fixed;
-  bottom: 0px;
+  top: 0;
   height: min(50%, auto);
 }
 
