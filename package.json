@@ -1,14 +1,16 @@
 {
   "name": "perk",
+  "homepage": "https://shalonday.github.io/perk/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "server": "json-server --watch data/trees.json --port 8000",
     "test": "vitest"
   },
   "dependencies": {
@@ -27,6 +29,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
+    "gh-pages": "^6.1.0",
     "vite": "^4.4.5",
     "vite-plugin-eslint": "^1.8.1",
     "vitest": "^0.34.6"
