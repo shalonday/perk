@@ -9,6 +9,8 @@ const LINK_COLOR = "hsl(60 10% 80%)";
 
 function ForceGraph(
   data,
+  svgRef,
+  gNodeAndLinkRef,
   gLinkRef,
   gNodeRef,
   viewBoxWidth = 400,
@@ -22,7 +24,8 @@ function ForceGraph(
   const nodes = data.nodes.map((d) => ({ ...d }));
 
   // Create a simulation with several forces.
-  d3.forceSimulation(nodes)
+  const simulation = d3
+    .forceSimulation(nodes)
     .force(
       "link",
       d3.forceLink(links).id((d) => d.id)
@@ -46,7 +49,8 @@ function ForceGraph(
     .attr("r", (d) => {
       if (d.type === "module") return RADIUS / 2;
       else return RADIUS;
-    });
+    })
+    .call(drag(simulation));
 
   function ticked() {
     link
@@ -56,6 +60,57 @@ function ForceGraph(
       .attr("y2", (d) => d.target.y);
 
     node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+  }
+
+  // it seems the call to d3.zoom() is added to the svg element, while
+  // a transform attribute is added to the g element inside it that we
+  // want to be able to pan. So I added a new g that contains both the
+  // nodes and links. Refactored from
+  // https://observablehq.com/@d3/drag-zoom
+  const gNodesAndLinks = d3
+    .select(gNodeAndLinkRef.current)
+    .attr("cursor", "grab");
+
+  d3.select(svgRef.current).call(
+    d3
+      .zoom()
+      .extent([
+        [0, 0],
+        [viewBoxWidth, viewBoxHeight],
+      ])
+      .scaleExtent([1, 8])
+      .on("zoom", zoomed)
+  );
+
+  function zoomed({ transform }) {
+    gNodesAndLinks.attr("transform", transform);
+  }
+
+  // taken from https://observablehq.com/@d3/force-directed-graph-component
+  // this allows the nodes to be draggable.
+  function drag(simulation) {
+    function dragstarted(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+
+    function dragended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+
+    return d3
+      .drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
   }
 }
 
@@ -69,62 +124,74 @@ export default function D3Chart({
 }) {
   const gLinkRef = useRef();
   const gNodeRef = useRef();
+  const svgRef = useRef();
+  const gNodeAndLinkRef = useRef();
   const svgContainerRef = useRef();
   const viewBoxWidth = svgContainerRef.current?.clientWidth;
   const viewBoxHeight = svgContainerRef.current?.clientHeight;
 
   useEffect(() => {
-    ForceGraph(tree, gLinkRef, gNodeRef, viewBoxWidth, viewBoxHeight);
+    ForceGraph(
+      tree,
+      svgRef,
+      gNodeAndLinkRef,
+      gLinkRef,
+      gNodeRef,
+      viewBoxWidth,
+      viewBoxHeight
+    );
   }, [tree, viewBoxWidth, viewBoxHeight]);
   return (
     <div className={className} ref={svgContainerRef}>
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${svgContainerRef.current ? viewBoxWidth : "400"} ${
           svgContainerRef.current ? viewBoxHeight : "400"
         }`}
         style={{ width: "100%", height: "100%" }}
       >
-        <g ref={gLinkRef}>
-          {tree.links.map((link) => (
-            <marker
-              key={"m" + link.id}
-              id="arrow"
-              viewBox="0 0 10 10"
-              refX="15"
-              refY="5"
-              markerWidth="6"
-              markerHeight="6"
-              orient="auto-start-reverse"
-              fill={LINK_COLOR}
-            >
-              <path d="M 0 0 L 10 5 L 0 10 z" />
-            </marker>
-          ))}
-
-          {tree.links.map((link) => (
-            <line
-              key={link.id}
-              stroke={LINK_COLOR}
-              strokeWidth={1.5}
-              markerEnd="url(#arrow)"
-            ></line>
-          ))}
-        </g>
-        <g ref={gNodeRef}>
-          {tree.nodes.map((node) => (
-            <circle
-              key={node.id}
-              strokeWidth={1.5}
-              onClick={onNodeClick}
-              onTouchStart={onNodeTouchStart}
-              onTouchEnd={onNodeTouchEnd}
-              className={
-                selectedNodeIds.includes(node.id)
-                  ? styles.selected
-                  : `${selectedNodeIds.includes(node.id)}`
-              }
-            ></circle>
-          ))}
+        <g ref={gNodeAndLinkRef}>
+          <g ref={gLinkRef}>
+            {tree.links.map((link) => (
+              <marker
+                key={"m" + link.id}
+                id="arrow"
+                viewBox="0 0 10 10"
+                refX="15"
+                refY="5"
+                markerWidth="6"
+                markerHeight="6"
+                orient="auto-start-reverse"
+                fill={LINK_COLOR}
+              >
+                <path d="M 0 0 L 10 5 L 0 10 z" />
+              </marker>
+            ))}
+            {tree.links.map((link) => (
+              <line
+                key={link.id}
+                stroke={LINK_COLOR}
+                strokeWidth={1.5}
+                markerEnd="url(#arrow)"
+              ></line>
+            ))}
+          </g>
+          <g ref={gNodeRef}>
+            {tree.nodes.map((node) => (
+              <circle
+                key={node.id}
+                strokeWidth={1.5}
+                onClick={onNodeClick}
+                onTouchStart={onNodeTouchStart}
+                onTouchEnd={onNodeTouchEnd}
+                className={
+                  selectedNodeIds.includes(node.id)
+                    ? styles.selected
+                    : `${selectedNodeIds.includes(node.id)}`
+                }
+              ></circle>
+            ))}
+          </g>
         </g>
       </svg>{" "}
     </div>
