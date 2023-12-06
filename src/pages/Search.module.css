@@ -3,11 +3,6 @@
   padding: 0;
 }
 
-.svgContainer {
-  height: 66vh;
-  width: 100vw;
-}
-
 .createButton {
   font-weight: bold;
   color: black;

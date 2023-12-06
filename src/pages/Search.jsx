@@ -1,71 +1,27 @@
 import styles from "./Search.module.css";
 import { Link } from "react-router-dom";
-import D3Chart from "../components/D3Chart";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import { useState } from "react";
+import SearchPageChart from "../components/SearchPageChart";
 
 function Search() {
-  const { universalTree, isLoading, setElementsToEdit, error } =
-    useSkillTreesContext();
-  const [isNodeDescriptionVisible, setIsNodeDescriptionVisible] =
-    useState(false);
+  const { isLoading, setElementsToEdit, error } = useSkillTreesContext();
+
+  const [searchQuery, setSearchQuery] = useState("");
+
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [currentNode, setCurrentNode] = useState(null);
-  let timer;
-  const touchduration = 500;
 
-  console.log(universalTree);
-
-  function handleNodeClick(e) {
-    // ctrl + click
-    if (e.ctrlKey) {
-      // allow for multiple selection
-      toggleSelect(e.target);
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      console.log(e.target.value);
+      // send searchQuery to backend, endpoint should write a Neo4j query based
+      // on the searchQuery that will match nodes (skill AND modules ??? idk yet)
+      // that CONTAIN the searchQuery.
+      // afterwards, if there are results, empty the currentTree then change the currentTree to the
+      // received Nodes. Otherwise, keep the currentTree, then display a temp
+      // pop up message telling the user there were no results.
     }
-    // select only one node at a time if normal clicking / normal touching
-    else if (selectedNodes.length === 0) {
-      toggleSelect(e.target);
-    } else if (selectedNodes.length === 1) {
-      if (e.target === selectedNodes[0]) toggleSelect(e.target);
-      else {
-        setSelectedNodes([]);
-        toggleSelect(e.target);
-      }
-    } else if (selectedNodes.length > 1) {
-      setSelectedNodes([e.target]);
-    }
-  }
-
-  function handleNodeTouchStart(e) {
-    // !!! still need to test on actual phone.
-    //do on longtouch
-    if (window.matchMedia("(pointer: coarse)").matches) {
-      //https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
-      // touchscreen
-      timer = setTimeout(() => {
-        toggleSelect(e.target);
-      }, touchduration);
-    }
-  }
-
-  // SVGElement -> Effect
-  // Adds or removes target from selectedNodes
-  function toggleSelect(target) {
-    if (!selectedNodes.includes(target)) {
-      setCurrentNode(target);
-      setSelectedNodes((arr) => [...arr, target]);
-      setIsNodeDescriptionVisible(true);
-    } else {
-      setSelectedNodes((arr) =>
-        arr.filter((el) => el.__data__.id !== target.__data__.id)
-      );
-      setIsNodeDescriptionVisible(false);
-    }
-  }
-
-  function handleNodeTouchEnd() {
-    //stops short touches from firing the event
-    if (timer) clearTimeout(timer); // https://stackoverflow.com/questions/6139225/how-to-detect-a-long-touch-pressure-with-javascript-for-android-and-iphone
   }
 
   // SVGArray -> RecordArray
@@ -89,19 +45,20 @@ function Search() {
       {isLoading && <h1>Loading</h1>}
       {error && <h1>{error}</h1>}
       {!isLoading && !error && (
-        <D3Chart
-          tree={universalTree}
-          onNodeClick={handleNodeClick}
-          onNodeTouchStart={handleNodeTouchStart}
-          onNodeTouchEnd={handleNodeTouchEnd}
-          className={styles.svgContainer}
-          selectedNodeIds={selectedNodes.map((node) => node.id)}
+        <SearchPageChart
+          selectedNodes={selectedNodes}
+          setSelectedNodes={setSelectedNodes}
+          setCurrentNode={setCurrentNode}
         />
       )}
-
+      <input
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
+      />
       <div
         className={styles.nodeDescription}
-        style={{ display: isNodeDescriptionVisible ? "block" : "none" }}
+        style={{ display: currentNode ? "block" : "none" }}
       >
         <div>
           <h3>{currentNode?.__data__.title}</h3>
