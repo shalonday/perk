@@ -140,7 +140,8 @@ export default function D3Chart({
       viewBoxWidth,
       viewBoxHeight
     );
-  }, [tree, viewBoxWidth, viewBoxHeight]);
+  }, [tree, viewBoxWidth, viewBoxHeight]); // that viewBoxWidth and Height are here is probs the reason the chart always restarts when I click stuff
+
   return (
     <div className={className} ref={svgContainerRef}>
       <svg
