@@ -13,7 +13,7 @@ import {
   useState,
 } from "react";
 
-const BASE_URL = "http://localhost:3000"; //https://perk-api-production.up.railway.app";
+const BASE_URL = "https://perk-api-production.up.railway.app"; //http://localhost:3000";
 const SkillTreesContext = createContext();
 
 const initialState = {
