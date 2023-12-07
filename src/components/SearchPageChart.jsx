@@ -3,7 +3,7 @@ import D3Chart from "./D3Chart";
 import styles from "./SearchPageChart.module.css";
 
 function SearchPageChart({ selectedNodes, setSelectedNodes, setCurrentNode }) {
-  const { universalTree } = useSkillTreesContext();
+  const { universalTree, searchResult } = useSkillTreesContext();
   let timer;
   const touchduration = 500;
 
@@ -61,7 +61,9 @@ function SearchPageChart({ selectedNodes, setSelectedNodes, setCurrentNode }) {
   return (
     <>
       <D3Chart
-        tree={universalTree}
+        tree={
+          Object.keys(searchResult).length > 0 ? searchResult : universalTree
+        }
         onNodeClick={handleNodeClick}
         onNodeTouchStart={handleNodeTouchStart}
         onNodeTouchEnd={handleNodeTouchEnd}

@@ -5,23 +5,16 @@ import { useState } from "react";
 import SearchPageChart from "../components/SearchPageChart";
 
 function Search() {
-  const { isLoading, setElementsToEdit, error } = useSkillTreesContext();
+  const { isLoading, setElementsToEdit, searchNodes, searchResult, error } =
+    useSkillTreesContext();
 
   const [searchQuery, setSearchQuery] = useState("");
 
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [currentNode, setCurrentNode] = useState(null);
 
-  function handleKeyDown(e) {
-    if (e.key === "Enter") {
-      console.log(e.target.value);
-      // send searchQuery to backend, endpoint should write a Neo4j query based
-      // on the searchQuery that will match nodes (skill AND modules ??? idk yet)
-      // that CONTAIN the searchQuery.
-      // afterwards, if there are results, empty the currentTree then change the currentTree to the
-      // received Nodes. Otherwise, keep the currentTree, then display a temp
-      // pop up message telling the user there were no results.
-    }
+  async function handleKeyDown(e) {
+    if (e.key === "Enter") await searchNodes(e.target.value);
   }
 
   // SVGArray -> RecordArray
@@ -32,6 +25,8 @@ function Search() {
       return rest;
     });
   }
+
+  function handleGeneratePath() {}
 
   function handlePlusClick() {
     setElementsToEdit({
@@ -56,6 +51,11 @@ function Search() {
         onChange={(e) => setSearchQuery(e.target.value)}
         onKeyDown={handleKeyDown}
       />
+
+      {Object.keys(searchResult).length > 0 && (
+        <button onClick={handleGeneratePath}>Generate Path</button>
+      )}
+
       <div
         className={styles.nodeDescription}
         style={{ display: currentNode ? "block" : "none" }}

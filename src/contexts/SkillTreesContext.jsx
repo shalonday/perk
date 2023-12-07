@@ -13,13 +13,13 @@ import {
   useState,
 } from "react";
 
-const BASE_URL = "https://perk-api-production.up.railway.app";
+const BASE_URL = "http://localhost:3000"; //https://perk-api-production.up.railway.app";
 const SkillTreesContext = createContext();
 
 const initialState = {
   isLoading: true,
   universalTree: {},
-  currentTree: {},
+  searchResult: {},
   error: "",
 };
 
@@ -29,10 +29,10 @@ function reducer(state, action) {
       return { ...state, isLoading: true };
     case "universalTree/loaded":
       return { ...state, universalTree: action.payload, isLoading: false };
-    case "tree/loaded":
+    case "search/loaded":
       return {
         ...state,
-        currentTree: action.payload,
+        searchResult: action.payload,
         isLoading: false,
       };
     case "tree/merged":
@@ -108,7 +108,7 @@ function reducer(state, action) {
 // to give those components access to Skill Tree data. This allows for a central place from which
 // to manage code related to accessing the data.
 function SkillTreesContextProvider({ children }) {
-  const [{ isLoading, universalTree, currentTree, error }, dispatch] =
+  const [{ isLoading, universalTree, searchResult, error }, dispatch] =
     useReducer(reducer, initialState);
 
   // Initial elements that will appear in Edit. These are set at Search.jsx, then accessed at Edit.jsx
@@ -132,21 +132,26 @@ function SkillTreesContextProvider({ children }) {
     fetchUniversalTree();
   }, []);
 
-  // Get single tree by id. This will be used in the Edit page or Tree page to display a
-  // tree that exists in the database.
-  async function getTree(id) {
-    if (id === currentTree.id) return; // no need to fetch if the currentTree is the same one being searched
+  // Send query to backend, which returns a (tree with only nodesArray populated or just nodesArray???)
+  // based on the search query
+  async function searchNodes(query) {
     try {
       dispatch({ type: "loading" });
-      const res = await fetch(`${BASE_URL}/trees/${id}`);
+      const res = await fetch(`${BASE_URL}/search/${query}`);
       const data = await res.json();
-      dispatch({ type: "tree/loaded", payload: data });
+      dispatch({ type: "search/loaded", payload: data });
     } catch {
       dispatch({
         type: "rejected",
-        payload: `There was an error getting tree data for ID:${id}`,
+        payload: `There was an error searching for query:${query}`,
       });
     }
+  }
+
+  async function searchPath(startSkillNode, endSkillNode) {
+    // Query the database for a path of nodes and links (ie tree) from
+    // the startNode to the EndNode. Add aggregation functions here???
+    // "/pathStart/:startNode/pathEnd/:endNode"
   }
 
   async function mergeTree(tree) {
@@ -200,8 +205,8 @@ function SkillTreesContextProvider({ children }) {
         error,
         mergeTree,
         updateTree,
-        getTree,
-        currentTree,
+        searchNodes,
+        searchResult,
         elementsToEdit,
         setElementsToEdit,
       }}
