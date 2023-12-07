@@ -5,7 +5,7 @@ import { useState } from "react";
 import SearchPageChart from "../components/SearchPageChart";
 
 function Search() {
-  const { isLoading, setElementsToEdit, searchNodes, searchResult, error } =
+  const { isLoading, setElementsToEdit, searchNodes, searchPath, error } =
     useSkillTreesContext();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -13,8 +13,8 @@ function Search() {
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [currentNode, setCurrentNode] = useState(null);
 
-  async function handleKeyDown(e) {
-    if (e.key === "Enter") await searchNodes(e.target.value);
+  function handleKeyDown(e) {
+    if (e.key === "Enter") searchNodes(e.target.value);
   }
 
   // SVGArray -> RecordArray
@@ -26,7 +26,9 @@ function Search() {
     });
   }
 
-  function handleGeneratePath() {}
+  function handleGeneratePath() {
+    searchPath("0", selectedNodes[0].id);
+  }
 
   function handlePlusClick() {
     setElementsToEdit({
@@ -52,7 +54,7 @@ function Search() {
         onKeyDown={handleKeyDown}
       />
 
-      {Object.keys(searchResult).length > 0 && (
+      {selectedNodes.length === 1 && (
         <button onClick={handleGeneratePath}>Generate Path</button>
       )}
 

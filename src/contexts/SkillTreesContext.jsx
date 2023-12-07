@@ -20,6 +20,7 @@ const initialState = {
   isLoading: true,
   universalTree: {},
   searchResult: {},
+  pathResult: {},
   error: "",
 };
 
@@ -33,13 +34,18 @@ function reducer(state, action) {
       return {
         ...state,
         searchResult: action.payload,
+        pathResult: {}, // ensure that searchResult and pathResult can't both be non-null at the same
+        isLoading: false,
+      };
+    case "path/loaded":
+      return {
+        ...state,
+        pathResult: action.payload,
+        searchResult: {}, // the user has chosen from the results, so trash them
         isLoading: false,
       };
     case "tree/merged":
       const appendedTree = action.payload;
-
-      console.log("appendedTree");
-      console.log(appendedTree);
 
       //Update node in universalTree if it's part of the appendedTree,
       //i.e., we're updating the node whether it was changed or not.
@@ -53,16 +59,10 @@ function reducer(state, action) {
           : univNode
       );
 
-      console.log("updatedUnivTreeNodes");
-      console.log(updatedUnivTreeNodes);
-
       const updatedUnivTree = {
         nodes: updatedUnivTreeNodes,
         links: state.universalTree.links,
       };
-
-      console.log("updatedUnivTree");
-      console.log(updatedUnivTree);
 
       // Array of nodes whose id's are not yet in universalTree
       const newNodes = appendedTree.nodes.filter(
@@ -71,14 +71,9 @@ function reducer(state, action) {
             .map((univNode) => univNode.id)
             .includes(appNode.id)
       );
-
-      console.log(updatedUnivTree.links);
       const mergedUnivTreeLinks = updatedUnivTree.links.concat(
         appendedTree.links
       );
-
-      console.log("updatedUnivTree.nodes");
-      console.log(updatedUnivTree.nodes);
       const mergedUnivTreeNodes = updatedUnivTree.nodes.concat(newNodes);
       const mergedUnivTree = {
         nodes: mergedUnivTreeNodes,
@@ -108,8 +103,10 @@ function reducer(state, action) {
 // to give those components access to Skill Tree data. This allows for a central place from which
 // to manage code related to accessing the data.
 function SkillTreesContextProvider({ children }) {
-  const [{ isLoading, universalTree, searchResult, error }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { isLoading, universalTree, searchResult, pathResult, error },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   // Initial elements that will appear in Edit. These are set at Search.jsx, then accessed at Edit.jsx
   const [elementsToEdit, setElementsToEdit] = useState([]);
@@ -148,7 +145,20 @@ function SkillTreesContextProvider({ children }) {
     }
   }
 
-  async function searchPath(startSkillNode, endSkillNode) {
+  async function searchPath(startSkillNodeId, endSkillNodeId) {
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(
+        `${BASE_URL}/pathStart/${startSkillNodeId}/pathEnd/${endSkillNodeId}`
+      );
+      const data = await res.json();
+      dispatch({ type: "path/loaded", payload: data });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: `There was an error searching for path`,
+      });
+    }
     // Query the database for a path of nodes and links (ie tree) from
     // the startNode to the EndNode. Add aggregation functions here???
     // "/pathStart/:startNode/pathEnd/:endNode"
@@ -157,16 +167,13 @@ function SkillTreesContextProvider({ children }) {
   async function mergeTree(tree) {
     try {
       dispatch({ type: "loading" });
-      const res = await fetch(`${BASE_URL}/tree`, {
+      await fetch(`${BASE_URL}/tree`, {
         method: "POST",
         body: JSON.stringify(tree),
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const data = await res.json();
-      console.log("Universal tree merged with data: ");
-      console.log(data);
       dispatch({ type: "tree/merged", payload: tree });
     } catch {
       dispatch({
@@ -187,7 +194,6 @@ function SkillTreesContextProvider({ children }) {
         },
       });
       const data = await res.json();
-      console.log(data);
       dispatch({ type: "tree/updated", payload: data });
     } catch {
       dispatch({
@@ -207,6 +213,8 @@ function SkillTreesContextProvider({ children }) {
         updateTree,
         searchNodes,
         searchResult,
+        searchPath,
+        pathResult,
         elementsToEdit,
         setElementsToEdit,
       }}

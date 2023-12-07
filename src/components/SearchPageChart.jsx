@@ -1,11 +1,38 @@
+import { useEffect, useState } from "react";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import D3Chart from "./D3Chart";
 import styles from "./SearchPageChart.module.css";
 
 function SearchPageChart({ selectedNodes, setSelectedNodes, setCurrentNode }) {
-  const { universalTree, searchResult } = useSkillTreesContext();
+  const { universalTree, searchResult, pathResult } = useSkillTreesContext();
+  const [displayedTree, setDisplayedTree] = useState(universalTree);
   let timer;
   const touchduration = 500;
+
+  useEffect(
+    function changeDisplayedTree() {
+      Object.keys(searchResult).length === 0 &&
+        Object.keys(pathResult).length === 0 &&
+        setDisplayedTree(universalTree);
+
+      Object.keys(searchResult).length > 0 &&
+        Object.keys(pathResult).length === 0 &&
+        setDisplayedTree(searchResult);
+
+      Object.keys(searchResult).length === 0 &&
+        Object.keys(pathResult).length > 0 &&
+        setDisplayedTree(pathResult);
+
+      if (
+        Object.keys(searchResult).length > 0 &&
+        Object.keys(pathResult).length > 0
+      )
+        console.err(
+          "both pathResult and searchResult are non-null. There is a bug"
+        );
+    },
+    [universalTree, searchResult, pathResult]
+  );
 
   function handleNodeClick(e) {
     // ctrl + click
@@ -61,9 +88,7 @@ function SearchPageChart({ selectedNodes, setSelectedNodes, setCurrentNode }) {
   return (
     <>
       <D3Chart
-        tree={
-          Object.keys(searchResult).length > 0 ? searchResult : universalTree
-        }
+        tree={displayedTree}
         onNodeClick={handleNodeClick}
         onNodeTouchStart={handleNodeTouchStart}
         onNodeTouchEnd={handleNodeTouchEnd}
