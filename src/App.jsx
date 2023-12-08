@@ -12,7 +12,7 @@ function App() {
       <BrowserRouter basename="/perk">
         <Routes>
           <Route index element={<Search />} />
-          <Route path="tree" element={<Tree />} />
+          <Route path="s/:startNodeId/e/:endNodeId" element={<Tree />} />
           <Route path="edit/" element={<Edit />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>

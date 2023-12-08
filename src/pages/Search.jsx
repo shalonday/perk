@@ -1,11 +1,13 @@
 import styles from "./Search.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import { useState } from "react";
 import SearchPageChart from "../components/SearchPageChart";
 
 function Search() {
-  const { isLoading, setElementsToEdit, searchNodes, searchPath, error } =
+  const navigate = useNavigate();
+
+  const { isLoading, setElementsToEdit, searchNodes, error } =
     useSkillTreesContext();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,8 +28,8 @@ function Search() {
     });
   }
 
-  function handleGeneratePath() {
-    searchPath("0", selectedNodes[0].id);
+  async function handleGeneratePath() {
+    navigate(`/s/0/${selectedNodes[0].id}`); // selectedNodes should only contain 1 element here.
   }
 
   function handlePlusClick() {
