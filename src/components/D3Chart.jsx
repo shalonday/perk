@@ -120,6 +120,7 @@ export default function D3Chart({
   onNodeClick = () => {},
   onNodeTouchStart = () => {},
   onNodeTouchEnd = () => {},
+  onNodeDblClick = () => {},
   selectedNodeIds = [],
 }) {
   const gLinkRef = useRef();
@@ -131,23 +132,28 @@ export default function D3Chart({
   const viewBoxHeight = svgContainerRef.current?.clientHeight;
 
   useEffect(() => {
-    ForceGraph(
-      tree,
-      svgRef,
-      gNodeAndLinkRef,
-      gLinkRef,
-      gNodeRef,
-      viewBoxWidth,
-      viewBoxHeight
-    );
+    // this if clause removes the distracting "bouncing" of graph
+    // that happens when these variables change from undefined to
+    // a value.
+    if (viewBoxHeight && viewBoxWidth) {
+      ForceGraph(
+        tree,
+        svgRef,
+        gNodeAndLinkRef,
+        gLinkRef,
+        gNodeRef,
+        viewBoxWidth,
+        viewBoxHeight
+      );
+    }
   }, [tree, viewBoxWidth, viewBoxHeight]); // that viewBoxWidth and Height are here is probs the reason the chart always restarts when I click stuff
 
   return (
     <div className={className} ref={svgContainerRef}>
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${svgContainerRef.current ? viewBoxWidth : "400"} ${
-          svgContainerRef.current ? viewBoxHeight : "400"
+        viewBox={`0 0 ${svgContainerRef.current ? viewBoxWidth * 1.5 : "400"} ${
+          svgContainerRef.current ? viewBoxHeight * 1.5 : "400"
         }`}
         style={{ width: "100%", height: "100%" }}
       >
