@@ -3,7 +3,8 @@ import styles from "./D3Chart.module.css";
 import { useEffect, useRef } from "react";
 
 const RADIUS = 7;
-const SKILL_FILL = "hsl(60 100% 50%)";
+const ACTIVE_SKILL_FILL = "hsl(60 100% 50%)";
+const INACTIVE_SKILL_FILL = "hsl(60 50% 50%)";
 const MODULE_FILL = "hsl(60 10% 80%)";
 const LINK_COLOR = "hsl(60 10% 80%)";
 
@@ -44,7 +45,8 @@ function ForceGraph(
     .attr("id", (d) => d.id)
     .attr("fill", (d) => {
       if (d.type === "module") return MODULE_FILL;
-      else return SKILL_FILL;
+      else if (d.type === "skill" && d.active) return ACTIVE_SKILL_FILL;
+      else if (d.type === "skill" && !d.active) return INACTIVE_SKILL_FILL;
     })
     .attr("r", (d) => {
       if (d.type === "module") return RADIUS / 2;

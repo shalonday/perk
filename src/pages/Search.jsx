@@ -29,7 +29,7 @@ function Search() {
   }
 
   async function handleGeneratePath() {
-    navigate(`/s/0/${selectedNodes[0].id}`); // selectedNodes should only contain 1 element here.
+    navigate(`/s/0/e/${selectedNodes[0].id}`); // selectedNodes should only contain 1 element here.
   }
 
   function handlePlusClick() {

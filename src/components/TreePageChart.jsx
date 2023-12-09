@@ -7,21 +7,20 @@ function TreePageChart({ branch, clickedNode, setClickedNode }) {
       clickedNode === e.target ? null : e.target
     );
   }
-
   function handleNodeDblClick(e) {
     // if module, enter module view.
   }
 
   return (
-    <div>
+    <>
       <D3Chart
         tree={branch}
         className={styles.svgContainer}
         onNodeClick={handleNodeClick}
         onNodeDblClick={handleNodeDblClick}
-        selectedNodeIds={[clickedNode.id]}
+        selectedNodeIds={[clickedNode?.id]}
       />
-    </div>
+    </>
   );
 }
 
