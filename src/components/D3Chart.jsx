@@ -5,8 +5,10 @@ import { useEffect, useRef } from "react";
 const RADIUS = 7;
 const ACTIVE_SKILL_FILL = "hsl(60 100% 50%)";
 const INACTIVE_SKILL_FILL = "hsl(60 50% 50%)";
-const MODULE_FILL = "hsl(60 10% 80%)";
-const LINK_COLOR = "hsl(60 10% 80%)";
+const ACTIVE_MODULE_FILL = "hsl(80 100% 50%)";
+const INACTIVE_MODULE_FILL = "hsl(60 10% 80%)";
+const ACTIVE_LINK_COLOR = "hsl(60 100% 50%)";
+const INACTIVE_LINK_COLOR = "hsl(60 10% 80%)";
 
 function ForceGraph(
   data,
@@ -39,7 +41,27 @@ function ForceGraph(
     .force("y", d3.forceY(viewBoxHeight / 2))
     .on("tick", ticked);
 
-  const link = d3.select(gLinkRef.current).selectAll("line").data(links);
+  const link = d3
+    .select(gLinkRef.current)
+    .selectAll("line")
+    .data(links)
+    .attr("stroke", (d) => {
+      if (!d.active) return INACTIVE_LINK_COLOR;
+      else if (d.active) return ACTIVE_LINK_COLOR;
+    })
+    .attr("marker-end", (d) => `url(#arrow-${d.id})`);
+
+  d3.select(gLinkRef.current)
+    .selectAll("marker")
+    .data(links)
+    .attr("fill", (d) => {
+      if (!d.active) return INACTIVE_LINK_COLOR;
+      else if (d.active) {
+        console.log(d);
+        return ACTIVE_LINK_COLOR;
+      }
+    })
+    .attr("id", (d) => `arrow-${d.id}`);
 
   const node = d3
     .select(gNodeRef.current)
@@ -47,7 +69,8 @@ function ForceGraph(
     .data(nodes)
     .attr("id", (d) => d.id)
     .attr("fill", (d) => {
-      if (d.type === "module") return MODULE_FILL;
+      if (d.type === "module" && !d.active) return INACTIVE_MODULE_FILL;
+      else if (d.type === "module" && d.active) return ACTIVE_MODULE_FILL;
       else if (d.type === "skill" && d.active) return ACTIVE_SKILL_FILL;
       else if (d.type === "skill" && !d.active) return INACTIVE_SKILL_FILL;
     })
@@ -178,7 +201,6 @@ export default function D3Chart({
                 markerWidth="6"
                 markerHeight="6"
                 orient="auto-start-reverse"
-                fill={LINK_COLOR}
               >
                 <path d="M 0 0 L 10 5 L 0 10 z" />
               </marker>
@@ -186,7 +208,6 @@ export default function D3Chart({
             {tree.links.map((link) => (
               <line
                 key={link.id}
-                stroke={LINK_COLOR}
                 strokeWidth={1.5}
                 markerEnd="url(#arrow)"
               ></line>

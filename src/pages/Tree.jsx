@@ -56,12 +56,20 @@ function Tree() {
           branch={treeWithActiveNodes}
           clickedNode={clickedNode}
           setClickedNode={setClickedNode}
+          setIsModuleVisible={setIsModuleVisible}
         />
       )}
 
       <div>divider button</div>
 
-      {isModuleVisible && <TreeModuleView module="" />}
+      {isModuleVisible && (
+        <TreeModuleView
+          module={clickedNode}
+          tree={treeWithActiveNodes}
+          setTreeWithActiveNodes={setTreeWithActiveNodes}
+          setIsModuleVisible={setIsModuleVisible}
+        />
+      )}
 
       <button onClick={handlePlayClick}>
         Eye or Next Arrow or "Play" Arrow
