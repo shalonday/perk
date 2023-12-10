@@ -11,7 +11,7 @@ function ModuleModal({
   setIsModuleModalVisible,
 }) {
   const [title, setTitle] = useState("");
-  const [targetNodeTitles, setTargetNodeTitles] = useState([]);
+  const [targetNodeDescriptions, setTargetNodeDescriptions] = useState([]);
   const [learnText, setLearnText] = useState("");
   const [practiceText, setPracticeText] = useState("");
 
@@ -21,13 +21,15 @@ function ModuleModal({
   // Int -> Effect
   // delete item in bullets array that corresponds to index
   function handleDeleteItem(index) {
-    setTargetNodeTitles((array) => array.filter((item, i) => i !== index));
+    setTargetNodeDescriptions((array) =>
+      array.filter((item, i) => i !== index)
+    );
   }
 
   // Add an empty item to detailsArray to be edited by user
   function handleAddItem(e) {
     e.preventDefault();
-    setTargetNodeTitles((array) => [...array, ""]);
+    setTargetNodeDescriptions((array) => [...array, ""]);
   }
 
   function handleSubmit(e) {
@@ -54,11 +56,12 @@ function ModuleModal({
       return newLink;
     });
 
-    const targetNodes = targetNodeTitles.map((title) => {
+    const targetNodes = targetNodeDescriptions.map((description) => {
       const newTargetNode = {
         id: uuidv4(),
-        title: title,
+        title: "",
         type: "skill",
+        description: description,
       };
       return newTargetNode;
     });
@@ -104,14 +107,14 @@ function ModuleModal({
           <h3>Prerequisites</h3>
           <ul className={styles.prerequisitesList}>
             {prerequisiteNodes.map((node, i) => (
-              <li key={i}>&#x2022;{node.title}</li>
+              <li key={i}>&#x2022;{node.description}</li>
             ))}
           </ul>
         </fieldset>
         <fieldset className={styles.targets}>
           <AddTargetNodeSection
-            targetNodes={targetNodeTitles}
-            setTargetNodes={setTargetNodeTitles}
+            targetNodes={targetNodeDescriptions}
+            setTargetNodes={setTargetNodeDescriptions}
             handleDeleteItem={handleDeleteItem}
             handleAddItem={handleAddItem}
           />

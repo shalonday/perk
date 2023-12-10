@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import D3Chart from "./D3Chart";
 import styles from "./SearchPageChart.module.css";
@@ -8,6 +8,9 @@ function SearchPageChart({ selectedNodes, setSelectedNodes, setCurrentNode }) {
   const [displayedTree, setDisplayedTree] = useState(universalTree);
   let timer;
   const touchduration = 500;
+
+  const selectedNodeIds = useRef();
+  selectedNodeIds.current = selectedNodes.map((node) => node.id);
 
   useEffect(
     function changeDisplayedTree() {
@@ -34,23 +37,25 @@ function SearchPageChart({ selectedNodes, setSelectedNodes, setCurrentNode }) {
     [universalTree, searchResult, pathResult]
   );
 
+  // click uses "e.target.__data__" while touch uses "e.subject"; this is because of how the click events are handled at D3Chart.jsx
   function handleNodeClick(e) {
     // ctrl + click
     if (e.ctrlKey) {
       // allow for multiple selection
-      toggleSelect(e.target);
+      toggleSelect(e.target.__data__);
     }
     // select only one node at a time if normal clicking / normal touching
     else if (selectedNodes.length === 0) {
-      toggleSelect(e.target);
+      toggleSelect(e.target.__data__);
     } else if (selectedNodes.length === 1) {
-      if (e.target === selectedNodes[0]) toggleSelect(e.target);
+      if (e.target.__data__ === selectedNodes[0])
+        toggleSelect(e.target.__data__);
       else {
         setSelectedNodes([]);
-        toggleSelect(e.target);
+        toggleSelect(e.target.__data__);
       }
     } else if (selectedNodes.length > 1) {
-      setSelectedNodes([e.target]);
+      setSelectedNodes([e.target.__data__]);
     }
   }
 
@@ -61,7 +66,7 @@ function SearchPageChart({ selectedNodes, setSelectedNodes, setCurrentNode }) {
       //https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
       // touchscreen
       timer = setTimeout(() => {
-        toggleSelect(e.target);
+        toggleSelect(e.subject); //
       }, touchduration);
     }
   }
@@ -69,13 +74,11 @@ function SearchPageChart({ selectedNodes, setSelectedNodes, setCurrentNode }) {
   // SVGElement -> Effect
   // Adds or removes target from selectedNodes
   function toggleSelect(target) {
-    if (!selectedNodes.includes(target)) {
+    if (!selectedNodeIds.current.includes(target.id)) {
       setCurrentNode(target);
       setSelectedNodes((arr) => [...arr, target]);
     } else {
-      setSelectedNodes((arr) =>
-        arr.filter((el) => el.__data__.id !== target.__data__.id)
-      );
+      setSelectedNodes((arr) => arr.filter((el) => el.id !== target.id));
       setCurrentNode(null);
     }
   }
@@ -93,7 +96,7 @@ function SearchPageChart({ selectedNodes, setSelectedNodes, setCurrentNode }) {
         onNodeTouchStart={handleNodeTouchStart}
         onNodeTouchEnd={handleNodeTouchEnd}
         className={styles.svgContainer}
-        selectedNodeIds={selectedNodes.map((node) => node.id)}
+        selectedNodeIds={selectedNodeIds.current}
       />
     </>
   );

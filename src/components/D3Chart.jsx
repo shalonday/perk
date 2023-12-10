@@ -15,7 +15,10 @@ function ForceGraph(
   gLinkRef,
   gNodeRef,
   viewBoxWidth = 400,
-  viewBoxHeight = 400
+  viewBoxHeight = 400,
+  onNodeClick,
+  onNodeTouchStart,
+  onNodeTouchEnd
 ) {
   // Specify the dimensions of the chart.
 
@@ -52,8 +55,8 @@ function ForceGraph(
       if (d.type === "module") return RADIUS / 2;
       else return RADIUS;
     })
+    .on("click", onNodeClick) // has to be before the "call" in order to work for some reason.
     .call(drag(simulation));
-
   function ticked() {
     link
       .attr("x1", (d) => d.source.x)
@@ -92,6 +95,7 @@ function ForceGraph(
   // this allows the nodes to be draggable.
   function drag(simulation) {
     function dragstarted(event) {
+      onNodeTouchStart(event); // put the touch events within the drag events because I don't know how to trigger the longtouch otherwise
       if (!event.active) simulation.alphaTarget(0.3).restart();
       event.subject.fx = event.subject.x;
       event.subject.fy = event.subject.y;
@@ -103,6 +107,7 @@ function ForceGraph(
     }
 
     function dragended(event) {
+      onNodeTouchEnd(event);
       if (!event.active) simulation.alphaTarget(0);
       event.subject.fx = null;
       event.subject.fy = null;
@@ -122,7 +127,6 @@ export default function D3Chart({
   onNodeClick = () => {},
   onNodeTouchStart = () => {},
   onNodeTouchEnd = () => {},
-  onNodeDblClick = () => {},
   selectedNodeIds = [],
 }) {
   const gLinkRef = useRef();
@@ -145,7 +149,10 @@ export default function D3Chart({
         gLinkRef,
         gNodeRef,
         viewBoxWidth,
-        viewBoxHeight
+        viewBoxHeight,
+        onNodeClick,
+        onNodeTouchStart,
+        onNodeTouchEnd
       );
     }
   }, [tree, viewBoxWidth, viewBoxHeight]); // that viewBoxWidth and Height are here is probs the reason the chart always restarts when I click stuff
@@ -190,9 +197,6 @@ export default function D3Chart({
               <circle
                 key={node.id}
                 strokeWidth={1.5}
-                onClick={onNodeClick}
-                onTouchStart={onNodeTouchStart}
-                onTouchEnd={onNodeTouchEnd}
                 className={
                   selectedNodeIds.includes(node.id)
                     ? styles.selected
@@ -202,7 +206,7 @@ export default function D3Chart({
             ))}
           </g>
         </g>
-      </svg>{" "}
+      </svg>
     </div>
   );
 }

@@ -10,9 +10,10 @@ function EditPageChart({
   let timer;
   const touchduration = 500;
 
+  // click uses "e.target.__data__" while touch uses "e.subject"; this is because of how the click events are handled at D3Chart.jsx
   function handleNodeClick(e) {
     if (e.target.__data__.type === "module") {
-      toggleSelectModuleNode(e.target);
+      toggleSelectModuleNode(e.target.__data__);
     } else if (e.target.__data__.type === "skill") {
       handleSkillNodeClick(e);
     }
@@ -23,9 +24,8 @@ function EditPageChart({
     if (window.matchMedia("(pointer: coarse)").matches) {
       //https://stackoverflow.com/questions/4817029/whats-the-best-way-to-detect-a-touch-screen-device-using-javascript
       timer = setTimeout(() => {
-        if (e.target.__data__.type === "skill") toggleSelectSkillNode(e.target);
-        else if (e.target.__data__.type === "module")
-          toggleSelectModuleNode(e.target);
+        if (e.subject.type === "skill") toggleSelectSkillNode(e.subject);
+        else if (e.subject.type === "module") toggleSelectModuleNode(e.subject);
       }, touchduration);
     }
   }
@@ -38,9 +38,9 @@ function EditPageChart({
   function handleSkillNodeClick(e) {
     if (e.ctrlKey) {
       // allow for multiple selection
-      toggleSelectSkillNode(e.target);
+      toggleSelectSkillNode(e.target.__data__);
     } else {
-      selectOneSkillNodeAtATime(e.target);
+      selectOneSkillNodeAtATime(e.target.__data__);
     }
   }
 
@@ -55,7 +55,6 @@ function EditPageChart({
         toggleSelectSkillNode(targetSkillNode); // necessary bec this sets node description visibility (vs just doing setSelectedNodes([target]))
       }
     } else if (selectedNodes.length > 1) {
-      console.log("enter");
       setSelectedNodes([targetSkillNode]);
     }
   }
@@ -63,7 +62,7 @@ function EditPageChart({
   // SkillNode -> Effect
   // unselects modules and toggles selection of skill nodes
   function toggleSelectSkillNode(targetSkillNode) {
-    if (selectedNodes[0]?.__data__.type === "module") {
+    if (selectedNodes[0]?.type === "module") {
       setCurrentNode(targetSkillNode);
       setSelectedNodes([targetSkillNode]);
     } else if (!selectedNodes.includes(targetSkillNode)) {
@@ -73,7 +72,7 @@ function EditPageChart({
     } else {
       // selectedNodes includes target and this unselects it
       setSelectedNodes((arr) =>
-        arr.filter((el) => el.__data__.id !== targetSkillNode.__data__.id)
+        arr.filter((el) => el.id !== targetSkillNode.id)
       );
       setCurrentNode(null);
     }

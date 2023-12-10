@@ -1,21 +1,40 @@
 import styles from "./Edit.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import ModuleModal from "../components/ModuleModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EditPageChart from "../components/EditPageChart";
 
 function Edit() {
-  const { elementsToEdit, mergeTree, isLoading, error } =
+  const { displayedTree, mergeTree, getNodesById, isLoading, error } =
     useSkillTreesContext();
 
   const navigate = useNavigate();
+  const { nodeIds } = useParams(); // string of node IDs separated by &
 
-  const [currentTree, setCurrentTree] = useState(elementsToEdit);
+  const [currentTree, setCurrentTree] = useState(displayedTree);
   const [selectedNodes, setSelectedNodes] = useState([]);
   const [currentNode, setCurrentNode] = useState(null);
   const [isModuleModalVisible, setIsModuleModalVisible] = useState(false);
 
+  // Generate the path upon opening this page. I do this here instead of at
+  // the Generate Path button on Search.jsx so that the path is based on url
+  // params, making the same path easily shareable.
+  // Scenario 1: A user w/o an account accesses the page and sees the path w/o any active nodes
+  // Scenario 2: activeNodesIdList is updated from user account (or some uploaded json?) then treeWithActiveNodes is set from this
+  useEffect(function initializeEditPagePart1() {
+    getNodesById(nodeIds);
+  }, []);
+
+  useEffect(
+    function initializeEditPagePart2() {
+      setCurrentTree(displayedTree);
+    },
+    [displayedTree]
+  );
+
+  console.log(displayedTree);
+  console.log(currentTree);
   async function handleSubmit() {
     // validation?
     // merge currentTree to database tree if validation passes
@@ -37,13 +56,13 @@ function Edit() {
           style={{ display: currentNode ? "block" : "none" }}
         >
           <div>
-            <h3>{currentNode?.__data__.title}</h3>
+            <h3>{currentNode?.title}</h3>
           </div>
-          <p>{currentNode?.__data__.description}</p>
+          <p>{currentNode?.description}</p>
         </div>
         {isLoading && <h1>Loading</h1>}
         {error && <h1>{error}</h1>}
-        {!isLoading && !error && (
+        {!isLoading && !error && currentTree && (
           <EditPageChart
             currentTree={currentTree}
             selectedNodes={selectedNodes}
@@ -68,7 +87,7 @@ function Edit() {
       </div>
       {isModuleModalVisible && (
         <ModuleModal
-          prerequisiteNodes={selectedNodes.map((node) => node.__data__)}
+          prerequisiteNodes={selectedNodes}
           setCurrentTree={setCurrentTree}
           setIsModuleModalVisible={setIsModuleModalVisible}
         />

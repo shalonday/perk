@@ -19,24 +19,25 @@ function Search() {
     if (e.key === "Enter") searchNodes(e.target.value);
   }
 
-  // SVGArray -> RecordArray
-  // Extract from the D3 SVGs the database records that were used to make them.
-  function getDataObjectsFromD3Node(nodes) {
-    return nodes.map((node) => {
-      const { vx, vy, x, y, index, ...rest } = node.__data__;
-      return rest;
-    });
-  }
-
   async function handleGeneratePath() {
     navigate(`/s/0/e/${selectedNodes[0].id}`); // selectedNodes should only contain 1 element here.
   }
 
   function handlePlusClick() {
+    console.log(selectedNodes);
     setElementsToEdit({
-      nodes: getDataObjectsFromD3Node(selectedNodes), //this simplifies the rendering at Edit.jsx
+      nodes: selectedNodes,
       links: [],
     });
+  }
+
+  function buildParamStringFromArray(array) {
+    let string = "";
+    for (let i = 0; i < array.length; i++) {
+      if (i < array.length - 1) string += array[i] + ",";
+      else string += array[i]; // last element, so don't put an & at the end.
+    }
+    return string;
   }
 
   return (
@@ -65,16 +66,20 @@ function Search() {
         style={{ display: currentNode ? "block" : "none" }}
       >
         <div>
-          <h3>{currentNode?.__data__.title}</h3>
+          <h3>{currentNode?.title}</h3>
           <h3>
-            <Link to={`/edit/`}>
+            <Link
+              to={`/edit/${buildParamStringFromArray(
+                selectedNodes.map((node) => node.id)
+              )}`}
+            >
               <button className={styles.createButton} onClick={handlePlusClick}>
                 +
               </button>
             </Link>
           </h3>
         </div>
-        <p>{currentNode?.__data__.description}</p>
+        <p>{currentNode?.description}</p>
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ import {
   useState,
 } from "react";
 
-const BASE_URL = "https://perk-api-production.up.railway.app"; //http://localhost:3000";
+const BASE_URL = "https://perk-api-production.up.railway.app"; //"http://localhost:3000"; //
 const SkillTreesContext = createContext();
 
 const initialState = {
@@ -21,6 +21,7 @@ const initialState = {
   universalTree: {},
   searchResult: {},
   pathResult: {},
+  displayedTree: null,
   error: "",
 };
 
@@ -35,6 +36,12 @@ function reducer(state, action) {
         ...state,
         searchResult: action.payload,
         pathResult: {}, // ensure that searchResult and pathResult can't both be non-null at the same
+        isLoading: false,
+      };
+    case "nodesById/loaded":
+      return {
+        ...state,
+        displayedTree: action.payload,
         isLoading: false,
       };
     case "path/loaded":
@@ -104,7 +111,14 @@ function reducer(state, action) {
 // to manage code related to accessing the data.
 function SkillTreesContextProvider({ children }) {
   const [
-    { isLoading, universalTree, searchResult, pathResult, error },
+    {
+      isLoading,
+      universalTree,
+      searchResult,
+      pathResult,
+      displayedTree,
+      error,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -164,6 +178,21 @@ function SkillTreesContextProvider({ children }) {
     // "/pathStart/:startNode/pathEnd/:endNode"
   }
 
+  // arrayString is a string of UUIDs attached to each other with &'s.
+  async function getNodesById(arrayString) {
+    try {
+      dispatch({ type: "loading" });
+      const res = await fetch(`${BASE_URL}/nodes/${arrayString}`);
+      const data = await res.json();
+      dispatch({ type: "nodesById/loaded", payload: data });
+    } catch {
+      dispatch({
+        type: "rejected",
+        payload: `There was an error getting nodes by id`,
+      });
+    }
+  }
+
   async function mergeTree(tree) {
     try {
       dispatch({ type: "loading" });
@@ -214,6 +243,8 @@ function SkillTreesContextProvider({ children }) {
         searchNodes,
         searchResult,
         searchPath,
+        getNodesById,
+        displayedTree,
         pathResult,
         elementsToEdit,
         setElementsToEdit,
