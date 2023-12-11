@@ -57,7 +57,6 @@ function ForceGraph(
     .attr("fill", (d) => {
       if (!d.active) return INACTIVE_LINK_COLOR;
       else if (d.active) {
-        console.log(d);
         return ACTIVE_LINK_COLOR;
       }
     })

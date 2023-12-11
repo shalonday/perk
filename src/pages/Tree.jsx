@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import TreeModuleView from "../components/TreeModuleView";
 import TreePageChart from "../components/TreePageChart";
 import NodeDescription from "../components/NodeDescription";
@@ -12,10 +12,12 @@ function Tree() {
   const [clickedNode, setClickedNode] = useState(null);
   const [treeWithActiveNodes, setTreeWithActiveNodes] = useState(null);
   const [isModuleVisible, setIsModuleVisible] = useState(false);
-  const activeNodesIdList = useRef([]);
-
+  const activeNodesIdList = treeWithActiveNodes
+    ? treeWithActiveNodes.nodes
+        .filter((node) => node.active)
+        .map((node) => node.id)
+    : [startNodeId];
   // !!! while there is no user auth yet, use just start with the start node as active node.
-  activeNodesIdList.current.push(startNodeId);
 
   // Generate the path upon opening this page. I do this here instead of at
   // the Generate Path button on Search.jsx so that the path is based on url
@@ -32,9 +34,9 @@ function Tree() {
       if (Object.keys(pathResult).length > 0)
         setTreeWithActiveNodes({
           nodes: pathResult.nodes.map((node) => {
-            if (activeNodesIdList.current.includes(node.id))
-              return { ...node, active: true };
-            else return node;
+            return activeNodesIdList?.includes(node.id)
+              ? { ...node, active: true }
+              : node;
           }),
           links: pathResult.links,
         });
@@ -64,7 +66,7 @@ function Tree() {
 
       {isModuleVisible && (
         <TreeModuleView
-          module={clickedNode}
+          clickedNode={clickedNode}
           tree={treeWithActiveNodes}
           setTreeWithActiveNodes={setTreeWithActiveNodes}
           setIsModuleVisible={setIsModuleVisible}
