@@ -132,7 +132,9 @@ function TreeModuleView({
   return (
     <div>
       <form className={styles.form}>
-        <button onClick={handleExit}>Exit</button>
+        <div className={styles.exitDiv}>
+          <button onClick={handleExit}>&times;</button>
+        </div>
         <fieldset className={styles.title}>
           <h3>{currentModule.title}</h3>
         </fieldset>

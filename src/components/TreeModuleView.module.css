@@ -14,6 +14,12 @@
   display: none;
 }
 
+.exitDiv button {
+  background-color: white;
+  border: none;
+  font-size: 1.5rem;
+}
+
 .form .title *,
 .form .prereqs *,
 .form .targets *,

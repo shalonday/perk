@@ -31,6 +31,10 @@ function Search() {
     });
   }
 
+  function handleSearchClick(e) {
+    searchNodes(searchQuery);
+  }
+
   function buildParamStringFromArray(array) {
     let string = "";
     for (let i = 0; i < array.length; i++) {
@@ -51,14 +55,21 @@ function Search() {
           setCurrentNode={setCurrentNode}
         />
       )}
-      <input
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-
+      <div className={styles.inputDiv}>
+        <input
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className={`${styles.input} ${
+            searchQuery ? styles.inputNoBackground : ""
+          }`}
+        />
+        <button onClick={handleSearchClick}>Search</button>
+      </div>
       {selectedNodes.length === 1 && (
-        <button onClick={handleGeneratePath}>Generate Path</button>
+        <button onClick={handleGeneratePath} className={styles.generatePathBtn}>
+          Generate Path
+        </button>
       )}
 
       <div

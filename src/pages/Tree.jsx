@@ -62,7 +62,7 @@ function Tree() {
         />
       )}
 
-      <div>divider button</div>
+      {/* <div>divider button</div> */}
 
       {isModuleVisible && (
         <TreeModuleView
@@ -73,9 +73,9 @@ function Tree() {
         />
       )}
 
-      <button onClick={handlePlayClick}>
+      {/* <button onClick={handlePlayClick}>
         Eye or Next Arrow or "Play" Arrow
-      </button>
+      </button> */}
       {clickedNode && (
         <NodeDescription currentNode={clickedNode} className="smth" />
       )}

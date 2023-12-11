@@ -25,3 +25,22 @@
   display: flex;
   justify-content: space-between;
 }
+
+.input {
+  background: top left url(../assets/search.svg);
+  border-style: solid;
+  flex: 1;
+}
+
+.input:focus,
+.inputNoBackground {
+  background: none;
+}
+
+.inputDiv {
+  display: flex;
+}
+
+.generatePathBtn {
+  width: 100%;
+}
