@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import { useState } from "react";
 import SearchPageChart from "../components/SearchPageChart";
+import MainButton from "../components/MainButton";
 
 function Search() {
   const navigate = useNavigate();
@@ -19,7 +20,8 @@ function Search() {
     if (e.key === "Enter") searchNodes(e.target.value);
   }
 
-  async function handleGeneratePath() {
+  function handleGeneratePath() {
+    console.log(selectedNodes[0].id);
     navigate(`/s/0/e/${selectedNodes[0].id}`); // selectedNodes should only contain 1 element here.
   }
 
@@ -55,42 +57,44 @@ function Search() {
           setCurrentNode={setCurrentNode}
         />
       )}
-      <div className={styles.inputDiv}>
-        <input
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          className={`${styles.input} ${
-            searchQuery ? styles.inputNoBackground : ""
-          }`}
-        />
-        <button onClick={handleSearchClick}>Search</button>
-      </div>
-      {selectedNodes.length === 1 && (
-        <button onClick={handleGeneratePath} className={styles.generatePathBtn}>
-          Generate Path
-        </button>
-      )}
-
-      <div
-        className={styles.nodeDescription}
-        style={{ display: currentNode ? "block" : "none" }}
-      >
-        <div>
-          <h3>{currentNode?.title}</h3>
-          <h3>
-            <Link
-              to={`/edit/${buildParamStringFromArray(
-                selectedNodes.map((node) => node.id)
-              )}`}
-            >
-              <button className={styles.createButton} onClick={handlePlusClick}>
-                +
-              </button>
-            </Link>
-          </h3>
+      <div className={styles.bottomThird}>
+        {selectedNodes.length === 1 && (
+          <MainButton onClick={handleGeneratePath}>Generate Path</MainButton>
+        )}
+        <div
+          className={styles.nodeDescription}
+          style={{ display: currentNode ? "block" : "none" }}
+        >
+          <div>
+            <h3>{currentNode?.title}</h3>
+            <h3>
+              <Link
+                to={`/edit/${buildParamStringFromArray(
+                  selectedNodes.map((node) => node.id)
+                )}`}
+              >
+                <button
+                  className={styles.createButton}
+                  onClick={handlePlusClick}
+                >
+                  +
+                </button>
+              </Link>
+            </h3>
+          </div>
+          <p>{currentNode?.description}</p>
         </div>
-        <p>{currentNode?.description}</p>
+
+        <div className={styles.inputDiv}>
+          <input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className={`${styles.input} ${
+              searchQuery ? styles.inputNoBackground : ""
+            }`}
+          />
+        </div>
       </div>
     </div>
   );

@@ -14,9 +14,7 @@
 .nodeDescription {
   font-size: 20px;
   text-align: justify;
-  padding: 20px;
-  position: fixed;
-  bottom: 0px;
+
   height: min(50%, auto);
 }
 
@@ -30,6 +28,11 @@
   background: top left url(../assets/search.svg);
   border-style: solid;
   flex: 1;
+  padding: 8px;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  transition: box-shadow 0.2s, -ms-transform 0.1s, -webkit-transform 0.1s,
+    transform 0.1s;
 }
 
 .input:focus,
@@ -41,6 +44,12 @@
   display: flex;
 }
 
-.generatePathBtn {
+.bottomThird {
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
