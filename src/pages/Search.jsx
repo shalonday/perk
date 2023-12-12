@@ -44,6 +44,15 @@ function Search() {
 
   return (
     <div className={styles.searchPage}>
+      <div
+        className={styles.nodeDescription}
+        style={{ display: currentNode ? "block" : "none" }}
+      >
+        <div>
+          <h3>{currentNode?.title}</h3>
+        </div>
+        <p>{currentNode?.description}</p>
+      </div>
       {isLoading && <h1>Loading</h1>}
       {error && <h1>{error}</h1>}
       {!isLoading && !error && (
@@ -54,32 +63,26 @@ function Search() {
         />
       )}
       <div className={styles.bottomThird}>
-        {selectedNodes.length === 1 && (
-          <MainButton onClick={handleGeneratePath}>Generate Path</MainButton>
-        )}
-        <div
-          className={styles.nodeDescription}
-          style={{ display: currentNode ? "block" : "none" }}
-        >
-          <div>
-            <h3>{currentNode?.title}</h3>
-            <h3>
-              <Link
-                to={`/edit/${buildParamStringFromArray(
-                  selectedNodes.map((node) => node.id)
-                )}`}
-              >
-                <button
-                  className={styles.createButton}
-                  onClick={handlePlusClick}
-                >
-                  +
-                </button>
-              </Link>
-            </h3>
+        {selectedNodes.length > 0 && (
+          <div className={styles.buttonsDiv}>
+            <MainButton
+              onClick={handleGeneratePath}
+              flexValue={1}
+              disabledValue={selectedNodes.length !== 1}
+            >
+              Generate Path
+            </MainButton>
+
+            <Link
+              to={`/edit/${buildParamStringFromArray(
+                selectedNodes.map((node) => node.id)
+              )}`}
+              className={styles.linkFlexItem}
+            >
+              <MainButton onClick={handlePlusClick}>Add a Branch</MainButton>
+            </Link>
           </div>
-          <p>{currentNode?.description}</p>
-        </div>
+        )}
 
         <div className={styles.inputDiv}>
           <input
