@@ -13,14 +13,20 @@ function AddLinkModal({
   const [otherType, setOtherType] = useState("");
   const [linkText, setLinkText] = useState("");
   const [url, setUrl] = useState("");
+  // add date of entering resource
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    const resourceId = uuidv4();
-    linkTextSetter(`[${linkText}](${url})`);
-    setResourcesArrayDependingOnType(resourceId);
-    setIsAddLinkModalVisible(false);
+    if (resourceType && price >= 0 && url) {
+      // required resources
+      const resourceId = uuidv4();
+      linkTextSetter(`[${linkText ? linkText : url}](${url})`);
+      setResourcesArrayDependingOnType(resourceId);
+      setIsAddLinkModalVisible(false);
+    } else if (price < 0) {
+      alert("Cannot accept a negative number for price");
+    } else alert("Please fill in the required details");
   }
 
   function setResourcesArrayDependingOnType(resourceId) {
@@ -62,13 +68,14 @@ function AddLinkModal({
   }
 
   return (
-    <div className={styles.form}>
+    <form className={styles.form}>
       <fieldset>
         <select
           value={resourceType}
           onChange={(e) => setResourceType(e.target.value)}
+          required
         >
-          <option>Select resource type</option>
+          <option>Select resource type*</option>
           <option value="article">
             Online Article (Wikipedia, Medium, docs, blogs, etc.)
           </option>
@@ -93,12 +100,15 @@ function AddLinkModal({
           <option value="other">Other document</option>
         </select>
         <div className={styles.sectionDiv}>
-          <label htmlFor="price">Price (USD):</label>
+          <label htmlFor="price">Price* (USD):</label>
           <input
+            type="number"
+            min="0"
             id="price"
             placeholder="Enter resource price in USD (Enter 0 if free)"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            required
           />
         </div>
         {resourceType === "book" && (
@@ -124,12 +134,13 @@ function AddLinkModal({
           </div>
         )}
         <div className={styles.sectionDiv}>
-          <label htmlFor="url">URL</label>
+          <label htmlFor="url">URL*</label>
           <input
             id="url"
             placeholder="Enter URL starting with http:// or https://"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
+            required
           />
         </div>
         <div className={styles.sectionDiv}>
@@ -140,12 +151,12 @@ function AddLinkModal({
             onChange={(e) => setLinkText(e.target.value)}
           />
         </div>
-
+        <div>*required</div>
         <div className={styles.submitButtonDiv}>
           <button onClick={handleSubmit}>+ Add Link</button>
         </div>
       </fieldset>
-    </div>
+    </form>
   );
 }
 

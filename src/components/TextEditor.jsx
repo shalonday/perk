@@ -1,19 +1,11 @@
 import {
   AdmonitionDirectiveDescriptor,
-  BlockTypeSelect,
   BoldItalicUnderlineToggles,
-  ChangeAdmonitionType,
-  CodeToggle,
   InsertAdmonition,
-  InsertCodeBlock,
-  InsertImage,
-  InsertTable,
   ListsToggle,
   MDXEditor,
-  UndoRedo,
   directivesPlugin,
   headingsPlugin,
-  imagePlugin,
   linkDialogPlugin,
   linkPlugin,
   quotePlugin,
@@ -26,15 +18,7 @@ import { useEffect, useRef } from "react";
 
 function TextEditor({ textToAppend, onChange }) {
   const ref = useRef();
-  const markdown = `
-  * Item 1
-  * Item 2
-  * Item 3
-    * nested item
-
-  1. Item 1
-  2. Item 2
-`;
+  const markdown = `Add resources, then organize and put them into context here`;
 
   // Dynamically set text on editor by passing textToAppend to this component
   // See https://mdxeditor.dev/editor/docs/getting-started or my commit message
@@ -65,7 +49,6 @@ function TextEditor({ textToAppend, onChange }) {
         toolbarPlugin({
           toolbarContents: () => (
             <>
-              <UndoRedo />
               <BoldItalicUnderlineToggles />
               <ListsToggle />
               <InsertAdmonition />

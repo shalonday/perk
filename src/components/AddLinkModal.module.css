@@ -12,6 +12,12 @@
   text-align: justify;
 }
 
+.form select:invalid,
+.form input:invalid,
+.form textarea:invalid {
+  /* border: 1px solid red; */
+}
+
 .form button,
 .form select {
   width: 100%;
@@ -22,7 +28,9 @@
 }
 
 .sectionDiv {
+  margin: 5px;
   display: flex;
+  gap: 10px;
 }
 
 .sectionDiv input,
@@ -33,4 +41,7 @@
 .submitButtonDiv {
   width: 100%;
   font-size: 20px;
+}
+.submitButtonDiv button {
+  text-align: center;
 }

@@ -28,10 +28,14 @@ function MainTextSection({ setLearnText, setPracticeText, setResourcesArray }) {
     <>
       <fieldset className={styles.learn}>
         <h3>Learn</h3>
-        <TextEditor
-          textToAppend={learnLinkText}
-          onChange={(markdown) => setLearnText(markdown)}
-        />
+        {!isLearnAddLinkModalVisible && (
+          <button
+            onClick={handleAddLinkLearn}
+            className={styles.addResourceLearn}
+          >
+            Link a resource
+          </button>
+        )}
         {isLearnAddLinkModalVisible && (
           <AddLinkModal
             linkTextSetter={linkTextSetter.current}
@@ -39,16 +43,21 @@ function MainTextSection({ setLearnText, setPracticeText, setResourcesArray }) {
             setResourcesArray={setResourcesArray}
           />
         )}
-        {!isLearnAddLinkModalVisible && (
-          <span onClick={handleAddLinkLearn}>[Add a hyperlink]</span>
-        )}
+        <TextEditor
+          textToAppend={learnLinkText}
+          onChange={(markdown) => setLearnText(markdown)}
+        />
       </fieldset>
       <fieldset className={styles.practice}>
         <h3>Practice</h3>
-        <TextEditor
-          textToAppend={practiceLinkText}
-          onChange={(markdown) => setPracticeText(markdown)}
-        />
+        {!isPracticeAddLinkModalVisible && (
+          <button
+            onClick={handleAddLinkPractice}
+            className={styles.addResourcePractice}
+          >
+            Link a resource
+          </button>
+        )}
         {isPracticeAddLinkModalVisible && (
           <AddLinkModal
             linkTextSetter={linkTextSetter.current}
@@ -56,9 +65,10 @@ function MainTextSection({ setLearnText, setPracticeText, setResourcesArray }) {
             setResourcesArray={setResourcesArray}
           />
         )}
-        {!isPracticeAddLinkModalVisible && (
-          <span onClick={handleAddLinkPractice}>[Add a hyperlink]</span>
-        )}
+        <TextEditor
+          textToAppend={practiceLinkText}
+          onChange={(markdown) => setPracticeText(markdown)}
+        />
       </fieldset>
     </>
   );

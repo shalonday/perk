@@ -21,6 +21,7 @@
 .form .prereqs,
 .form .targets,
 .submitButtonDiv * {
+  font-size: 1rem;
   border: none;
   background-color: transparent;
 
