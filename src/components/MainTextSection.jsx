@@ -2,6 +2,7 @@ import styles from "./MainTextSection.module.css";
 import { useRef, useState } from "react";
 import AddLinkModal from "./AddLinkModal";
 import TextEditor from "./TextEditor";
+import MainButton from "./MainButton";
 
 function MainTextSection({ setLearnText, setPracticeText, setResourcesArray }) {
   const [learnLinkText, setLearnLinkText] = useState("");
@@ -29,12 +30,7 @@ function MainTextSection({ setLearnText, setPracticeText, setResourcesArray }) {
       <fieldset className={styles.learn}>
         <h3>Learn</h3>
         {!isLearnAddLinkModalVisible && (
-          <button
-            onClick={handleAddLinkLearn}
-            className={styles.addResourceLearn}
-          >
-            Link a resource
-          </button>
+          <MainButton onClick={handleAddLinkLearn}>Link a resource</MainButton>
         )}
         {isLearnAddLinkModalVisible && (
           <AddLinkModal
@@ -51,12 +47,9 @@ function MainTextSection({ setLearnText, setPracticeText, setResourcesArray }) {
       <fieldset className={styles.practice}>
         <h3>Practice</h3>
         {!isPracticeAddLinkModalVisible && (
-          <button
-            onClick={handleAddLinkPractice}
-            className={styles.addResourcePractice}
-          >
+          <MainButton onClick={handleAddLinkPractice}>
             Link a resource
-          </button>
+          </MainButton>
         )}
         {isPracticeAddLinkModalVisible && (
           <AddLinkModal

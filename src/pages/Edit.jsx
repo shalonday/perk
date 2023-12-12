@@ -4,6 +4,7 @@ import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import ModuleModal from "../components/ModuleModal";
 import { useNavigate, useParams } from "react-router-dom";
 import EditPageChart from "../components/EditPageChart";
+import MainButton from "../components/MainButton";
 
 function Edit() {
   const { displayedTree, mergeTree, getNodesById, isLoading, error } =
@@ -81,8 +82,8 @@ function Edit() {
           ) : null}
         </div>
 
-        <div>
-          <button onClick={handleSubmit}>Submit &rarr;</button>
+        <div className={styles.submitDiv}>
+          <MainButton onClick={handleSubmit}>Submit</MainButton>
         </div>
       </div>
       {isModuleModalVisible && (

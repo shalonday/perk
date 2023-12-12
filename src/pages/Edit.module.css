@@ -30,3 +30,10 @@
 .nodeDescription h3 {
   margin: 0;
 }
+
+.submitDiv {
+  padding: 20px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
