@@ -1,6 +1,7 @@
-function NodeDescription({ currentNode, className }) {
+import styles from "./NodeDescription.module.css";
+function NodeDescription({ currentNode }) {
   return (
-    <div className={className}>
+    <div className={styles.nodeDescription}>
       <div>
         <h3>{currentNode?.title}</h3>
       </div>

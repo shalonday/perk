@@ -1,0 +1,16 @@
+.nodeDescription {
+  position: fixed;
+  top: 0px;
+  padding: 20px;
+  font-size: 1rem;
+  text-align: justify;
+  height: min(50%, auto);
+}
+
+.nodeDescription > div {
+  margin-bottom: 10px;
+}
+
+.nodeDescription p {
+  margin: 0;
+}

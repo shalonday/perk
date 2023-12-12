@@ -1,7 +1,9 @@
+import styles from "./Tree.module.css";
 import { useEffect, useState } from "react";
 import TreeModuleView from "../components/TreeModuleView";
 import TreePageChart from "../components/TreePageChart";
 import NodeDescription from "../components/NodeDescription";
+import MainButton from "../components/MainButton";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import { useParams } from "react-router-dom";
 
@@ -45,12 +47,47 @@ function Tree() {
   );
 
   function handlePlayClick() {
+    console.log("play was clicked");
     // play animation and then set activeNode to the next node. If it is a module node,
     // display the module view, and fold the Chart.
+    setIsModuleVisible(true);
+    const nextModule = getNextModule(activeNodesIdList);
+    setClickedNode(nextModule); // set this even though no node was clicked, since "clickedNode" determines what's displayed
+  }
+
+  function getNextModule(activeNodeIds) {
+    const reachableModule = treeWithActiveNodes.nodes.find((node) => {
+      if (node.type === "module" && !node.active) {
+        const prerequisiteNodes = getPrerequisiteNodes(node);
+        const prereqIds = prerequisiteNodes.map((node) => node.id);
+
+        const isPrereqActiveArray = prereqIds.map((id) =>
+          activeNodeIds.includes(id)
+        );
+        const areAllPrereqsActive = isPrereqActiveArray.reduce(
+          (acc, cur) => cur && acc
+        );
+        return areAllPrereqsActive;
+      }
+      return false;
+    });
+    return reachableModule;
+  }
+
+  function getPrerequisiteNodes(module) {
+    const incomingLinks = treeWithActiveNodes.links.filter(
+      (link) => link.target === module.id
+    );
+    const prerequisiteNodeIdsArray = incomingLinks.map((link) => link.source);
+    const prerequisiteNodes = treeWithActiveNodes.nodes.filter((node) =>
+      prerequisiteNodeIdsArray.includes(node.id)
+    );
+    return prerequisiteNodes;
   }
 
   return (
     <div>
+      {clickedNode && <NodeDescription currentNode={clickedNode} />}
       {isLoading && <h1>Loading</h1>}
       {error && <h1>{error}</h1>}
       {!isLoading && !error && treeWithActiveNodes && (
@@ -72,12 +109,12 @@ function Tree() {
           setIsModuleVisible={setIsModuleVisible}
         />
       )}
-
-      {/* <button onClick={handlePlayClick}>
-        Eye or Next Arrow or "Play" Arrow
-      </button> */}
-      {clickedNode && (
-        <NodeDescription currentNode={clickedNode} className="smth" />
+      {!isModuleVisible && (
+        <div className={styles.playButtonDiv}>
+          <MainButton onClick={handlePlayClick}>
+            {activeNodesIdList.length > 1 ? "Continue" : "Start!"}
+          </MainButton>
+        </div>
       )}
     </div>
   );

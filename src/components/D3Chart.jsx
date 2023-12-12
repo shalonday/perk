@@ -182,9 +182,7 @@ export default function D3Chart({
     <div className={className} ref={svgContainerRef}>
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${svgContainerRef.current ? viewBoxWidth * 1.5 : "400"} ${
-          svgContainerRef.current ? viewBoxHeight * 1.5 : "400"
-        }`}
+        viewBox={`0 0 400 400`}
         style={{ width: "100%", height: "100%" }}
       >
         <g ref={gNodeAndLinkRef}>
