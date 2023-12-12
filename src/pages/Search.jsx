@@ -33,10 +33,6 @@ function Search() {
     });
   }
 
-  function handleSearchClick(e) {
-    searchNodes(searchQuery);
-  }
-
   function buildParamStringFromArray(array) {
     let string = "";
     for (let i = 0; i < array.length; i++) {
