@@ -4,6 +4,7 @@ import styles from "./ModuleModal.module.css";
 import AddTargetNodeSection from "./AddTargetNodeSection";
 import MainTextSection from "./MainTextSection";
 import { uuidv4 } from "../utils";
+import Loader from "./Loader";
 
 function ModuleModal({
   prerequisiteNodes,
@@ -92,7 +93,7 @@ function ModuleModal({
   }
 
   return (
-    <Suspense fallback={<p>Loading</p>}>
+    <Suspense fallback={<Loader />}>
       <form className={styles.form}>
         <fieldset className={styles.title}>
           <h3>

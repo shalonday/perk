@@ -4,6 +4,8 @@ import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import { useState } from "react";
 import SearchPageChart from "../components/SearchPageChart";
 import MainButton from "../components/MainButton";
+import { Circles } from "react-loader-spinner";
+import Loader from "../components/Loader";
 
 function Search() {
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ function Search() {
         </div>
         <p>{currentNode?.description}</p>
       </div>
-      {isLoading && <h1>Loading</h1>}
+      {isLoading && <Loader />}
       {error && <h1>{error}</h1>}
       {!isLoading && !error && (
         <SearchPageChart

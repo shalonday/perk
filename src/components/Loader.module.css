@@ -1,0 +1,8 @@
+.loaderDiv {
+  display: flex;
+  height: 66vh;
+}
+
+.loader {
+  margin: auto;
+}

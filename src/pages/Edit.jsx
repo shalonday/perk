@@ -5,6 +5,7 @@ import ModuleModal from "../components/ModuleModal";
 import { useNavigate, useParams } from "react-router-dom";
 import EditPageChart from "../components/EditPageChart";
 import MainButton from "../components/MainButton";
+import Loader from "../components/Loader";
 
 function Edit() {
   const { displayedTree, mergeTree, getNodesById, isLoading, error } =
@@ -61,7 +62,7 @@ function Edit() {
           </div>
           <p>{currentNode?.description}</p>
         </div>
-        {isLoading && <h1>Loading</h1>}
+        {isLoading && <Loader />}
         {error && <h1>{error}</h1>}
         {!isLoading && !error && currentTree && (
           <EditPageChart

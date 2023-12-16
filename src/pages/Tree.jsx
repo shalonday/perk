@@ -6,6 +6,7 @@ import NodeDescription from "../components/NodeDescription";
 import MainButton from "../components/MainButton";
 import { useSkillTreesContext } from "../contexts/SkillTreesContext";
 import { useParams } from "react-router-dom";
+import Loader from "../components/Loader";
 
 // page for viewing "themed" trees or "branches" of the universal tree
 function Tree() {
@@ -88,7 +89,7 @@ function Tree() {
   return (
     <div>
       {clickedNode && <NodeDescription currentNode={clickedNode} />}
-      {isLoading && <h1>Loading</h1>}
+      {isLoading && <Loader />}
       {error && <h1>{error}</h1>}
       {!isLoading && !error && treeWithActiveNodes && (
         <TreePageChart
